@@ -19,34 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hoshea99.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta property="og:type" content="article">
-<meta property="og:title" content="汤圆照片1">
-<meta property="og:url" content="https://hoshea99.github.io/2025/10/09/dog1/index.html">
+    <meta name="description" content="decltype基本语法1decltype(expression) varible;   expression是一个未加括号的标识符 直接返回该标识符的声明类型  expression是一个函数调用或者加括号的表达式 返回函数返回类型或者表达式结果类型（左值引用）   应用 泛型函数返回值类型 1234template&lt;typename Container&gt;auto getValue(">
+<meta property="og:type" content="article">
+<meta property="og:title" content="decltype">
+<meta property="og:url" content="https://hoshea99.github.io/2025/10/10/decltype/index.html">
 <meta property="og:site_name" content="Hoshea&#39;s Blog">
+<meta property="og:description" content="decltype基本语法1decltype(expression) varible;   expression是一个未加括号的标识符 直接返回该标识符的声明类型  expression是一个函数调用或者加括号的表达式 返回函数返回类型或者表达式结果类型（左值引用）   应用 泛型函数返回值类型 1234template&lt;typename Container&gt;auto getValue(">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1758010068100.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/wx_camera_1746437946351.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1755166237687.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1738400799164.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/wx_camera_1746437958267.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1730730606474.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1740107638540.jpg">
-<meta property="og:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1744455600276.jpg">
-<meta property="article:published_time" content="2025-10-09T14:21:46.000Z">
-<meta property="article:modified_time" content="2025-10-09T14:23:59.920Z">
+<meta property="article:published_time" content="2025-10-10T03:33:37.000Z">
+<meta property="article:modified_time" content="2025-10-10T03:40:30.227Z">
 <meta property="article:author" content="Hoshea">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://hoshea99.github.io/2025/10/09/dog1/mmexport1758010068100.jpg">
 
 
-<link rel="canonical" href="https://hoshea99.github.io/2025/10/09/dog1/">
+<link rel="canonical" href="https://hoshea99.github.io/2025/10/10/decltype/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hoshea99.github.io/2025/10/09/dog1/","path":"2025/10/09/dog1/","title":"汤圆照片1"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hoshea99.github.io/2025/10/10/decltype/","path":"2025/10/10/decltype/","title":"decltype"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>汤圆照片1 | Hoshea's Blog</title>
+<title>decltype | Hoshea's Blog</title>
   
 
 
@@ -151,7 +143,7 @@
   
   <aside class="sidebar">
 
-    <div class="sidebar-inner sidebar-overview-active">
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
       <ul class="sidebar-nav">
         <li class="sidebar-nav-toc">
           文章目录
@@ -164,6 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#decltype"><span class="nav-number">1.</span> <span class="nav-text">decltype</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">1.1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8"><span class="nav-number">1.2.</span> <span class="nav-text">应用</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -208,7 +201,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/09/dog1/">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/10/decltype/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -221,12 +214,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="汤圆照片1 | Hoshea's Blog">
+      <meta itemprop="name" content="decltype | Hoshea's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          汤圆照片1
+          decltype
         </h1>
 
         <div class="post-meta-container">
@@ -238,7 +231,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2025-10-09 22:21:46 / 修改时间：22:23:59" itemprop="dateCreated datePublished" datetime="2025-10-09T22:21:46+08:00">2025-10-09</time>
+      <time title="创建时间：2025-10-10 11:33:37 / 修改时间：11:40:30" itemprop="dateCreated datePublished" datetime="2025-10-10T11:33:37+08:00">2025-10-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -246,7 +239,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/pets/" itemprop="url" rel="index"><span itemprop="name">pets</span></a>
+          <a href="/categories/Cpp/" itemprop="url" rel="index"><span itemprop="name">Cpp</span></a>
         </span>
     </span>
 
@@ -259,14 +252,20 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1755166237687.jpg" alt="mmexport1755166237687"></p>
-<p><img src="/2025/10/09/dog1/mmexport1738400799164.jpg" alt="mmexport1738400799164"></p>
-<p><img src="/2025/10/09/dog1/wx_camera_1746437958267.jpg" alt="wx_camera_1746437958267"></p>
-<p><img src="/2025/10/09/dog1/mmexport1730730606474.jpg" alt="mmexport1730730606474"></p>
-<p><img src="/2025/10/09/dog1/mmexport1740107638540.jpg" alt="mmexport1740107638540"></p>
-<p><img src="/2025/10/09/dog1/mmexport1744455600276.jpg" alt="mmexport1744455600276"></p>
+    <div class="post-body" itemprop="articleBody"><h1 id="decltype"><a href="#decltype" class="headerlink" title="decltype"></a>decltype</h1><h2 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>expression是一个未加括号的标识符</p>
+<p>直接返回该标识符的声明类型</p>
+</li>
+<li><p>expression是一个函数调用或者加括号的表达式</p>
+<p>返回函数返回类型或者表达式结果类型（左值引用）</p>
+</li>
+</ul>
+<h2 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h2><ol>
+<li><p>泛型函数返回值类型</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">getValue</span><span class="params">(Container&amp; c, <span class="type">int</span> index)</span> -&gt; <span class="title">decltype</span><span class="params">(c[index])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c[index];  <span class="comment">// 返回引用类型，可修改元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
 
     </div>
 
@@ -280,14 +279,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/" rel="prev" title="双椒牛肉">
-                  <i class="fa fa-angle-left"></i> 双椒牛肉
+                <a href="/2025/10/09/dog1/" rel="prev" title="汤圆照片1">
+                  <i class="fa fa-angle-left"></i> 汤圆照片1
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/10/10/decltype/" rel="next" title="decltype">
-                  decltype <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
