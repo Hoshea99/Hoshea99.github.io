@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>concept</title>
+    <url>/2025/10/10/concept/</url>
+    <content><![CDATA[<p>Concept是C++20引用的一种对模板参数进行约束的机制，它允许程序员明确指定模板参数必须满足的要求，从而在编译期就能捕获不符合要求的模板参数错误。</p>
+<h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><ul>
+<li><p>定义</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">concept</span> MyConcept = <span class="built_in">requires</span>(T a,T b)&#123;</span><br><span class="line">    &#123;a+b&#125;-&gt;std::convertible_to&lt;T&gt;;</span><br><span class="line">    a.<span class="built_in">size</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用</p>
+  <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;MyConcept T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myFunction</span><span class="params">(T param)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>标准库中存在很多预定义的concept，在<code>&lt;concepts&gt;</code>头文件中。</p>
+<h1 id="requires"><a href="#requires" class="headerlink" title="requires"></a>requires</h1><p>requires表达式用于定义Concept的具体要求。子句类型有如下几种：</p>
+<ul>
+<li><p>简单要求<br>  只要求表达式是否合法：<code>{a+b}</code></p>
+</li>
+<li><p>类型要求<br>  检查类型是否存在:<code>typename T::value_type;</code></p>
+</li>
+<li><p>符合要求<br>  检查表达式属性：<code>{a+b}-&gt;std::same_as&lt;T&gt;;</code></p>
+</li>
+<li><p>嵌套要求<br>  在requires表达式内使用constexpr布尔表达式：<code>requires sizeof(T)&gt;4;</code></p>
+</li>
+</ul>
+<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>应用场景包括约束函数模板、类模板、约束auto变量、约束返回类型、约束多个参数。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>constexpr</title>
     <url>/2025/10/10/constexpr/</url>
     <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
@@ -23,23 +52,19 @@
       </categories>
   </entry>
   <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
-</ol>
+    <title>汤圆照片1</title>
+    <url>/2025/10/09/dog1/</url>
+    <content><![CDATA[<p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
+<p><img src="/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg" alt="mmexport1758644956147"></p>
+<p><img src="/2025/10/09/dog1/mmexport1755166237687.jpg" alt="mmexport1755166237687"></p>
+<p><img src="/2025/10/09/dog1/mmexport1738400799164.jpg" alt="mmexport1738400799164"></p>
+<p><img src="/2025/10/09/dog1/wx_camera_1746437958267.jpg" alt="wx_camera_1746437958267"></p>
+<p><img src="/2025/10/09/dog1/mmexport1730730606474.jpg" alt="mmexport1730730606474"></p>
+<p><img src="/2025/10/09/dog1/mmexport1740107638540.jpg" alt="mmexport1740107638540"></p>
+<p><img src="/2025/10/09/dog1/mmexport1744455600276.jpg" alt="mmexport1744455600276"></p>
 ]]></content>
       <categories>
-        <category>cooking</category>
+        <category>pets</category>
       </categories>
   </entry>
   <entry>
@@ -72,6 +97,26 @@
 ]]></content>
       <categories>
         <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
+<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
+<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
+<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
+<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
       </categories>
   </entry>
   <entry>
@@ -143,68 +188,23 @@
       </categories>
   </entry>
   <entry>
-    <title>concept</title>
-    <url>/2025/10/10/concept/</url>
-    <content><![CDATA[<p>Concept是C++20引用的一种对模板参数进行约束的机制，它允许程序员明确指定模板参数必须满足的要求，从而在编译期就能捕获不符合要求的模板参数错误。</p>
-<h1 id="语法基础"><a href="#语法基础" class="headerlink" title="语法基础"></a>语法基础</h1><ul>
-<li><p>定义</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">concept</span> MyConcept = <span class="built_in">requires</span>(T a,T b)&#123;</span><br><span class="line">    &#123;a+b&#125;-&gt;std::convertible_to&lt;T&gt;;</span><br><span class="line">    a.<span class="built_in">size</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>使用</p>
-  <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;MyConcept T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myFunction</span><span class="params">(T param)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>标准库中存在很多预定义的concept，在<code>&lt;concepts&gt;</code>头文件中。</p>
-<h1 id="requires"><a href="#requires" class="headerlink" title="requires"></a>requires</h1><p>requires表达式用于定义Concept的具体要求。子句类型有如下几种：</p>
-<ul>
-<li><p>简单要求<br>  只要求表达式是否合法：<code>{a+b}</code></p>
-</li>
-<li><p>类型要求<br>  检查类型是否存在:<code>typename T::value_type;</code></p>
-</li>
-<li><p>符合要求<br>  检查表达式属性：<code>{a+b}-&gt;std::same_as&lt;T&gt;;</code></p>
-</li>
-<li><p>嵌套要求<br>  在requires表达式内使用constexpr布尔表达式：<code>requires sizeof(T)&gt;4;</code></p>
-</li>
-</ul>
-<h1 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h1><p>应用场景包括约束函数模板、类模板、约束auto变量、约束返回类型、约束多个参数。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
 <h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
 </ol>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
-<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
-<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
-<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
-<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
 </ol>
 ]]></content>
       <categories>
         <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>汤圆照片1</title>
-    <url>/2025/10/09/dog1/</url>
-    <content><![CDATA[<p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1755166237687.jpg" alt="mmexport1755166237687"></p>
-<p><img src="/2025/10/09/dog1/mmexport1738400799164.jpg" alt="mmexport1738400799164"></p>
-<p><img src="/2025/10/09/dog1/wx_camera_1746437958267.jpg" alt="wx_camera_1746437958267"></p>
-<p><img src="/2025/10/09/dog1/mmexport1730730606474.jpg" alt="mmexport1730730606474"></p>
-<p><img src="/2025/10/09/dog1/mmexport1740107638540.jpg" alt="mmexport1740107638540"></p>
-<p><img src="/2025/10/09/dog1/mmexport1744455600276.jpg" alt="mmexport1744455600276"></p>
-]]></content>
-      <categories>
-        <category>pets</category>
       </categories>
   </entry>
 </search>
