@@ -1,41 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>decltype</title>
-    <url>/2025/10/10/decltype/</url>
-    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li><p>expression是一个未加括号的标识符</p>
-<p>直接返回该标识符的声明类型</p>
-</li>
-<li><p>expression是一个函数调用或者加括号的表达式</p>
-<p>返回函数返回类型或者表达式结果类型（左值引用）</p>
-</li>
-</ul>
-<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><ol>
-<li><p>泛型函数返回值类型</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">getValue</span><span class="params">(Container&amp; c, <span class="type">int</span> index)</span> -&gt; <span class="title">decltype</span><span class="params">(c[index])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c[index];  <span class="comment">// 返回引用类型，可修改元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
 <h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
 </ol>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
-<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
-<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
-<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
-<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
 </ol>
 ]]></content>
       <categories>
@@ -59,23 +37,113 @@
       </categories>
   </entry>
   <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
 <h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
 </ol>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
+<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
+<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
+<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
+<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
+<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
 </ol>
 ]]></content>
       <categories>
         <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>decltype</title>
+    <url>/2025/10/10/decltype/</url>
+    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>expression是一个未加括号的标识符</p>
+<p>直接返回该标识符的声明类型</p>
+</li>
+<li><p>expression是一个函数调用或者加括号的表达式</p>
+<p>返回函数返回类型或者表达式结果类型（左值引用）</p>
+</li>
+</ul>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><ol>
+<li><p>泛型函数返回值类型</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">getValue</span><span class="params">(Container&amp; c, <span class="type">int</span> index)</span> -&gt; <span class="title">decltype</span><span class="params">(c[index])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c[index];  <span class="comment">// 返回引用类型，可修改元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>constexpr</title>
+    <url>/2025/10/10/constexpr/</url>
+    <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
+<blockquote>
+<p>作用：</p>
+<ol>
+<li>编译时计算</li>
+<li>性能优化</li>
+<li>类型安全</li>
+</ol>
+</blockquote>
+<p>和const的区别是其为编译时初始化，const为运行时初始化。</p>
+<h1 id="修饰变量"><a href="#修饰变量" class="headerlink" title="修饰变量"></a>修饰变量</h1><p>编译期常量</p>
+<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>函数在编译期即可调用：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">square</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x*x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="built_in">square</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>可变参数模版</title>
+    <url>/2025/10/10/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E7%89%88/</url>
+    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ul>
+<li><p>参数包</p>
+<p>包含多个参数的模版参数</p>
+</li>
+<li><p>包展开</p>
+<p>解包参数的机制</p>
+</li>
+</ul>
+<h1 id="展开参数包的四种方法"><a href="#展开参数包的四种方法" class="headerlink" title="展开参数包的四种方法"></a>展开参数包的四种方法</h1><ol>
+<li><p>递归展开</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(T first,Args... rest)</span></span>&#123;</span><br><span class="line">    std::cout&lt;&lt;first&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">print</span>(rest...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>折叠表达式</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">sum</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (...+args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>初始化列表</p>
+<p>代码解释：</p>
+<ul>
+<li>初始化列表用到了逗号运算符，相当于运行逗号左边的，输出逗号右边的东西。这个0随便取的，取任意值都可以。</li>
+<li>使用(void)是为了抑制编译期警告，因为我们用不到这个初始化列表，只是为了cout</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printall</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">      std::cout&lt;&lt;args&lt;&lt;<span class="string">&quot; &quot;</span>,<span class="number">0</span>)...  </span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lambda</p>
+<p>代码解释：</p>
+<p>这个使用到了lambda立即调用技巧，举例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设调用：process(1, &quot;hello&quot;, 3.14);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line">[](<span class="keyword">auto</span>&amp;&amp; x1, <span class="keyword">auto</span>&amp;&amp; x2, <span class="keyword">auto</span>&amp;&amp; x3)&#123;</span><br><span class="line">    <span class="comment">// 处理 x1, x2, x3</span></span><br><span class="line">&#125;(<span class="number">1</span>, <span class="string">&quot;hello&quot;</span>, <span class="number">3.14</span>);  <span class="comment">// 立即用参数调用 lambda</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">tmplate&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(Args&amp;&amp;... args)</span></span>&#123;</span><br><span class="line">    [](<span class="keyword">auto</span>&amp;&amp;... xs)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;(std::forward&lt;Args&gt;(args)...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h1><p>这里介绍完美转发和参数过滤</p>
+<h2 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 示例1：转发给 printf</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(Args&amp;&amp;... args)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(std::forward&lt;Args&gt;(args)...);  <span class="comment">// target_function = printf</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="built_in">wrapper</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数过滤"><a href="#参数过滤" class="headerlink" title="参数过滤"></a>参数过滤</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">bool</span> is_integer = std::is_integral_v&lt;T&gt;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">filter_integers</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; result;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">        (is_integer&lt;<span class="keyword">decltype</span>(args)&gt;?(result.<span class="built_in">push_back</span>(args),<span class="number">0</span>):<span class="number">0</span>)...</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
       </categories>
   </entry>
 </search>
