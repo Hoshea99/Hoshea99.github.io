@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
-<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
-<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
-<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
-<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
     <title>decltype</title>
     <url>/2025/10/10/decltype/</url>
     <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
@@ -40,6 +20,26 @@
 ]]></content>
       <categories>
         <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
+<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
+<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
+<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
+<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
       </categories>
   </entry>
   <entry>
