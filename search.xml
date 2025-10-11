@@ -52,6 +52,28 @@
       </categories>
   </entry>
   <entry>
+    <title>decltype</title>
+    <url>/2025/10/10/decltype/</url>
+    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>expression是一个未加括号的标识符</p>
+<p>直接返回该标识符的声明类型</p>
+</li>
+<li><p>expression是一个函数调用或者加括号的表达式</p>
+<p>返回函数返回类型或者表达式结果类型（左值引用）</p>
+</li>
+</ul>
+<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><ol>
+<li><p>泛型函数返回值类型</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">getValue</span><span class="params">(Container&amp; c, <span class="type">int</span> index)</span> -&gt; <span class="title">decltype</span><span class="params">(c[index])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c[index];  <span class="comment">// 返回引用类型，可修改元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>汤圆照片1</title>
     <url>/2025/10/09/dog1/</url>
     <content><![CDATA[<p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
@@ -100,19 +122,19 @@
       </categories>
   </entry>
   <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
 <h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
 </ol>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
-<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
-<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
-<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
-<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
 </ol>
 ]]></content>
       <categories>
@@ -120,22 +142,19 @@
       </categories>
   </entry>
   <entry>
-    <title>decltype</title>
-    <url>/2025/10/10/decltype/</url>
-    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
+    <title>多态类型简述</title>
+    <url>/2025/10/11/%E5%A4%9A%E6%80%81%E7%B1%BB%E5%9E%8B%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<p>C++多态主要分为静态多态和动态多态</p>
+<h1 id="静态多态（编译时多态）"><a href="#静态多态（编译时多态）" class="headerlink" title="静态多态（编译时多态）"></a>静态多态（编译时多态）</h1><h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器根据参数类型和数量选择合适的函数</span></span><br><span class="line">Calculator calc;</span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// 调用int版本</span></span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);    <span class="comment">// 调用double版本</span></span><br></pre></td></tr></table></figure>
 
-<ul>
-<li><p>expression是一个未加括号的标识符</p>
-<p>直接返回该标识符的声明类型</p>
-</li>
-<li><p>expression是一个函数调用或者加括号的表达式</p>
-<p>返回函数返回类型或者表达式结果类型（左值引用）</p>
-</li>
-</ul>
-<h1 id="应用"><a href="#应用" class="headerlink" title="应用"></a>应用</h1><ol>
-<li><p>泛型函数返回值类型</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> Container&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">getValue</span><span class="params">(Container&amp; c, <span class="type">int</span> index)</span> -&gt; <span class="title">decltype</span><span class="params">(c[index])</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> c[index];  <span class="comment">// 返回引用类型，可修改元素</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-</ol>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">double</span> real, imag;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Complex</span>(<span class="type">double</span> r = <span class="number">0</span>, <span class="type">double</span> i = <span class="number">0</span>) : <span class="built_in">real</span>(r), <span class="built_in">imag</span>(i) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real + other.real, imag + other.imag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>, <span class="title">c2</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">Complex c3 = c1 + c2;  <span class="comment">// 使用重载的+运算符</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="模版多态"><a href="#模版多态" class="headerlink" title="模版多态"></a>模版多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">max</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (a &gt; b) ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> result1 = <span class="built_in">max</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// T=int</span></span><br><span class="line"><span class="type">double</span> result2 = <span class="built_in">max</span>(<span class="number">1.5</span>, <span class="number">2.5</span>); <span class="comment">// T=double</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="动态多态（运行时多态）"><a href="#动态多态（运行时多态）" class="headerlink" title="动态多态（运行时多态）"></a>动态多态（运行时多态）</h1><h2 id="虚函数多态"><a href="#虚函数多态" class="headerlink" title="虚函数多态"></a>虚函数多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Animal makes sound&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Animal</span>() = <span class="keyword">default</span>;  <span class="comment">// 虚析构函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Dog barks&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Cat meows&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行时多态的使用</span></span><br><span class="line">Animal* animals[] = &#123;<span class="keyword">new</span> <span class="built_in">Dog</span>(), <span class="keyword">new</span> <span class="built_in">Cat</span>()&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">    animals[i]-&gt;<span class="built_in">makeSound</span>();  <span class="comment">// 根据实际对象类型调用相应函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -188,19 +207,55 @@
       </categories>
   </entry>
   <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
+    <title>小问题集</title>
+    <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
+<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
+<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>智能指针简述</title>
+    <url>/2025/10/11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<h1 id="指针指针类型"><a href="#指针指针类型" class="headerlink" title="指针指针类型"></a>指针指针类型</h1><h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转移所有权</span></span><br><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; ptr3 = std::<span class="built_in">move</span>(ptr);  <span class="comment">// ptr变为空</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问</span></span><br><span class="line">*ptr3 = <span class="number">200</span>;        <span class="comment">// 解引用</span></span><br><span class="line">ptr3-&gt;<span class="built_in">someMethod</span>(); <span class="comment">// 成员访问</span></span><br><span class="line">ptr<span class="number">3.</span><span class="built_in">get</span>();         <span class="comment">// 获取原始指针</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::shared_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;  <span class="comment">// 不推荐</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 共享所有权</span></span><br><span class="line"><span class="keyword">auto</span> ptr3 = ptr;  <span class="comment">// 引用计数+1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查引用计数</span></span><br><span class="line">cout &lt;&lt; ptr.<span class="built_in">use_count</span>();  <span class="comment">// 输出当前引用数</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::shared_ptr&lt;<span class="type">int</span>&gt; shared = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line">std::weak_ptr&lt;<span class="type">int</span>&gt; weak = shared;  <span class="comment">// 不增加引用计数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全访问</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">auto</span> locked = weak.<span class="built_in">lock</span>()) &#123;  <span class="comment">// 检查对象是否还存在</span></span><br><span class="line">    cout &lt;&lt; *locked &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="shared-from-this"><a href="#shared-from-this" class="headerlink" title="shared_from_this"></a>shared_from_this</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;MyClass&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 正确方式：从this获取shared_ptr</span></span><br><span class="line">        <span class="keyword">auto</span> self = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="comment">// 传递给异步操作等...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">std::shared_ptr&lt;MyClass&gt; <span class="title">getPtr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">auto</span> obj = std::<span class="built_in">make_shared</span>&lt;MyClass&gt;();</span><br><span class="line">obj-&gt;<span class="built_in">doWork</span>();  <span class="comment">// 安全！</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="危险用法"><a href="#危险用法" class="headerlink" title="危险用法"></a>危险用法</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;MyClass&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 正确方式：从this获取shared_ptr</span></span><br><span class="line">        <span class="keyword">auto</span> self = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="comment">// 传递给异步操作等...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">std::shared_ptr&lt;MyClass&gt; <span class="title">getPtr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">auto</span> obj = std::<span class="built_in">make_shared</span>&lt;MyClass&gt;();</span><br><span class="line">obj-&gt;<span class="built_in">doWork</span>();  <span class="comment">// 安全！</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>类型转换</title>
+    <url>/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
 <h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
 </ol>
 <h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
+<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
+<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
+<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
+<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
+<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
 </ol>
 ]]></content>
       <categories>
