@@ -30,6 +30,28 @@
       </categories>
   </entry>
   <entry>
+    <title>constexpr</title>
+    <url>/2025/10/10/constexpr/</url>
+    <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
+<blockquote>
+<p>作用：</p>
+<ol>
+<li>编译时计算</li>
+<li>性能优化</li>
+<li>类型安全</li>
+</ol>
+</blockquote>
+<p>和const的区别是其为编译时初始化，const为运行时初始化。</p>
+<h1 id="修饰变量"><a href="#修饰变量" class="headerlink" title="修饰变量"></a>修饰变量</h1><p>编译期常量</p>
+<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>函数在编译期即可调用：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">square</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x*x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="built_in">square</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>decltype</title>
     <url>/2025/10/10/decltype/</url>
     <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
@@ -59,28 +81,6 @@
 <h1 id="CRTP的作用"><a href="#CRTP的作用" class="headerlink" title="CRTP的作用"></a>CRTP的作用</h1><p>无虚函数开销，适用于静态时多态。具有性能优势和编译时多态的特点。</p>
 <h1 id="风险"><a href="#风险" class="headerlink" title="风险"></a>风险</h1><p>基类使用派生类成员如果没有这个方法，编译会错误。解决方法为使用Concept</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">concept</span> Drawable = <span class="built_in">requires</span>(T t)&#123;</span><br><span class="line">    t.<span class="built_in">draw</span>();</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt;Drawable Derived&gt;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GraphicsBase</span>&#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>constexpr</title>
-    <url>/2025/10/10/constexpr/</url>
-    <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
-<blockquote>
-<p>作用：</p>
-<ol>
-<li>编译时计算</li>
-<li>性能优化</li>
-<li>类型安全</li>
-</ol>
-</blockquote>
-<p>和const的区别是其为编译时初始化，const为运行时初始化。</p>
-<h1 id="修饰变量"><a href="#修饰变量" class="headerlink" title="修饰变量"></a>修饰变量</h1><p>编译期常量</p>
-<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>函数在编译期即可调用：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">square</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x*x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="built_in">square</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
-
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -138,26 +138,6 @@
       </categories>
   </entry>
   <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
     <title>static简述</title>
     <url>/2025/10/10/static%E7%AE%80%E8%BF%B0/</url>
     <content><![CDATA[<h1 id="static在全局作用域的意义"><a href="#static在全局作用域的意义" class="headerlink" title="static在全局作用域的意义"></a>static在全局作用域的意义</h1><ul>
@@ -190,69 +170,214 @@
       </categories>
   </entry>
   <entry>
-    <title>可变参数模版</title>
-    <url>/2025/10/10/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E7%89%88/</url>
-    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ul>
-<li><p>参数包</p>
-<p>包含多个参数的模版参数</p>
-</li>
-<li><p>包展开</p>
-<p>解包参数的机制</p>
-</li>
-</ul>
-<h1 id="展开参数包的四种方法"><a href="#展开参数包的四种方法" class="headerlink" title="展开参数包的四种方法"></a>展开参数包的四种方法</h1><ol>
-<li><p>递归展开</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(T first,Args... rest)</span></span>&#123;</span><br><span class="line">    std::cout&lt;&lt;first&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">print</span>(rest...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>折叠表达式</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">sum</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (...+args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>初始化列表</p>
-<p>代码解释：</p>
-<ul>
-<li>初始化列表用到了逗号运算符，相当于运行逗号左边的，输出逗号右边的东西。这个0随便取的，取任意值都可以。</li>
-<li>使用(void)是为了抑制编译期警告，因为我们用不到这个初始化列表，只是为了cout</li>
-</ul>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printall</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">      std::cout&lt;&lt;args&lt;&lt;<span class="string">&quot; &quot;</span>,<span class="number">0</span>)...  </span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>lambda</p>
-<p>代码解释：</p>
-<p>这个使用到了lambda立即调用技巧，举例如下：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设调用：process(1, &quot;hello&quot;, 3.14);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line">[](<span class="keyword">auto</span>&amp;&amp; x1, <span class="keyword">auto</span>&amp;&amp; x2, <span class="keyword">auto</span>&amp;&amp; x3)&#123;</span><br><span class="line">    <span class="comment">// 处理 x1, x2, x3</span></span><br><span class="line">&#125;(<span class="number">1</span>, <span class="string">&quot;hello&quot;</span>, <span class="number">3.14</span>);  <span class="comment">// 立即用参数调用 lambda</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-
-
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">tmplate&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(Args&amp;&amp;... args)</span></span>&#123;</span><br><span class="line">    [](<span class="keyword">auto</span>&amp;&amp;... xs)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;(std::forward&lt;Args&gt;(args)...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
 </ol>
-<h1 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h1><p>这里介绍完美转发和参数过滤</p>
-<h2 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 示例1：转发给 printf</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(Args&amp;&amp;... args)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(std::forward&lt;Args&gt;(args)...);  <span class="comment">// target_function = printf</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="built_in">wrapper</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="参数过滤"><a href="#参数过滤" class="headerlink" title="参数过滤"></a>参数过滤</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">bool</span> is_integer = std::is_integral_v&lt;T&gt;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">filter_integers</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; result;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">        (is_integer&lt;<span class="keyword">decltype</span>(args)&gt;?(result.<span class="built_in">push_back</span>(args),<span class="number">0</span>):<span class="number">0</span>)...</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
+</ol>
 ]]></content>
       <categories>
-        <category>cpp</category>
+        <category>cooking</category>
       </categories>
   </entry>
   <entry>
-    <title>多态类型简述</title>
-    <url>/2025/10/11/%E5%A4%9A%E6%80%81%E7%B1%BB%E5%9E%8B%E7%AE%80%E8%BF%B0/</url>
-    <content><![CDATA[<p>C++多态主要分为静态多态和动态多态</p>
-<h1 id="静态多态（编译时多态）"><a href="#静态多态（编译时多态）" class="headerlink" title="静态多态（编译时多态）"></a>静态多态（编译时多态）</h1><h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器根据参数类型和数量选择合适的函数</span></span><br><span class="line">Calculator calc;</span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// 调用int版本</span></span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);    <span class="comment">// 调用double版本</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">double</span> real, imag;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Complex</span>(<span class="type">double</span> r = <span class="number">0</span>, <span class="type">double</span> i = <span class="number">0</span>) : <span class="built_in">real</span>(r), <span class="built_in">imag</span>(i) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real + other.real, imag + other.imag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>, <span class="title">c2</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">Complex c3 = c1 + c2;  <span class="comment">// 使用重载的+运算符</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="模版多态"><a href="#模版多态" class="headerlink" title="模版多态"></a>模版多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">max</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (a &gt; b) ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> result1 = <span class="built_in">max</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// T=int</span></span><br><span class="line"><span class="type">double</span> result2 = <span class="built_in">max</span>(<span class="number">1.5</span>, <span class="number">2.5</span>); <span class="comment">// T=double</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="动态多态（运行时多态）"><a href="#动态多态（运行时多态）" class="headerlink" title="动态多态（运行时多态）"></a>动态多态（运行时多态）</h1><h2 id="虚函数多态"><a href="#虚函数多态" class="headerlink" title="虚函数多态"></a>虚函数多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Animal makes sound&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Animal</span>() = <span class="keyword">default</span>;  <span class="comment">// 虚析构函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Dog barks&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Cat meows&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行时多态的使用</span></span><br><span class="line">Animal* animals[] = &#123;<span class="keyword">new</span> <span class="built_in">Dog</span>(), <span class="keyword">new</span> <span class="built_in">Cat</span>()&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">    animals[i]-&gt;<span class="built_in">makeSound</span>();  <span class="comment">// 根据实际对象类型调用相应函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="虚函数调用的地址如何解析"><a href="#虚函数调用的地址如何解析" class="headerlink" title="虚函数调用的地址如何解析"></a>虚函数调用的地址如何解析</h2><p>通过虚函数表（vtable）解析。当类中有虚函数时，编译器会为每个包含虚函数的类创建一个虚函数表，并在每个对象中添加一个虚函数表指针。</p>
-<p>这个指针的地址其实就是对象地址，所以我们实际上可以通过这个指针调用虚函数。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*FuncPtr)</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 手动模拟虚函数调用过程</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;\n=== 手动模拟虚函数调用 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"><span class="type">uintptr_t</span>* vptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(derived);</span><br><span class="line"><span class="type">uintptr_t</span>* vtable = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(*vptr);</span><br><span class="line">FuncPtr func = <span class="built_in">reinterpret_cast</span>&lt;FuncPtr&gt;(vtable[<span class="number">0</span>]); <span class="comment">// func1的地址</span></span><br></pre></td></tr></table></figure>
+    <title>传输层</title>
+    <url>/2025/10/12/%E4%BC%A0%E8%BE%93%E5%B1%82/</url>
+    <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>传输层位于网络层和应用层之间，为不同主机上的应用进程提供了逻辑通信功能</p>
+<ul>
+<li><p>端口号</p>
+<p>唯一标识一台主机上的特定应用进程，16位整数</p>
+</li>
+</ul>
+<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h2><ul>
+<li><strong>无连接</strong>：无需建立连接即可发送数据。</li>
+<li><strong>不可靠</strong>：不保证数据交付、不保证顺序、不具备拥塞控制。</li>
+<li><strong>高效</strong>：头部开销小，延迟低。</li>
+</ul>
+<h2 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h2><p>UDP头部固定为<strong>8字节</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">长度</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源端口号</td>
+<td align="left">16位</td>
+<td align="left">发送方端口号（可省略为0）</td>
+</tr>
+<tr>
+<td align="left">目的端口号</td>
+<td align="left">16位</td>
+<td align="left">接收方端口号</td>
+</tr>
+<tr>
+<td align="left">长度</td>
+<td align="left">16位</td>
+<td align="left">UDP整个数据报（头部+数据）的长度</td>
+</tr>
+<tr>
+<td align="left">校验和</td>
+<td align="left">16位</td>
+<td align="left">用于差错检测（可选）</td>
+</tr>
+</tbody></table>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><p>TCP是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<h2 id="TCP报文格式"><a href="#TCP报文格式" class="headerlink" title="TCP报文格式"></a>TCP报文格式</h2><p>TCP头部<strong>最小20字节</strong>，最大60字节（因选项字段长度可变）。</p>
+<p><strong>固定头部（20字节）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">长度</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源端口号</td>
+<td align="left">16位</td>
+<td align="left">发送方端口号</td>
+</tr>
+<tr>
+<td align="left">目的端口号</td>
+<td align="left">16位</td>
+<td align="left">接收方端口号</td>
+</tr>
+<tr>
+<td align="left"><strong>序列号</strong></td>
+<td align="left">32位</td>
+<td align="left">本报文段所发送数据的第一个字节的序号</td>
+</tr>
+<tr>
+<td align="left"><strong>确认应答号</strong></td>
+<td align="left">32位</td>
+<td align="left">期望收到的下一个报文段的第一个数据字节的序号</td>
+</tr>
+<tr>
+<td align="left"><strong>首部长度</strong></td>
+<td align="left">4位</td>
+<td align="left">以4字节为单位，指示TCP头部长度</td>
+</tr>
+<tr>
+<td align="left"><strong>保留位</strong></td>
+<td align="left">6位</td>
+<td align="left">保留为未来使用</td>
+</tr>
+<tr>
+<td align="left"><strong>控制标志</strong></td>
+<td align="left">6位</td>
+<td align="left">见下表详解</td>
+</tr>
+<tr>
+<td align="left"><strong>窗口大小</strong></td>
+<td align="left">16位</td>
+<td align="left">用于流量控制，指示接收方还能接收的字节数</td>
+</tr>
+<tr>
+<td align="left"><strong>校验和</strong></td>
+<td align="left">16位</td>
+<td align="left">用于差错检测</td>
+</tr>
+<tr>
+<td align="left"><strong>紧急指针</strong></td>
+<td align="left">16位</td>
+<td align="left">当URG&#x3D;1时有效，指示紧急数据的末尾</td>
+</tr>
+</tbody></table>
+<p><strong>控制标志（各占1位）</strong>：</p>
+<ul>
+<li><strong>URG</strong>：紧急指针有效。</li>
+<li><strong>ACK</strong>：确认号有效。<strong>一旦连接建立，该位通常始终为1</strong>。</li>
+<li><strong>PSH</strong>：接收方应尽快将数据交付应用层。</li>
+<li><strong>RST</strong>：重置连接。</li>
+<li><strong>SYN</strong>：同步序列号，用于<strong>建立连接</strong>。</li>
+<li><strong>FIN</strong>：结束连接，用于<strong>释放连接</strong>。</li>
+</ul>
+<p><strong>可选字段</strong>：常见选项包括MSS（最大报文段长度）、窗口缩放因子、时间戳等。</p>
+<h2 id="序列号与确认应答机制"><a href="#序列号与确认应答机制" class="headerlink" title="序列号与确认应答机制"></a>序列号与确认应答机制</h2><ul>
+<li><strong>序列号</strong>：标识发送数据流中每一个字节的编号。初始序列号随机生成，后续序列号按已发送的字节数递增。例如，发送seq&#x3D;1000，数据长度为200，则下一个报文seq&#x3D;1200。</li>
+<li><strong>确认应答号</strong>：当ACK标志位为1时有效。它向发送方声明期望收到的下一个字节的序列号。例如，收到seq&#x3D;1000，数据长度为150字节，则回复ack&#x3D;1150。<strong>确认应答号代表此序号之前的所有数据都已成功接收</strong>。</li>
+</ul>
+<h1 id="TCP连接管理"><a href="#TCP连接管理" class="headerlink" title="TCP连接管理"></a>TCP连接管理</h1><h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>用于建立TCP连接。</p>
+<ol>
+<li><strong>第一次握手</strong>：客户端发送SYN报文。随机生成初始序列号<code>client_isn</code>，并将SYN标志位置1。客户端进入<code>SYN-SENT</code>状态。</li>
+<li><strong>第二次握手</strong>：服务器收到SYN报文后，回复SYN-ACK报文。随机生成自己的初始序列号<code>server_isn</code>，将确认应答号设置为<code>client_isn + 1</code>，并将SYN和ACK标志位置1。服务器进入<code>SYN-RCVD</code>状态。</li>
+<li><strong>第三次握手</strong>：客户端收到SYN-ACK报文后，回复ACK报文。将确认应答号设置为<code>server_isn + 1</code>，ACK标志位置1。<strong>此报文可以携带数据</strong>。客户端进入<code>ESTABLISHED</code>状态，服务器收到后也进入<code>ESTABLISHED</code>状态。</li>
+</ol>
+<p><strong>为什么需要三次握手？</strong></p>
+<ol>
+<li><strong>阻止重复历史连接初始化（主因）</strong>：防止旧的、延迟的SYN报文到达服务器，导致服务器错误地打开一个连接。客户端可以通过第三次握手来判断这是否是一个历史连接，并决定是否重置它。</li>
+<li><strong>同步双方初始序列号</strong>：确保双方都知晓并确认了对方的初始序列号，这是可靠传输的基础。</li>
+<li><strong>避免资源浪费</strong>：如果是两次握手，服务器收到SYN后就建立连接。若客户端的SYN报文丢失，服务器会一直维持一个无效的连接，造成资源浪费。</li>
+</ol>
+<p><strong>相关概念</strong>：</p>
+<ul>
+<li><strong>半连接队列</strong>：服务器在收到第一次握手（SYN）后，但未完成三次握手时，会将连接请求放入此队列。</li>
+<li><strong>全连接队列</strong>：已完成三次握手、建立成功的连接会被放入此队列，等待应用进程调用<code>accept()</code>取走。</li>
+<li><strong>SYN Flood攻击</strong>：攻击者伪造大量IP发送SYN报文，但不完成第三次握手，占满服务器的半连接队列，导致正常用户无法连接。</li>
+</ul>
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>用于释放TCP连接。TCP连接是全双工的，因此每个方向必须单独关闭。</p>
+<ol>
+<li><strong>第一次挥手</strong>：客户端打算关闭连接，发送一个FIN报文（FIN标志位置1）。客户端进入<code>FIN-WAIT-1</code>状态。</li>
+<li><strong>第二次挥手</strong>：服务器收到FIN报文后，回复一个ACK报文（确认应答号为客户端序列号+1）。服务器进入<code>CLOSE-WAIT</code>状态。此时，<strong>从客户端到服务器的连接关闭，但服务器到客户端的连接仍然存在</strong>（即半关闭状态）。</li>
+<li><strong>第三次挥手</strong>：当服务器处理完所有数据后，也发送一个FIN报文。服务器进入<code>LAST-ACK</code>状态。</li>
+<li><strong>第四次挥手</strong>：客户端收到服务器的FIN报文后，回复一个ACK报文。客户端进入<code>TIME-WAIT</code>状态。服务器收到ACK后，立即进入<code>CLOSED</code>状态。客户端经过<strong>2MSL</strong>（最长报文段寿命的两倍）时间后，也进入<code>CLOSED</code>状态。</li>
+</ol>
+<p><strong>为什么需要四次挥手？</strong><br>因为TCP连接是全双工的，一方发送FIN只表示它不再发送数据，但还可以接收数据。服务器在收到客户端的FIN后，可能还有数据需要发送和处理，因此ACK和FIN报文需要分开发送，这就比三次握手多了一次。</p>
+<p><strong>为什么需要TIME-WAIT状态？</strong></p>
+<ol>
+<li><strong>可靠地终止连接</strong>：确保最后一个ACK报文能够到达服务器。如果这个ACK丢失，服务器会超时重传FIN报文，处于<code>TIME-WAIT</code>状态的客户端可以重发ACK。</li>
+<li><strong>让旧连接的所有报文在网络中消逝</strong>：防止之前连接的延迟报文段被新的、具有相同四元组（源IP、源端口、目的IP、目的端口）的连接错误地接收。</li>
+</ol>
+<h1 id="TCP可靠传输机制"><a href="#TCP可靠传输机制" class="headerlink" title="TCP可靠传输机制"></a>TCP可靠传输机制</h1><h2 id="重传机制"><a href="#重传机制" class="headerlink" title="重传机制"></a>重传机制</h2><ul>
+<li><strong>超时重传</strong>：发送方为每个发送的数据包设置一个计时器。如果在<strong>RTO</strong>（超时重传时间）内未收到确认应答，就重传该数据包。RTO应略大于<strong>RTT</strong>（数据包的往返时间）。</li>
+<li><strong>快速重传</strong>：当接收方收到一个失序的报文段时，它会立即重复发送最后一个按序接收的ACK。当发送方<strong>连续收到3个重复的ACK</strong>时，就认为该ACK之后的数据包已经丢失，会在超时之前立即重传，而不必等待超时。</li>
+</ul>
+<h2 id="滑动窗口与流量控制"><a href="#滑动窗口与流量控制" class="headerlink" title="滑动窗口与流量控制"></a>滑动窗口与流量控制</h2><ul>
+<li><strong>目的</strong>：解决发送方发送速率过快，导致接收方缓冲区溢出的问题。</li>
+<li><strong>机制</strong>：<ul>
+<li>接收方通过TCP头部的<strong>窗口大小</strong>字段，告知发送方自己接收缓冲区的剩余空间（接收窗口，<code>rwnd</code>）。</li>
+<li>发送方根据<code>rwnd</code>的大小，调整自己可以发送的数据量。</li>
+<li>当<code>rwnd = 0</code>时，发送方停止发送数据，并启动一个持久计时器，定期探测接收方窗口是否已恢复。</li>
+</ul>
+</li>
+</ul>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><ul>
+<li><strong>目的</strong>：防止过多的数据注入网络，避免网络中间设备（如路由器）负载过大。</li>
+<li><strong>核心</strong>：发送方维护一个<strong>拥塞窗口</strong>，其大小取决于网络的拥塞程度。发送方的<strong>实际发送窗口</strong> &#x3D; <code>min(拥塞窗口, 接收窗口)</code>。</li>
+<li><strong>四大算法</strong>：<ol>
+<li><strong>慢启动</strong>：连接开始时，拥塞窗口从1开始，每收到一个ACK，窗口就加倍（指数增长）。直到窗口达到<strong>慢启动阈值</strong>。</li>
+<li><strong>拥塞避免</strong>：当窗口达到慢启动阈值后，进入拥塞避免阶段，每收到一个ACK，窗口只增加1（线性增长）。</li>
+<li><strong>拥塞发生</strong>：<ul>
+<li><strong>超时重传</strong>：认为网络拥塞严重。慢启动阈值降为当前窗口的一半，拥塞窗口重置为1，重新开始慢启动。</li>
+<li><strong>快速重传</strong>（收到3个重复ACK）：认为网络拥塞较轻。执行<strong>快速恢复</strong>。</li>
+</ul>
+</li>
+<li><strong>快速恢复</strong>：<ul>
+<li>慢启动阈值降为当前窗口的一半。</li>
+<li>拥塞窗口设置为新的慢启动阈值 + 3。</li>
+<li>重传丢失的数据包。</li>
+<li>每收到一个重复的ACK，拥塞窗口增加1。</li>
+<li>当收到一个新的数据的ACK时，退出快速恢复状态，进入拥塞避免阶段。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
 ]]></content>
       <categories>
-        <category>cpp</category>
+        <category>cn</category>
       </categories>
   </entry>
   <entry>
@@ -397,27 +522,46 @@
       </categories>
   </entry>
   <entry>
-    <title>小问题集</title>
-    <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
-    <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
-<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
-<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+    <title>可变参数模版</title>
+    <url>/2025/10/10/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E7%89%88/</url>
+    <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
-<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
-<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
-<li>map底层用到红黑树，unordered_map用到哈希表</li>
-<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
-<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
+<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><ul>
+<li><p>参数包</p>
+<p>包含多个参数的模版参数</p>
+</li>
+<li><p>包展开</p>
+<p>解包参数的机制</p>
+</li>
 </ul>
-<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
-<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
-<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
+<h1 id="展开参数包的四种方法"><a href="#展开参数包的四种方法" class="headerlink" title="展开参数包的四种方法"></a>展开参数包的四种方法</h1><ol>
+<li><p>递归展开</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T,<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(T first,Args... rest)</span></span>&#123;</span><br><span class="line">    std::cout&lt;&lt;first&lt;&lt;<span class="string">&quot; &quot;</span>;</span><br><span class="line">    <span class="built_in">print</span>(rest...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>折叠表达式</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">sum</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (...+args)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>初始化列表</p>
+<p>代码解释：</p>
+<ul>
+<li>初始化列表用到了逗号运算符，相当于运行逗号左边的，输出逗号右边的东西。这个0随便取的，取任意值都可以。</li>
+<li>使用(void)是为了抑制编译期警告，因为我们用不到这个初始化列表，只是为了cout</li>
 </ul>
-<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">printall</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">      std::cout&lt;&lt;args&lt;&lt;<span class="string">&quot; &quot;</span>,<span class="number">0</span>)...  </span><br><span class="line">    &#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>lambda</p>
+<p>代码解释：</p>
+<p>这个使用到了lambda立即调用技巧，举例如下：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 假设调用：process(1, &quot;hello&quot;, 3.14);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line">[](<span class="keyword">auto</span>&amp;&amp; x1, <span class="keyword">auto</span>&amp;&amp; x2, <span class="keyword">auto</span>&amp;&amp; x3)&#123;</span><br><span class="line">    <span class="comment">// 处理 x1, x2, x3</span></span><br><span class="line">&#125;(<span class="number">1</span>, <span class="string">&quot;hello&quot;</span>, <span class="number">3.14</span>);  <span class="comment">// 立即用参数调用 lambda</span></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<p>如上，抛出异常是不会进入catch的。</p>
+
+
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">tmplate&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(Args&amp;&amp;... args)</span></span>&#123;</span><br><span class="line">    [](<span class="keyword">auto</span>&amp;&amp;... xs)&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;(std::forward&lt;Args&gt;(args)...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="高级用法"><a href="#高级用法" class="headerlink" title="高级用法"></a>高级用法</h1><p>这里介绍完美转发和参数过滤</p>
+<h2 id="完美转发"><a href="#完美转发" class="headerlink" title="完美转发"></a>完美转发</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 示例1：转发给 printf</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(Args&amp;&amp;... args)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(std::forward&lt;Args&gt;(args)...);  <span class="comment">// target_function = printf</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="built_in">wrapper</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 展开后相当于：</span></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Value: %d, Name: %s\n&quot;</span>, <span class="number">42</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="参数过滤"><a href="#参数过滤" class="headerlink" title="参数过滤"></a>参数过滤</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">bool</span> is_integer = std::is_integral_v&lt;T&gt;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">filter_integers</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; result;</span><br><span class="line">    (<span class="type">void</span>)std::initializer_list&lt;<span class="type">int</span>&gt;&#123;</span><br><span class="line">        (is_integer&lt;<span class="keyword">decltype</span>(args)&gt;?(result.<span class="built_in">push_back</span>(args),<span class="number">0</span>):<span class="number">0</span>)...</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="keyword">return</span> results;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -459,28 +603,20 @@
       </categories>
   </entry>
   <entry>
-    <title>类型转换</title>
-    <url>/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
-    <content><![CDATA[<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><ol>
-<li>基本类型转换</li>
-<li>继承关系转换</li>
-<li>void*和其他类型指针转换</li>
-<li>明确的隐式转换</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本类型转换</span></span><br><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(d);  <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上行转换（安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line">Derived* d = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Base* b = <span class="built_in">static_cast</span>&lt;Base*&gt;(d);  <span class="comment">// 安全的向上转换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下行转换（不安全，需谨慎）</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived = <span class="built_in">static_cast</span>&lt;Derived*&gt;(base);  <span class="comment">// 危险！未检查</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// void* 转换</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="type">int</span>* int_ptr = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(ptr);</span><br></pre></td></tr></table></figure>
+    <title>多态类型简述</title>
+    <url>/2025/10/11/%E5%A4%9A%E6%80%81%E7%B1%BB%E5%9E%8B%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<p>C++多态主要分为静态多态和动态多态</p>
+<h1 id="静态多态（编译时多态）"><a href="#静态多态（编译时多态）" class="headerlink" title="静态多态（编译时多态）"></a>静态多态（编译时多态）</h1><h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器根据参数类型和数量选择合适的函数</span></span><br><span class="line">Calculator calc;</span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// 调用int版本</span></span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);    <span class="comment">// 调用double版本</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h1><h2 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h2><p>安全的下行转换，只能用于具有虚函数的类。</p>
-<p>失败时会抛异常，或者返回空指针</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 必须有虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">derivedFunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的下行转换</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Derived* derived = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base);</span><br><span class="line"><span class="keyword">if</span>(derived) &#123;</span><br><span class="line">    derived-&gt;<span class="built_in">derivedFunc</span>();  <span class="comment">// 安全调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换失败的情况</span></span><br><span class="line">Base* base2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived2 = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base2);</span><br><span class="line"><span class="comment">// derived2 == nullptr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用转换（失败时抛异常）</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Base&amp; base_ref = *base;</span><br><span class="line">    Derived&amp; derived_ref = <span class="built_in">dynamic_cast</span>&lt;Derived&amp;&gt;(base_ref);</span><br><span class="line">&#125; <span class="built_in">catch</span>(<span class="type">const</span> std::bad_cast&amp; e) &#123;</span><br><span class="line">    <span class="comment">// 转换失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">double</span> real, imag;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Complex</span>(<span class="type">double</span> r = <span class="number">0</span>, <span class="type">double</span> i = <span class="number">0</span>) : <span class="built_in">real</span>(r), <span class="built_in">imag</span>(i) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real + other.real, imag + other.imag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>, <span class="title">c2</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">Complex c3 = c1 + c2;  <span class="comment">// 使用重载的+运算符</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
-<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><h2 id="适用范围-2"><a href="#适用范围-2" class="headerlink" title="适用范围"></a>适用范围</h2><p>添加或移除const</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 移除const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">int</span>* modifiable = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(&amp;value);</span><br><span class="line">*modifiable = <span class="number">100</span>;  <span class="comment">// 未定义行为！原对象是const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确使用场景</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">legacyFunction</span><span class="params">(<span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 旧C函数，不接受const参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">modernFunction</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">legacyFunction</span>(<span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(param));  <span class="comment">// 临时移除const</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加const</span></span><br><span class="line"><span class="type">int</span> mutable_value = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* const_ptr = <span class="built_in">const_cast</span>&lt;<span class="type">const</span> <span class="type">int</span>*&gt;(&amp;mutable_value);</span><br></pre></td></tr></table></figure>
+<h2 id="模版多态"><a href="#模版多态" class="headerlink" title="模版多态"></a>模版多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">max</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (a &gt; b) ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> result1 = <span class="built_in">max</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// T=int</span></span><br><span class="line"><span class="type">double</span> result2 = <span class="built_in">max</span>(<span class="number">1.5</span>, <span class="number">2.5</span>); <span class="comment">// T=double</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h1><h2 id="适用范围-3"><a href="#适用范围-3" class="headerlink" title="适用范围"></a>适用范围</h2><p>低级位模式转换，不进行安全检查</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指针到整数</span></span><br><span class="line"><span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">uintptr_t</span> addr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(&amp;value);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整数到指针</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">void</span>*&gt;(addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不相关类型指针转换</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">A</span> &#123; <span class="type">int</span> x; &#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123; <span class="type">double</span> y; &#125;;</span><br><span class="line">A a&#123;<span class="number">42</span>&#125;;</span><br><span class="line">B* b = <span class="built_in">reinterpret_cast</span>&lt;B*&gt;(&amp;a);  <span class="comment">// 危险！位模式重新解释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针转换</span></span><br><span class="line"><span class="built_in">void</span> (*func_ptr)() = <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span>(*)()&gt;(some_address);</span><br></pre></td></tr></table></figure>
+<h1 id="动态多态（运行时多态）"><a href="#动态多态（运行时多态）" class="headerlink" title="动态多态（运行时多态）"></a>动态多态（运行时多态）</h1><h2 id="虚函数多态"><a href="#虚函数多态" class="headerlink" title="虚函数多态"></a>虚函数多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Animal makes sound&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Animal</span>() = <span class="keyword">default</span>;  <span class="comment">// 虚析构函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Dog barks&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Cat meows&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行时多态的使用</span></span><br><span class="line">Animal* animals[] = &#123;<span class="keyword">new</span> <span class="built_in">Dog</span>(), <span class="keyword">new</span> <span class="built_in">Cat</span>()&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">    animals[i]-&gt;<span class="built_in">makeSound</span>();  <span class="comment">// 根据实际对象类型调用相应函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-
-
+<h2 id="虚函数调用的地址如何解析"><a href="#虚函数调用的地址如何解析" class="headerlink" title="虚函数调用的地址如何解析"></a>虚函数调用的地址如何解析</h2><p>通过虚函数表（vtable）解析。当类中有虚函数时，编译器会为每个包含虚函数的类创建一个虚函数表，并在每个对象中添加一个虚函数表指针。</p>
+<p>这个指针的地址其实就是对象地址，所以我们实际上可以通过这个指针调用虚函数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*FuncPtr)</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 手动模拟虚函数调用过程</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;\n=== 手动模拟虚函数调用 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"><span class="type">uintptr_t</span>* vptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(derived);</span><br><span class="line"><span class="type">uintptr_t</span>* vtable = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(*vptr);</span><br><span class="line">FuncPtr func = <span class="built_in">reinterpret_cast</span>&lt;FuncPtr&gt;(vtable[<span class="number">0</span>]); <span class="comment">// func1的地址</span></span><br></pre></td></tr></table></figure>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -522,6 +658,33 @@
       </categories>
   </entry>
   <entry>
+    <title>小问题集</title>
+    <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
+<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
+<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
+<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
+<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
+<li>map底层用到红黑树，unordered_map用到哈希表</li>
+<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
+<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
+</ul>
+<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
+<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
+<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
+</ul>
+<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，抛出异常是不会进入catch的。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>模版元编程</title>
     <url>/2025/10/11/%E6%A8%A1%E7%89%88%E5%85%83%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p>模板元编程TMP是C++在编译期执行计算和类型操作的编程范式，本质是用代码生成代码，核心思想是将运行时计算转移到编译期，从而提升性能，增强类型安全并实现零开销抽象。</p>
@@ -531,6 +694,34 @@
 
 <h1 id="模板特化"><a href="#模板特化" class="headerlink" title="模板特化"></a>模板特化</h1><p>为特定类型&#x2F;值提供定制实现，构成TMP的逻辑分支基础：</p>
 <figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 通用模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针类型的特化</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">true</span>;  <span class="comment">// 对指针返回true</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">static_assert</span>(IsPointer&lt;<span class="type">int</span>*&gt;::value, <span class="string">&quot;Must be pointer&quot;</span>);  <span class="comment">// 编译期验证</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>类型转换</title>
+    <url>/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
+    <content><![CDATA[<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><ol>
+<li>基本类型转换</li>
+<li>继承关系转换</li>
+<li>void*和其他类型指针转换</li>
+<li>明确的隐式转换</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本类型转换</span></span><br><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(d);  <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上行转换（安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line">Derived* d = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Base* b = <span class="built_in">static_cast</span>&lt;Base*&gt;(d);  <span class="comment">// 安全的向上转换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下行转换（不安全，需谨慎）</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived = <span class="built_in">static_cast</span>&lt;Derived*&gt;(base);  <span class="comment">// 危险！未检查</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// void* 转换</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="type">int</span>* int_ptr = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(ptr);</span><br></pre></td></tr></table></figure>
+
+<h1 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h1><h2 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h2><p>安全的下行转换，只能用于具有虚函数的类。</p>
+<p>失败时会抛异常，或者返回空指针</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 必须有虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">derivedFunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的下行转换</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Derived* derived = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base);</span><br><span class="line"><span class="keyword">if</span>(derived) &#123;</span><br><span class="line">    derived-&gt;<span class="built_in">derivedFunc</span>();  <span class="comment">// 安全调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换失败的情况</span></span><br><span class="line">Base* base2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived2 = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base2);</span><br><span class="line"><span class="comment">// derived2 == nullptr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用转换（失败时抛异常）</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Base&amp; base_ref = *base;</span><br><span class="line">    Derived&amp; derived_ref = <span class="built_in">dynamic_cast</span>&lt;Derived&amp;&gt;(base_ref);</span><br><span class="line">&#125; <span class="built_in">catch</span>(<span class="type">const</span> std::bad_cast&amp; e) &#123;</span><br><span class="line">    <span class="comment">// 转换失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><h2 id="适用范围-2"><a href="#适用范围-2" class="headerlink" title="适用范围"></a>适用范围</h2><p>添加或移除const</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 移除const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">int</span>* modifiable = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(&amp;value);</span><br><span class="line">*modifiable = <span class="number">100</span>;  <span class="comment">// 未定义行为！原对象是const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确使用场景</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">legacyFunction</span><span class="params">(<span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 旧C函数，不接受const参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">modernFunction</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">legacyFunction</span>(<span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(param));  <span class="comment">// 临时移除const</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加const</span></span><br><span class="line"><span class="type">int</span> mutable_value = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* const_ptr = <span class="built_in">const_cast</span>&lt;<span class="type">const</span> <span class="type">int</span>*&gt;(&amp;mutable_value);</span><br></pre></td></tr></table></figure>
+
+<h1 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h1><h2 id="适用范围-3"><a href="#适用范围-3" class="headerlink" title="适用范围"></a>适用范围</h2><p>低级位模式转换，不进行安全检查</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指针到整数</span></span><br><span class="line"><span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">uintptr_t</span> addr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(&amp;value);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整数到指针</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">void</span>*&gt;(addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不相关类型指针转换</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">A</span> &#123; <span class="type">int</span> x; &#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123; <span class="type">double</span> y; &#125;;</span><br><span class="line">A a&#123;<span class="number">42</span>&#125;;</span><br><span class="line">B* b = <span class="built_in">reinterpret_cast</span>&lt;B*&gt;(&amp;a);  <span class="comment">// 危险！位模式重新解释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针转换</span></span><br><span class="line"><span class="built_in">void</span> (*func_ptr)() = <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span>(*)()&gt;(some_address);</span><br></pre></td></tr></table></figure>
+
+
+
 ]]></content>
       <categories>
         <category>cpp</category>
