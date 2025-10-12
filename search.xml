@@ -87,6 +87,22 @@
       </categories>
   </entry>
   <entry>
+    <title>汤圆照片1</title>
+    <url>/2025/10/09/dog1/</url>
+    <content><![CDATA[<p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
+<p><img src="/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg" alt="mmexport1758644956147"></p>
+<p><img src="/2025/10/09/dog1/mmexport1755166237687.jpg" alt="mmexport1755166237687"></p>
+<p><img src="/2025/10/09/dog1/mmexport1738400799164.jpg" alt="mmexport1738400799164"></p>
+<p><img src="/2025/10/09/dog1/wx_camera_1746437958267.jpg" alt="wx_camera_1746437958267"></p>
+<p><img src="/2025/10/09/dog1/mmexport1730730606474.jpg" alt="mmexport1730730606474"></p>
+<p><img src="/2025/10/09/dog1/mmexport1740107638540.jpg" alt="mmexport1740107638540"></p>
+<p><img src="/2025/10/09/dog1/mmexport1744455600276.jpg" alt="mmexport1744455600276"></p>
+]]></content>
+      <categories>
+        <category>pets</category>
+      </categories>
+  </entry>
+  <entry>
     <title>inline</title>
     <url>/2025/10/11/inline/</url>
     <content><![CDATA[<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明为inline的函数</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> result = <span class="built_in">add</span>(<span class="number">3</span>, <span class="number">4</span>);  <span class="comment">// 可能被内联</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -104,6 +120,41 @@
 ]]></content>
       <categories>
         <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>Name Mangling</title>
+    <url>/2025/10/11/name-mangling/</url>
+    <content><![CDATA[<h1 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h1><p>解决函数重载的符号冲突，保持类型安全，区分作用域，模板实例化的区分</p>
+<p>ABI规范定义了name mangling规则，确保了同一ABI的编译器能够互相链接。</p>
+<p>由于C++支持重载，所以编译器要对函数名进行命名，但是MSVC和MINGW编译器的命名方法不同，会导致跨编译器编译出错，所以需要在代码上进行兼容。</p>
+<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ImageSourceModuleAPI.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> IMAGESOURCEMODULE_API_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_API_H</span></span><br><span class="line"><span class="comment">// DLL导出宏定义</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> IMAGESOURCEMODULE_DLL_EXPORTS</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_DLL_API __declspec(dllexport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_DLL_API __declspec(dllimport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="comment">// 前向声明</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CAbstractUserModule</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"> <span class="comment">// 采用__stdcall调用约定，且须在.def文件中增加接口描述。</span></span><br><span class="line"> <span class="function">IMAGESOURCEMODULE_DLL_API CAbstractUserModule* __stdcall <span class="title">CreateModule</span><span class="params">(<span class="type">void</span>* hModule)</span></span>;</span><br><span class="line"> <span class="function">IMAGESOURCEMODULE_DLL_API <span class="type">void</span> __stdcall <span class="title">DestroyModule</span><span class="params">(<span class="type">void</span>* hModule, CAbstractUserModule* pUserModule)</span></span>;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// IMAGESOURCEMODULE_API_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p>这种属于是extern “C”的方法，还有一种方法是在def文件里声明：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">; ImageSourceModule.def</span><br><span class="line">EXPORTS</span><br><span class="line">CreateModule</span><br><span class="line">DestroyModule</span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
       </categories>
   </entry>
   <entry>
@@ -136,152 +187,6 @@
 ]]></content>
       <categories>
         <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>小问题集</title>
-    <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
-    <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
-<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
-<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
-<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
-<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
-<li>map底层用到红黑树，unordered_map用到哈希表</li>
-<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
-<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
-</ul>
-<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
-<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
-<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
-</ul>
-<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如上，抛出异常是不会进入catch的。</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>智能指针简述</title>
-    <url>/2025/10/11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%AE%80%E8%BF%B0/</url>
-    <content><![CDATA[<h1 id="指针指针类型"><a href="#指针指针类型" class="headerlink" title="指针指针类型"></a>指针指针类型</h1><h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转移所有权</span></span><br><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; ptr3 = std::<span class="built_in">move</span>(ptr);  <span class="comment">// ptr变为空</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问</span></span><br><span class="line">*ptr3 = <span class="number">200</span>;        <span class="comment">// 解引用</span></span><br><span class="line">ptr3-&gt;<span class="built_in">someMethod</span>(); <span class="comment">// 成员访问</span></span><br><span class="line">ptr<span class="number">3.</span><span class="built_in">get</span>();         <span class="comment">// 获取原始指针</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::shared_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;  <span class="comment">// 不推荐</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 共享所有权</span></span><br><span class="line"><span class="keyword">auto</span> ptr3 = ptr;  <span class="comment">// 引用计数+1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查引用计数</span></span><br><span class="line">cout &lt;&lt; ptr.<span class="built_in">use_count</span>();  <span class="comment">// 输出当前引用数</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::shared_ptr&lt;<span class="type">int</span>&gt; shared = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line">std::weak_ptr&lt;<span class="type">int</span>&gt; weak = shared;  <span class="comment">// 不增加引用计数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全访问</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">auto</span> locked = weak.<span class="built_in">lock</span>()) &#123;  <span class="comment">// 检查对象是否还存在</span></span><br><span class="line">    cout &lt;&lt; *locked &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="shared-from-this"><a href="#shared-from-this" class="headerlink" title="shared_from_this"></a>shared_from_this</h2><h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ol>
-<li><p>std::enable_shared_from_this 类模板：</p>
-<ul>
-<li>它是一个基类模板，用于继承。当一个类继承自 <code>std::enable_shared_from_this&lt;T&gt;</code>时，它就具备了安全地从成员函数中返回 this 指针的能力，而不会导致双重删除或悬空指针的问题。</li>
-<li>它内部维护了一个弱引用（std::weak_ptr），这个弱引用会在第一个 <code>std::shared_ptr</code> 指向对象时被自动设置。</li>
-</ul>
-</li>
-<li><p>shared_from_this() 成员函数：</p>
-<ul>
-<li>这是 std::enable_shared_from_this 提供的成员函数。调用它可以返回一个指向当前对象的 std::shared_ptr，前提是当前对象已经被一个 std::shared_ptr 管理。</li>
-<li>如果对象不是由 std::shared_ptr 管理的（例如，直接在栈上创建或通过普通指针 new 创建），调用 shared_from_this() 会导致未定义行为（通常是抛出 std::bad_weak_ptr 异常）。</li>
-</ul>
-</li>
-</ol>
-<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
-<li>当一个对象通过 std::make_shared 或 std::shared_ptr 的构造函数被首次管理时，std::enable_shared_from_this 的内部机制会自动将对象的控制块与一个 std::weak_ptr 关联起来。</li>
-<li>当你调用 shared_from_this() 时，它会尝试将内部的 std::weak_ptr 升级为 std::shared_ptr。如果升级成功，说明对象仍然被 std::shared_ptr 管理，返回的 std::shared_ptr 会增加引用计数；如果失败（例如，对象已经被销毁），则会抛出异常。</li>
-</ul>
-<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>比如定时器回调，要打印日志，但是不保证调用回调的时候还有这个对象。所以用shared_from_this</p>
-<h2 id="危险用法"><a href="#危险用法" class="headerlink" title="危险用法"></a>危险用法</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;MyClass&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 正确方式：从this获取shared_ptr</span></span><br><span class="line">        <span class="keyword">auto</span> self = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="comment">// 传递给异步操作等...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">std::shared_ptr&lt;MyClass&gt; <span class="title">getPtr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">auto</span> obj = std::<span class="built_in">make_shared</span>&lt;MyClass&gt;();</span><br><span class="line">obj-&gt;<span class="built_in">doWork</span>();  <span class="comment">// 安全！</span></span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>类型转换</title>
-    <url>/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
-    <content><![CDATA[<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><ol>
-<li>基本类型转换</li>
-<li>继承关系转换</li>
-<li>void*和其他类型指针转换</li>
-<li>明确的隐式转换</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本类型转换</span></span><br><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(d);  <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上行转换（安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line">Derived* d = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Base* b = <span class="built_in">static_cast</span>&lt;Base*&gt;(d);  <span class="comment">// 安全的向上转换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下行转换（不安全，需谨慎）</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived = <span class="built_in">static_cast</span>&lt;Derived*&gt;(base);  <span class="comment">// 危险！未检查</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// void* 转换</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="type">int</span>* int_ptr = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(ptr);</span><br></pre></td></tr></table></figure>
-
-<h1 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h1><h2 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h2><p>安全的下行转换，只能用于具有虚函数的类。</p>
-<p>失败时会抛异常，或者返回空指针</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 必须有虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">derivedFunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的下行转换</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Derived* derived = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base);</span><br><span class="line"><span class="keyword">if</span>(derived) &#123;</span><br><span class="line">    derived-&gt;<span class="built_in">derivedFunc</span>();  <span class="comment">// 安全调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换失败的情况</span></span><br><span class="line">Base* base2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived2 = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base2);</span><br><span class="line"><span class="comment">// derived2 == nullptr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用转换（失败时抛异常）</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Base&amp; base_ref = *base;</span><br><span class="line">    Derived&amp; derived_ref = <span class="built_in">dynamic_cast</span>&lt;Derived&amp;&gt;(base_ref);</span><br><span class="line">&#125; <span class="built_in">catch</span>(<span class="type">const</span> std::bad_cast&amp; e) &#123;</span><br><span class="line">    <span class="comment">// 转换失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><h2 id="适用范围-2"><a href="#适用范围-2" class="headerlink" title="适用范围"></a>适用范围</h2><p>添加或移除const</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 移除const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">int</span>* modifiable = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(&amp;value);</span><br><span class="line">*modifiable = <span class="number">100</span>;  <span class="comment">// 未定义行为！原对象是const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确使用场景</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">legacyFunction</span><span class="params">(<span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 旧C函数，不接受const参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">modernFunction</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">legacyFunction</span>(<span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(param));  <span class="comment">// 临时移除const</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加const</span></span><br><span class="line"><span class="type">int</span> mutable_value = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* const_ptr = <span class="built_in">const_cast</span>&lt;<span class="type">const</span> <span class="type">int</span>*&gt;(&amp;mutable_value);</span><br></pre></td></tr></table></figure>
-
-<h1 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h1><h2 id="适用范围-3"><a href="#适用范围-3" class="headerlink" title="适用范围"></a>适用范围</h2><p>低级位模式转换，不进行安全检查</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指针到整数</span></span><br><span class="line"><span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">uintptr_t</span> addr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(&amp;value);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整数到指针</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">void</span>*&gt;(addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不相关类型指针转换</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">A</span> &#123; <span class="type">int</span> x; &#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123; <span class="type">double</span> y; &#125;;</span><br><span class="line">A a&#123;<span class="number">42</span>&#125;;</span><br><span class="line">B* b = <span class="built_in">reinterpret_cast</span>&lt;B*&gt;(&amp;a);  <span class="comment">// 危险！位模式重新解释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针转换</span></span><br><span class="line"><span class="built_in">void</span> (*func_ptr)() = <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span>(*)()&gt;(some_address);</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
-<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
-<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
-<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
-<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>汤圆照片1</title>
-    <url>/2025/10/09/dog1/</url>
-    <content><![CDATA[<p><img src="/2025/10/09/dog1/mmexport1758010068100.jpg" alt="mmexport1758010068100"><img src="/2025/10/09/dog1/wx_camera_1746437946351.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1758644956147-1760019802395-4.jpg" alt="mmexport1758644956147"></p>
-<p><img src="/2025/10/09/dog1/mmexport1755166237687.jpg" alt="mmexport1755166237687"></p>
-<p><img src="/2025/10/09/dog1/mmexport1738400799164.jpg" alt="mmexport1738400799164"></p>
-<p><img src="/2025/10/09/dog1/wx_camera_1746437958267.jpg" alt="wx_camera_1746437958267"></p>
-<p><img src="/2025/10/09/dog1/mmexport1730730606474.jpg" alt="mmexport1730730606474"></p>
-<p><img src="/2025/10/09/dog1/mmexport1740107638540.jpg" alt="mmexport1740107638540"></p>
-<p><img src="/2025/10/09/dog1/mmexport1744455600276.jpg" alt="mmexport1744455600276"></p>
-]]></content>
-      <categories>
-        <category>pets</category>
       </categories>
   </entry>
   <entry>
@@ -331,15 +236,286 @@
       </categories>
   </entry>
   <entry>
-    <title>Name Mangling</title>
-    <url>/2025/10/11/name-mangling/</url>
-    <content><![CDATA[<h1 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h1><p>解决函数重载的符号冲突，保持类型安全，区分作用域，模板实例化的区分</p>
-<p>ABI规范定义了name mangling规则，确保了同一ABI的编译器能够互相链接。</p>
-<p>由于C++支持重载，所以编译器要对函数名进行命名，但是MSVC和MINGW编译器的命名方法不同，会导致跨编译器编译出错，所以需要在代码上进行兼容。</p>
-<h1 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// ImageSourceModuleAPI.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> IMAGESOURCEMODULE_API_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_API_H</span></span><br><span class="line"><span class="comment">// DLL导出宏定义</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> IMAGESOURCEMODULE_DLL_EXPORTS</span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_DLL_API __declspec(dllexport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">else</span></span></span><br><span class="line">    <span class="meta">#<span class="keyword">define</span> IMAGESOURCEMODULE_DLL_API __declspec(dllimport)</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="comment">// 前向声明</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CAbstractUserModule</span>;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line"><span class="keyword">extern</span> <span class="string">&quot;C&quot;</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"> <span class="comment">// 采用__stdcall调用约定，且须在.def文件中增加接口描述。</span></span><br><span class="line"> <span class="function">IMAGESOURCEMODULE_DLL_API CAbstractUserModule* __stdcall <span class="title">CreateModule</span><span class="params">(<span class="type">void</span>* hModule)</span></span>;</span><br><span class="line"> <span class="function">IMAGESOURCEMODULE_DLL_API <span class="type">void</span> __stdcall <span class="title">DestroyModule</span><span class="params">(<span class="type">void</span>* hModule, CAbstractUserModule* pUserModule)</span></span>;</span><br><span class="line"><span class="meta">#<span class="keyword">ifdef</span> __cplusplus</span></span><br><span class="line">&#125;;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// IMAGESOURCEMODULE_API_H</span></span></span><br></pre></td></tr></table></figure>
+    <title>多态类型简述</title>
+    <url>/2025/10/11/%E5%A4%9A%E6%80%81%E7%B1%BB%E5%9E%8B%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<p>C++多态主要分为静态多态和动态多态</p>
+<h1 id="静态多态（编译时多态）"><a href="#静态多态（编译时多态）" class="headerlink" title="静态多态（编译时多态）"></a>静态多态（编译时多态）</h1><h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器根据参数类型和数量选择合适的函数</span></span><br><span class="line">Calculator calc;</span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// 调用int版本</span></span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);    <span class="comment">// 调用double版本</span></span><br></pre></td></tr></table></figure>
 
-<p>这种属于是extern “C”的方法，还有一种方法是在def文件里声明：</p>
-<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">; ImageSourceModule.def</span><br><span class="line">EXPORTS</span><br><span class="line">CreateModule</span><br><span class="line">DestroyModule</span><br></pre></td></tr></table></figure>
+<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">double</span> real, imag;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Complex</span>(<span class="type">double</span> r = <span class="number">0</span>, <span class="type">double</span> i = <span class="number">0</span>) : <span class="built_in">real</span>(r), <span class="built_in">imag</span>(i) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real + other.real, imag + other.imag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>, <span class="title">c2</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">Complex c3 = c1 + c2;  <span class="comment">// 使用重载的+运算符</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="模版多态"><a href="#模版多态" class="headerlink" title="模版多态"></a>模版多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">max</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (a &gt; b) ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> result1 = <span class="built_in">max</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// T=int</span></span><br><span class="line"><span class="type">double</span> result2 = <span class="built_in">max</span>(<span class="number">1.5</span>, <span class="number">2.5</span>); <span class="comment">// T=double</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="动态多态（运行时多态）"><a href="#动态多态（运行时多态）" class="headerlink" title="动态多态（运行时多态）"></a>动态多态（运行时多态）</h1><h2 id="虚函数多态"><a href="#虚函数多态" class="headerlink" title="虚函数多态"></a>虚函数多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Animal makes sound&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Animal</span>() = <span class="keyword">default</span>;  <span class="comment">// 虚析构函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Dog barks&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Cat meows&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行时多态的使用</span></span><br><span class="line">Animal* animals[] = &#123;<span class="keyword">new</span> <span class="built_in">Dog</span>(), <span class="keyword">new</span> <span class="built_in">Cat</span>()&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">    animals[i]-&gt;<span class="built_in">makeSound</span>();  <span class="comment">// 根据实际对象类型调用相应函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="虚函数调用的地址如何解析"><a href="#虚函数调用的地址如何解析" class="headerlink" title="虚函数调用的地址如何解析"></a>虚函数调用的地址如何解析</h2><p>通过虚函数表（vtable）解析。当类中有虚函数时，编译器会为每个包含虚函数的类创建一个虚函数表，并在每个对象中添加一个虚函数表指针。</p>
+<p>这个指针的地址其实就是对象地址，所以我们实际上可以通过这个指针调用虚函数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*FuncPtr)</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 手动模拟虚函数调用过程</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;\n=== 手动模拟虚函数调用 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"><span class="type">uintptr_t</span>* vptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(derived);</span><br><span class="line"><span class="type">uintptr_t</span>* vtable = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(*vptr);</span><br><span class="line">FuncPtr func = <span class="built_in">reinterpret_cast</span>&lt;FuncPtr&gt;(vtable[<span class="number">0</span>]); <span class="comment">// func1的地址</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>存储系统</title>
+    <url>/2025/10/11/%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/</url>
+    <content><![CDATA[<h1 id="存储器层次结构"><a href="#存储器层次结构" class="headerlink" title="存储器层次结构"></a>存储器层次结构</h1><h2 id="存储金字塔"><a href="#存储金字塔" class="headerlink" title="存储金字塔"></a>存储金字塔</h2><table>
+<thead>
+<tr>
+<th align="left">层级</th>
+<th align="left">存储介质</th>
+<th align="left">特点</th>
+<th align="left">访问时间</th>
+<th align="left">容量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>寄存器</strong></td>
+<td align="left">CPU内部寄存器</td>
+<td align="left">速度极快，半时钟周期完成</td>
+<td align="left">~0.1ns</td>
+<td align="left">KB级</td>
+</tr>
+<tr>
+<td align="left"><strong>CPU Cache</strong></td>
+<td align="left">SRAM（静态随机存储器）</td>
+<td align="left">断电数据丢失，分L1&#x2F;L2&#x2F;L3</td>
+<td align="left">~1ns</td>
+<td align="left">MB级</td>
+</tr>
+<tr>
+<td align="left"><strong>主内存</strong></td>
+<td align="left">DRAM（动态随机存储器）</td>
+<td align="left">需要刷新，速度较慢</td>
+<td align="left">~10-100ns</td>
+<td align="left">GB级</td>
+</tr>
+<tr>
+<td align="left"><strong>SSD</strong></td>
+<td align="left">NAND Flash</td>
+<td align="left">非易失性，速度快于HDD</td>
+<td align="left">~10-100μs</td>
+<td align="left">TB级</td>
+</tr>
+<tr>
+<td align="left"><strong>HDD</strong></td>
+<td align="left">磁性盘片</td>
+<td align="left">机械寻道，速度最慢</td>
+<td align="left">~1-10ms</td>
+<td align="left">TB级</td>
+</tr>
+</tbody></table>
+<p><strong>关键面试点：</strong></p>
+<ul>
+<li><strong>SRAM vs DRAM</strong>：SRAM更快更贵，用于Cache；DRAM更便宜，用于主内存</li>
+<li><strong>访问时间差距</strong>：CPU Cache比内存快10-100倍，内存比SSD快1000倍</li>
+</ul>
+<h1 id="CPU-Cache工作原理"><a href="#CPU-Cache工作原理" class="headerlink" title="CPU Cache工作原理"></a>CPU Cache工作原理</h1><h2 id="层级"><a href="#层级" class="headerlink" title="层级"></a>层级</h2><ul>
+<li><strong>L1 Cache</strong>：分指令Cache和数据Cache，每个核心独享</li>
+<li><strong>L2 Cache</strong>：每个核心独享</li>
+<li><strong>L3 Cache</strong>：所有核心共享</li>
+</ul>
+<h1 id="虚拟内存机制"><a href="#虚拟内存机制" class="headerlink" title="虚拟内存机制"></a>虚拟内存机制</h1><h2 id="为什么需要虚拟内存？"><a href="#为什么需要虚拟内存？" class="headerlink" title="为什么需要虚拟内存？"></a>为什么需要虚拟内存？</h2><ul>
+<li><strong>进程隔离</strong>：每个进程有独立的地址空间</li>
+<li><strong>内存扩展</strong>：程序可以使用比物理内存更大的地址空间</li>
+<li><strong>简化编程</strong>：程序员无需关心物理内存布局</li>
+</ul>
+<h2 id="地址转换过程"><a href="#地址转换过程" class="headerlink" title="地址转换过程"></a>地址转换过程</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">虚拟地址 → [MMU] → 物理地址</span><br><span class="line">              ↓</span><br><span class="line">      页表（存储映射关系）</span><br></pre></td></tr></table></figure>
+
+<h2 id="分段-vs-分页"><a href="#分段-vs-分页" class="headerlink" title="分段 vs 分页"></a>分段 vs 分页</h2><table>
+<thead>
+<tr>
+<th align="left">方面</th>
+<th align="left">分段</th>
+<th align="left">分页</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>管理视角</strong></td>
+<td align="left">逻辑视角（代码段、数据段等）</td>
+<td align="left">物理视角（固定大小页面）</td>
+</tr>
+<tr>
+<td align="left"><strong>划分单位</strong></td>
+<td align="left">按逻辑单元大小划分</td>
+<td align="left">固定大小（通常4KB）</td>
+</tr>
+<tr>
+<td align="left"><strong>地址构成</strong></td>
+<td align="left">段基址 + 段内偏移</td>
+<td align="left">页号 + 页内偏移</td>
+</tr>
+<tr>
+<td align="left"><strong>碎片问题</strong></td>
+<td align="left">外部碎片严重</td>
+<td align="left">内部碎片（页内浪费）</td>
+</tr>
+<tr>
+<td align="left"><strong>现代应用</strong></td>
+<td align="left">较少使用</td>
+<td align="left">现代操作系统主流</td>
+</tr>
+</tbody></table>
+<h2 id="多级页表"><a href="#多级页表" class="headerlink" title="多级页表"></a>多级页表</h2><ul>
+<li>解决单级页表空间开销大的问题</li>
+<li>按需分配页表，节省内存</li>
+<li>举例：x86-64使用4级页表</li>
+</ul>
+<h2 id="页面置换算法"><a href="#页面置换算法" class="headerlink" title="页面置换算法"></a>页面置换算法</h2><h3 id="最佳置换算法（OPT）"><a href="#最佳置换算法（OPT）" class="headerlink" title="最佳置换算法（OPT）"></a>最佳置换算法（OPT）</h3><ul>
+<li>淘汰未来最长时间不会被访问的页面</li>
+<li>理论最优，但无法实际实现（无法预知未来）</li>
+</ul>
+<h3 id="先进先出（FIFO）"><a href="#先进先出（FIFO）" class="headerlink" title="先进先出（FIFO）"></a>先进先出（FIFO）</h3><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 伪代码实现</span></span><br><span class="line">queue page_queue;  <span class="comment">// 页面队列</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">access_page</span><span class="params">(<span class="type">int</span> page_num)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">page_in_memory</span>(page_num)) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">memory_full</span>()) &#123;</span><br><span class="line">            victim = page_queue.<span class="built_in">front</span>();  <span class="comment">// 淘汰最先进入的</span></span><br><span class="line">            page_queue.<span class="built_in">pop</span>();</span><br><span class="line">            <span class="built_in">remove_page</span>(victim);</span><br><span class="line">        &#125;</span><br><span class="line">        page_queue.<span class="built_in">push</span>(page_num);</span><br><span class="line">        <span class="built_in">load_page</span>(page_num);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><strong>Belady异常</strong>：分配更多页框时，缺页率反而上升</li>
+</ul>
+<h3 id="最近最久未使用（LRU）"><a href="#最近最久未使用（LRU）" class="headerlink" title="最近最久未使用（LRU）"></a>最近最久未使用（LRU）</h3><p>cpp</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">// 伪代码实现</span><br><span class="line">list page_list;  // 按访问时间排序</span><br><span class="line"></span><br><span class="line">void access_page(int page_num) &#123;</span><br><span class="line">    if (page_in_memory(page_num)) &#123;</span><br><span class="line">        page_list.remove(page_num);  // 从原位置移除</span><br><span class="line">    &#125; else &#123;</span><br><span class="line">        if (memory_full()) &#123;</span><br><span class="line">            victim = page_list.back();  // 淘汰最久未使用的</span><br><span class="line">            page_list.pop_back();</span><br><span class="line">            remove_page(victim);</span><br><span class="line">        &#125;</span><br><span class="line">        load_page(page_num);</span><br><span class="line">    &#125;</span><br><span class="line">    page_list.push_front(page_num);  // 放到最近使用位置</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>实际近似实现：时钟算法、二次机会算法</li>
+</ul>
+<h1 id="面试题"><a href="#面试题" class="headerlink" title="面试题"></a>面试题</h1><h2 id="概念题"><a href="#概念题" class="headerlink" title="概念题"></a>概念题</h2><ol>
+<li>为什么需要多级Cache<ul>
+<li>在速度和容量取得平衡</li>
+<li>L1追求速度，L3追求容量</li>
+<li>降低平均内存访问时间</li>
+</ul>
+</li>
+<li>虚拟内存的好处</li>
+<li>如何监控程序缺页情况？<ul>
+<li>Linux：<code>perf stat -e page-faults ./program</code></li>
+<li>Windows：性能监视器跟踪Page Faults&#x2F;sec</li>
+</ul>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>os</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>小问题集</title>
+    <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
+    <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
+<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
+<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
+
+<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
+<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
+<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
+<li>map底层用到红黑树，unordered_map用到哈希表</li>
+<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
+<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
+</ul>
+<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
+<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
+<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
+</ul>
+<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如上，抛出异常是不会进入catch的。</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>数据链路层</title>
+    <url>/2025/10/12/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/</url>
+    <content><![CDATA[<h1 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h1><h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ol>
+<li>唯一标识：全球唯一的硬件地址，在局域网内标识网络设备</li>
+<li>帧寻址：在数据链路层，通过源MAC和目标MAC地址，实现了同一网段内设备直接通信</li>
+<li>帧过滤：网卡根据收到的帧的目标MAC地址，决定是否接收并上传给上层处理</li>
+</ol>
+<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>48位，前24为由IEEE分配给厂商，后24位厂商自行分配</p>
+<h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><ul>
+<li>全称：地址解析协议</li>
+<li>作用：根据IP地址查询对应的MAC地址</li>
+<li>工作原理：<ol>
+<li>当主机A需要与同一局域网内主机B通信，A会查询本地ARP缓存表</li>
+<li>如果没找到B的MAC地址，A会向局域网广播一个ARP请求包，内容为询问IP地址为x.x.x.x的MAC地址</li>
+<li>局域网内所有主机都会收到这个请求，但是IP地址对应的主机会给主机A单播一个ARP回复包，包含自己的MAC地址</li>
+<li>主机A收到回复后，将IP-MAC的映射关系存入ARP缓存</li>
+</ol>
+</li>
+</ul>
+<h1 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h1><p>交换机是数据链路层设备，核心工作是基于MAC地址转发数据帧。</p>
+<ol>
+<li>学习：交换机有一个MAC地址表，记录端口与连接在该端口上设备的MAC地址映射关系</li>
+<li>转发，过滤：当交换机收到一个数据帧，则查看其目标MAC地址，在MAC地址表中查找对应的端口<ul>
+<li>如果找到了，单播将帧从那个端口转发</li>
+<li>如果未找到，则广播所有其他窗口</li>
+</ul>
+</li>
+<li>环路避免：在复杂网络中，使用STP协议来防止广播风暴</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cn</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>类型转换</title>
+    <url>/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/</url>
+    <content><![CDATA[<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><ol>
+<li>基本类型转换</li>
+<li>继承关系转换</li>
+<li>void*和其他类型指针转换</li>
+<li>明确的隐式转换</li>
+</ol>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 基本类型转换</span></span><br><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(d);  <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上行转换（安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line">Derived* d = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Base* b = <span class="built_in">static_cast</span>&lt;Base*&gt;(d);  <span class="comment">// 安全的向上转换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下行转换（不安全，需谨慎）</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived = <span class="built_in">static_cast</span>&lt;Derived*&gt;(base);  <span class="comment">// 危险！未检查</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// void* 转换</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="type">int</span>* int_ptr = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(ptr);</span><br></pre></td></tr></table></figure>
+
+<h1 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h1><h2 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h2><p>安全的下行转换，只能用于具有虚函数的类。</p>
+<p>失败时会抛异常，或者返回空指针</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 必须有虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">derivedFunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的下行转换</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Derived* derived = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base);</span><br><span class="line"><span class="keyword">if</span>(derived) &#123;</span><br><span class="line">    derived-&gt;<span class="built_in">derivedFunc</span>();  <span class="comment">// 安全调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换失败的情况</span></span><br><span class="line">Base* base2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived2 = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base2);</span><br><span class="line"><span class="comment">// derived2 == nullptr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用转换（失败时抛异常）</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Base&amp; base_ref = *base;</span><br><span class="line">    Derived&amp; derived_ref = <span class="built_in">dynamic_cast</span>&lt;Derived&amp;&gt;(base_ref);</span><br><span class="line">&#125; <span class="built_in">catch</span>(<span class="type">const</span> std::bad_cast&amp; e) &#123;</span><br><span class="line">    <span class="comment">// 转换失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><h2 id="适用范围-2"><a href="#适用范围-2" class="headerlink" title="适用范围"></a>适用范围</h2><p>添加或移除const</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 移除const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">int</span>* modifiable = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(&amp;value);</span><br><span class="line">*modifiable = <span class="number">100</span>;  <span class="comment">// 未定义行为！原对象是const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确使用场景</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">legacyFunction</span><span class="params">(<span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 旧C函数，不接受const参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">modernFunction</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">legacyFunction</span>(<span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(param));  <span class="comment">// 临时移除const</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加const</span></span><br><span class="line"><span class="type">int</span> mutable_value = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* const_ptr = <span class="built_in">const_cast</span>&lt;<span class="type">const</span> <span class="type">int</span>*&gt;(&amp;mutable_value);</span><br></pre></td></tr></table></figure>
+
+<h1 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h1><h2 id="适用范围-3"><a href="#适用范围-3" class="headerlink" title="适用范围"></a>适用范围</h2><p>低级位模式转换，不进行安全检查</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 指针到整数</span></span><br><span class="line"><span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">uintptr_t</span> addr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(&amp;value);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整数到指针</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">void</span>*&gt;(addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不相关类型指针转换</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">A</span> &#123; <span class="type">int</span> x; &#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123; <span class="type">double</span> y; &#125;;</span><br><span class="line">A a&#123;<span class="number">42</span>&#125;;</span><br><span class="line">B* b = <span class="built_in">reinterpret_cast</span>&lt;B*&gt;(&amp;a);  <span class="comment">// 危险！位模式重新解释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针转换</span></span><br><span class="line"><span class="built_in">void</span> (*func_ptr)() = <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span>(*)()&gt;(some_address);</span><br></pre></td></tr></table></figure>
+
+
+
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>智能指针简述</title>
+    <url>/2025/10/11/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<h1 id="指针指针类型"><a href="#指针指针类型" class="headerlink" title="指针指针类型"></a>指针指针类型</h1><h2 id="unique-ptr"><a href="#unique-ptr" class="headerlink" title="unique_ptr"></a>unique_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_unique</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::unique_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转移所有权</span></span><br><span class="line">std::unique_ptr&lt;<span class="type">int</span>&gt; ptr3 = std::<span class="built_in">move</span>(ptr);  <span class="comment">// ptr变为空</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 访问</span></span><br><span class="line">*ptr3 = <span class="number">200</span>;        <span class="comment">// 解引用</span></span><br><span class="line">ptr3-&gt;<span class="built_in">someMethod</span>(); <span class="comment">// 成员访问</span></span><br><span class="line">ptr<span class="number">3.</span><span class="built_in">get</span>();         <span class="comment">// 获取原始指针</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="shared-ptr"><a href="#shared-ptr" class="headerlink" title="shared_ptr"></a>shared_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 创建</span></span><br><span class="line"><span class="keyword">auto</span> ptr = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line"><span class="function">std::shared_ptr&lt;<span class="type">int</span>&gt; <span class="title">ptr2</span><span class="params">(<span class="keyword">new</span> <span class="type">int</span>(<span class="number">100</span>))</span></span>;  <span class="comment">// 不推荐</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 共享所有权</span></span><br><span class="line"><span class="keyword">auto</span> ptr3 = ptr;  <span class="comment">// 引用计数+1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查引用计数</span></span><br><span class="line">cout &lt;&lt; ptr.<span class="built_in">use_count</span>();  <span class="comment">// 输出当前引用数</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="weak-ptr"><a href="#weak-ptr" class="headerlink" title="weak_ptr"></a>weak_ptr</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::shared_ptr&lt;<span class="type">int</span>&gt; shared = std::<span class="built_in">make_shared</span>&lt;<span class="type">int</span>&gt;(<span class="number">42</span>);</span><br><span class="line">std::weak_ptr&lt;<span class="type">int</span>&gt; weak = shared;  <span class="comment">// 不增加引用计数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全访问</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">auto</span> locked = weak.<span class="built_in">lock</span>()) &#123;  <span class="comment">// 检查对象是否还存在</span></span><br><span class="line">    cout &lt;&lt; *locked &lt;&lt; endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h1><h2 id="shared-from-this"><a href="#shared-from-this" class="headerlink" title="shared_from_this"></a>shared_from_this</h2><h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><ol>
+<li><p>std::enable_shared_from_this 类模板：</p>
+<ul>
+<li>它是一个基类模板，用于继承。当一个类继承自 <code>std::enable_shared_from_this&lt;T&gt;</code>时，它就具备了安全地从成员函数中返回 this 指针的能力，而不会导致双重删除或悬空指针的问题。</li>
+<li>它内部维护了一个弱引用（std::weak_ptr），这个弱引用会在第一个 <code>std::shared_ptr</code> 指向对象时被自动设置。</li>
+</ul>
+</li>
+<li><p>shared_from_this() 成员函数：</p>
+<ul>
+<li>这是 std::enable_shared_from_this 提供的成员函数。调用它可以返回一个指向当前对象的 std::shared_ptr，前提是当前对象已经被一个 std::shared_ptr 管理。</li>
+<li>如果对象不是由 std::shared_ptr 管理的（例如，直接在栈上创建或通过普通指针 new 创建），调用 shared_from_this() 会导致未定义行为（通常是抛出 std::bad_weak_ptr 异常）。</li>
+</ul>
+</li>
+</ol>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><ul>
+<li>当一个对象通过 std::make_shared 或 std::shared_ptr 的构造函数被首次管理时，std::enable_shared_from_this 的内部机制会自动将对象的控制块与一个 std::weak_ptr 关联起来。</li>
+<li>当你调用 shared_from_this() 时，它会尝试将内部的 std::weak_ptr 升级为 std::shared_ptr。如果升级成功，说明对象仍然被 std::shared_ptr 管理，返回的 std::shared_ptr 会增加引用计数；如果失败（例如，对象已经被销毁），则会抛出异常。</li>
+</ul>
+<h3 id="场景"><a href="#场景" class="headerlink" title="场景"></a>场景</h3><p>比如定时器回调，要打印日志，但是不保证调用回调的时候还有这个对象。所以用shared_from_this</p>
+<h2 id="危险用法"><a href="#危险用法" class="headerlink" title="危险用法"></a>危险用法</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span> : <span class="keyword">public</span> std::enable_shared_from_this&lt;MyClass&gt; &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 正确方式：从this获取shared_ptr</span></span><br><span class="line">        <span class="keyword">auto</span> self = <span class="built_in">shared_from_this</span>();</span><br><span class="line">        <span class="comment">// 传递给异步操作等...</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function">std::shared_ptr&lt;MyClass&gt; <span class="title">getPtr</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">shared_from_this</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line"><span class="keyword">auto</span> obj = std::<span class="built_in">make_shared</span>&lt;MyClass&gt;();</span><br><span class="line">obj-&gt;<span class="built_in">doWork</span>();  <span class="comment">// 安全！</span></span><br></pre></td></tr></table></figure>
+
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -361,23 +537,462 @@
       </categories>
   </entry>
   <entry>
-    <title>多态类型简述</title>
-    <url>/2025/10/11/%E5%A4%9A%E6%80%81%E7%B1%BB%E5%9E%8B%E7%AE%80%E8%BF%B0/</url>
-    <content><![CDATA[<p>C++多态主要分为静态多态和动态多态</p>
-<h1 id="静态多态（编译时多态）"><a href="#静态多态（编译时多态）" class="headerlink" title="静态多态（编译时多态）"></a>静态多态（编译时多态）</h1><h2 id="函数重载"><a href="#函数重载" class="headerlink" title="函数重载"></a>函数重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Calculator</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">double</span> <span class="title">add</span><span class="params">(<span class="type">double</span> a, <span class="type">double</span> b)</span> </span>&#123; <span class="keyword">return</span> a + b; &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b, <span class="type">int</span> c)</span> </span>&#123; <span class="keyword">return</span> a + b + c; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译器根据参数类型和数量选择合适的函数</span></span><br><span class="line">Calculator calc;</span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// 调用int版本</span></span><br><span class="line">calc.<span class="built_in">add</span>(<span class="number">1.5</span>, <span class="number">2.5</span>);    <span class="comment">// 调用double版本</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="运算符重载"><a href="#运算符重载" class="headerlink" title="运算符重载"></a>运算符重载</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Complex</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">double</span> real, imag;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">Complex</span>(<span class="type">double</span> r = <span class="number">0</span>, <span class="type">double</span> i = <span class="number">0</span>) : <span class="built_in">real</span>(r), <span class="built_in">imag</span>(i) &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    Complex <span class="keyword">operator</span>+(<span class="type">const</span> Complex&amp; other) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">Complex</span>(real + other.real, imag + other.imag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">Complex <span class="title">c1</span><span class="params">(<span class="number">1</span>, <span class="number">2</span>)</span>, <span class="title">c2</span><span class="params">(<span class="number">3</span>, <span class="number">4</span>)</span></span>;</span><br><span class="line">Complex c3 = c1 + c2;  <span class="comment">// 使用重载的+运算符</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h2 id="模版多态"><a href="#模版多态" class="headerlink" title="模版多态"></a>模版多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">T <span class="title">max</span><span class="params">(T a, T b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (a &gt; b) ? a : b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> result1 = <span class="built_in">max</span>(<span class="number">1</span>, <span class="number">2</span>);        <span class="comment">// T=int</span></span><br><span class="line"><span class="type">double</span> result2 = <span class="built_in">max</span>(<span class="number">1.5</span>, <span class="number">2.5</span>); <span class="comment">// T=double</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="动态多态（运行时多态）"><a href="#动态多态（运行时多态）" class="headerlink" title="动态多态（运行时多态）"></a>动态多态（运行时多态）</h1><h2 id="虚函数多态"><a href="#虚函数多态" class="headerlink" title="虚函数多态"></a>虚函数多态</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Animal</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Animal makes sound&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">Animal</span>() = <span class="keyword">default</span>;  <span class="comment">// 虚析构函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Dog barks&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Cat</span> : <span class="keyword">public</span> Animal &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">makeSound</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        cout &lt;&lt; <span class="string">&quot;Cat meows&quot;</span> &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 运行时多态的使用</span></span><br><span class="line">Animal* animals[] = &#123;<span class="keyword">new</span> <span class="built_in">Dog</span>(), <span class="keyword">new</span> <span class="built_in">Cat</span>()&#125;;</span><br><span class="line"><span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">2</span>; i++) &#123;</span><br><span class="line">    animals[i]-&gt;<span class="built_in">makeSound</span>();  <span class="comment">// 根据实际对象类型调用相应函数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="虚函数调用的地址如何解析"><a href="#虚函数调用的地址如何解析" class="headerlink" title="虚函数调用的地址如何解析"></a>虚函数调用的地址如何解析</h2><p>通过虚函数表（vtable）解析。当类中有虚函数时，编译器会为每个包含虚函数的类创建一个虚函数表，并在每个对象中添加一个虚函数表指针。</p>
-<p>这个指针的地址其实就是对象地址，所以我们实际上可以通过这个指针调用虚函数。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">typedef</span> <span class="title">void</span> <span class="params">(*FuncPtr)</span><span class="params">()</span></span>;</span><br><span class="line"><span class="comment">// 手动模拟虚函数调用过程</span></span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;\n=== 手动模拟虚函数调用 ===&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"><span class="type">uintptr_t</span>* vptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(derived);</span><br><span class="line"><span class="type">uintptr_t</span>* vtable = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>*&gt;(*vptr);</span><br><span class="line">FuncPtr func = <span class="built_in">reinterpret_cast</span>&lt;FuncPtr&gt;(vtable[<span class="number">0</span>]); <span class="comment">// func1的地址</span></span><br></pre></td></tr></table></figure>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</li>
+<li>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</li>
+<li>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</li>
+<li>倒开水没过猪蹄，小火炖一个小时，中间可加盐</li>
+<li>把香料夹出来，大火收汁，不夹的话可能会发苦</li>
+</ol>
 ]]></content>
       <categories>
-        <category>cpp</category>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>网络分层模型</title>
+    <url>/2025/10/12/%E7%BD%91%E7%BB%9C%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="OSI七层模型"><a href="#OSI七层模型" class="headerlink" title="OSI七层模型"></a>OSI七层模型</h1><p>OSI模型是一个理论的标准，将网络通信划分为七个层次，从下到上分别为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">层次</th>
+<th align="left">名称</th>
+<th align="left">核心功能</th>
+<th align="left">数据单位</th>
+<th align="left">典型设备&#x2F;协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">第1层</td>
+<td align="left">物理层</td>
+<td align="left">传输原始比特流，定义电气、机械规格</td>
+<td align="left">比特</td>
+<td align="left">网线、光纤、中继器</td>
+</tr>
+<tr>
+<td align="left">第2层</td>
+<td align="left">数据链路层</td>
+<td align="left"><strong>局域网内</strong>通过MAC地址通信，差错检测</td>
+<td align="left"><strong>帧</strong></td>
+<td align="left"><strong>交换机</strong>、网桥</td>
+</tr>
+<tr>
+<td align="left">第3层</td>
+<td align="left">网络层</td>
+<td align="left"><strong>跨网络</strong>的逻辑寻址和路由选择</td>
+<td align="left"><strong>数据包</strong></td>
+<td align="left"><strong>路由器</strong>、IP、ICMP、ARP</td>
+</tr>
+<tr>
+<td align="left">第4层</td>
+<td align="left">传输层</td>
+<td align="left"><strong>端到端</strong>的通信，可靠性、流量控制</td>
+<td align="left"><strong>段</strong></td>
+<td align="left">TCP、UDP</td>
+</tr>
+<tr>
+<td align="left">第5层</td>
+<td align="left">会话层</td>
+<td align="left">建立、管理和终止应用程序间的会话</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">第6层</td>
+<td align="left">表示层</td>
+<td align="left">数据格式转换、加密解密、压缩解压缩</td>
+<td align="left">-</td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left">第7层</td>
+<td align="left">应用层</td>
+<td align="left">为应用程序提供网络服务接口</td>
+<td align="left">-</td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+<h1 id="TCP-IP四层模型"><a href="#TCP-IP四层模型" class="headerlink" title="TCP&#x2F;IP四层模型"></a>TCP&#x2F;IP四层模型</h1><p>这个是互联网实际标准，可以看作OSI模型的简化和合并</p>
+<table>
+<thead>
+<tr>
+<th align="left">TCP&#x2F;IP 四层模型</th>
+<th align="left">对应的 OSI 层</th>
+<th align="left">核心协议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">应用层</td>
+<td align="left">应用层、表示层、会话层</td>
+<td align="left">HTTP, FTP, DNS, SMTP</td>
+</tr>
+<tr>
+<td align="left">传输层</td>
+<td align="left">传输层</td>
+<td align="left">TCP, UDP</td>
+</tr>
+<tr>
+<td align="left">网络层</td>
+<td align="left">网络层</td>
+<td align="left">IP, ICMP, ARP</td>
+</tr>
+<tr>
+<td align="left">网络接口层</td>
+<td align="left">数据链路层、物理层</td>
+<td align="left">Ethernet, WiFi</td>
+</tr>
+</tbody></table>
+]]></content>
+      <categories>
+        <category>cn</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>网络层</title>
+    <url>/2025/10/12/%E7%BD%91%E7%BB%9C%E5%B1%82/</url>
+    <content><![CDATA[<h1 id="IPv4与IPv6"><a href="#IPv4与IPv6" class="headerlink" title="IPv4与IPv6"></a>IPv4与IPv6</h1><ul>
+<li>IPv4：<ul>
+<li>地址长度：32位（4字节）</li>
+<li>表示方法：点分十进制</li>
+<li>地址空间：43亿个</li>
+</ul>
+</li>
+<li>IPv6：<ul>
+<li>地址长度：128位</li>
+<li>表示方法：冒分十六进制</li>
+<li>地址空间：非常大</li>
+</ul>
+</li>
+</ul>
+<h1 id="TTL机制"><a href="#TTL机制" class="headerlink" title="TTL机制"></a>TTL机制</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>全称：生存时间</li>
+<li>作用：防止IP数据包在网络中无限循环地传输</li>
+</ul>
+<h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><ol>
+<li>TTL是IP头中的一个字段，初始值通常为64,128或者255</li>
+<li>数据包每经过一个路由器，TTL减1</li>
+<li>当路由器将TTL减至0，会丢弃该数据包，并向IP地址发送一个ICMP超时消息</li>
+</ol>
+<h1 id="子网划分与CIDR"><a href="#子网划分与CIDR" class="headerlink" title="子网划分与CIDR"></a>子网划分与CIDR</h1><ul>
+<li><strong>CIDR表示法</strong>：无类别域间路由，用于更灵活地分配IP地址。格式为 <code>IP地址/前缀长度</code>，例如 <code>192.168.1.0/24</code>。<ul>
+<li><code>/24</code> 表示网络部分占前24位，主机部分占后8位。</li>
+<li>可用IP地址数量为 2^8 - 2 &#x3D; 254个（减去网络地址和广播地址）。</li>
+</ul>
+</li>
+<li><strong>划分子网的目的</strong>：<ol>
+<li><strong>控制广播域</strong>：缩小广播范围，减少网络中的广播流量（如ARP、DHCP广播），提高网络性能。</li>
+<li><strong>提高安全性</strong>：便于在网络边界实施访问控制策略，例如限制不同子网间的访问。</li>
+<li><strong>IP地址高效利用</strong>：根据实际需要分配地址空间，避免浪费。</li>
+</ol>
+</li>
+</ul>
+<h1 id="路由机制"><a href="#路由机制" class="headerlink" title="路由机制"></a>路由机制</h1><p>路由是网络层的核心功能，指路由器为数据包选择路径的过程。</p>
+<ul>
+<li><strong>静态路由</strong>：由管理员手动配置路由表。适用于小型、结构稳定的网络。</li>
+<li><strong>动态路由协议</strong>：路由器之间自动交换路由信息，动态更新路由表。<ul>
+<li><strong>RIP</strong>：基于跳数的距离矢量协议，简单，适用于小型网络。</li>
+<li><strong>OSPF</strong>：基于链路状态的协议，收敛快，适用于大型企业网络。</li>
+<li><strong>BGP</strong>：路径矢量协议，用于在不同自治系统之间交换路由信息，是互联网的“骨架”协议。</li>
+</ul>
+</li>
+</ul>
+<h1 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h1><ul>
+<li><strong>全称</strong>：互联网控制消息协议。</li>
+<li><strong>作用</strong>：用于在IP主机、路由器之间传递<strong>控制消息</strong>，如网络通不通、主机是否可达、路由是否可用等。</li>
+<li><strong>常见应用</strong>：<ul>
+<li><strong>Ping</strong>：利用ICMP回送请求和回送应答消息，测试网络连通性。</li>
+<li><strong>Traceroute</strong>：利用ICMP超时消息和目的不可达消息，跟踪数据包路径。</li>
+</ul>
+</li>
+</ul>
+<h1 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h1><ul>
+<li><strong>全称</strong>：网络地址转换。</li>
+<li><strong>作用</strong>：将私有IP地址转换为公有IP地址，使内网设备可以访问互联网。它有效缓解了IPv4地址短缺问题，并提供了一定的安全隐藏性。</li>
+<li><strong>基本过程</strong>：NAT设备（通常是路由器）维护一个转换表。当内网主机发送数据包到外网时，NAT会将数据包的源IP和端口号替换为路由器的公网IP和一个新端口，并将映射关系记录在表中。当收到外网回复时，再根据转换表将目标IP和端口转换回内网主机的地址。</li>
+</ul>
+<h1 id="IP分片"><a href="#IP分片" class="headerlink" title="IP分片"></a>IP分片</h1><ul>
+<li><strong>原因</strong>：当IP数据包的大小超过数据链路层的<strong>最大传输单元（MTU）</strong> 时，就需要进行分片。</li>
+<li><strong>过程</strong>：路由器将原始数据包分割成多个较小的<strong>分片</strong>，每个分片都拥有自己的IP头（包含分片相关信息）。这些分片独立传输到目的地后，由目的主机的IP层进行重组。</li>
+<li><strong>缺点</strong>：<ul>
+<li><strong>性能开销</strong>：每个分片都需要IP头，增加额外负担。</li>
+<li><strong>可靠性差</strong>：任何一个分片丢失，都会导致整个原始数据包重传。</li>
+</ul>
+</li>
+<li><strong>优化</strong>：因此，在传输层，TCP协议会通过<strong>MSS（最大报文段长度）</strong> 来主动限制 segment 的大小，从而<strong>避免在IP层发生分片</strong>。</li>
+</ul>
+<h1 id="面试经典题型"><a href="#面试经典题型" class="headerlink" title="面试经典题型"></a>面试经典题型</h1><h3 id="NAT的工作原理及其优缺点"><a href="#NAT的工作原理及其优缺点" class="headerlink" title="NAT的工作原理及其优缺点"></a><strong>NAT的工作原理及其优缺点</strong></h3><h4 id="参考回答"><a href="#参考回答" class="headerlink" title="参考回答"></a><strong>参考回答</strong></h4><p><strong>NAT</strong>，即网络地址转换，是一种在当今互联网中至关重要的技术。它的核心功能是<strong>将私有IP地址转换为公有IP地址</strong>，使得使用私有地址的内网设备能够访问公共互联网。</p>
+<p><strong>一、工作原理</strong></p>
+<p>NAT通常运行在连接内网和外网的路由器（即NAT网关）上。其核心是一个<strong>NAT转换表</strong>，记录了内网IP和端口与外网IP和端口的映射关系。最常见的工作模式是<strong>NAPT</strong>，即同时转换IP地址和端口号。</p>
+<p>其工作过程可以分为以下几步：</p>
+<ol>
+<li><p><strong>出站请求（内网 -&gt; 外网）</strong>：</p>
+<ul>
+<li>当内网主机（例如 <code>192.168.1.100:5000</code>）想要访问外网服务器（例如 <code>203.0.113.1:80</code>）时，它会发送一个IP数据包。</li>
+<li>源IP：<code>192.168.1.100</code>，源端口：<code>5000</code></li>
+<li>目标IP：<code>203.0.113.1</code>，目标端口：<code>80</code></li>
+<li>这个数据包到达NAT路由器。</li>
+<li><strong>NAT操作</strong>：路由器会为该连接创建一个NAT表项。它将数据包的<strong>源IP</strong>替换为路由器自己的<strong>公网IP</strong>（例如 <code>198.51.100.1</code>），并分配一个新的<strong>源端口</strong>（例如 <code>10000</code>），然后将这个 <code>(公网IP:新端口, 目标IP:目标端口)</code> 的映射记录在NAT表中。</li>
+<li>修改后的数据包发出：源地址变为 <code>198.51.100.1:10000</code>，目标地址不变。</li>
+</ul>
+</li>
+<li><p><strong>NAT转换表记录</strong>：</p>
+<ul>
+<li><p>路由器内部会生成一条类似这样的映射记录：</p>
+<table>
+<thead>
+<tr>
+<th align="left">内网本地地址 (Local)</th>
+<th align="left">外网全局地址 (Global)</th>
+<th align="left">外部服务器地址 (Remote)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>192.168.1.100:5000</code></td>
+<td align="left"><code>198.51.100.1:10000</code></td>
+<td align="left"><code>203.0.113.1:80</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>入站响应（外网 -&gt; 内网）</strong>：</p>
+<ul>
+<li>外网服务器 <code>203.0.113.1:80</code> 收到请求后，会回复一个数据包。</li>
+<li>源IP：<code>203.0.113.1</code>，源端口：<code>80</code></li>
+<li>目标IP：<code>198.51.100.1</code>，目标端口：<code>10000</code>（即N路由器转换后的地址）</li>
+<li>这个数据包到达NAT路由器。</li>
+<li><strong>NAT操作</strong>：路由器查看目标IP和端口 <code>198.51.100.1:10000</code>，并在NAT表中查找匹配的映射记录。</li>
+<li>找到记录后，路由器将数据包的<strong>目标IP</strong>还原为内网主机的 <code>192.168.1.100</code>，<strong>目标端口</strong>还原为 <code>5000</code>。</li>
+<li>然后将数据包转发给内网中的原始主机。</li>
+</ul>
+</li>
+</ol>
+<p><strong>简单比喻</strong>：NAT就像一个公司的前台总机。公司内部有很多分机（私有IP），但对外只有一个总机号（公有IP）。外部电话打进来要找“小王”，前台需要查表知道“小王”对应的是“分机123”，然后把电话转接进去。</p>
+<p><strong>二、优缺点</strong></p>
+<p><strong>优点</strong>：</p>
+<ol>
+<li><strong>缓解IPv4地址枯竭</strong>：这是NAT最重要的作用。一个家庭或企业只需要一个或少数几个公网IP，就可以让成百上千台设备同时上网。</li>
+<li><strong>提供基础安全防护</strong>：外部网络无法主动发起对NAT内部特定设备的连接，因为NAT表中没有对应的映射记录。这在一定程度上隐藏了内网拓扑，起到了类似防火墙的作用。</li>
+<li><strong>网络部署灵活</strong>：内网可以使用任意的私有地址空间，无需申请公网IP，便于网络规划和变更。</li>
+</ol>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li><strong>破坏了端到端通信原则</strong>：这是NAT最大的理论缺陷。互联网设计初衷是任意两台主机都能直接通信，而NAT的介入使得通信必须经过地址转换，变得复杂。</li>
+<li><strong>增加了延迟和复杂性</strong>：每个数据包都需要经过修改和查表操作，增加了处理开销和延迟。</li>
+<li><strong>导致某些应用兼容性问题</strong>：对于一些复杂的网络协议（如IPsec、FTP的主动模式），它们会在应用层数据中携带IP地址信息，NAT设备无法识别和修改这些内容，导致连接失败。虽然可以通过ALG等技术解决，但增加了复杂性。</li>
+<li><strong>对P2P应用不友好</strong>：由于内网主机无法被外网直接访问，建立P2P连接（如视频通话、BT下载）需要借助STUN、TURN等中继服务器，过程复杂。</li>
+</ol>
+]]></content>
+      <categories>
+        <category>os</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>进程与线程</title>
+    <url>/2025/10/11/%E8%BF%9B%E7%A8%8B%E4%B8%8E%E7%BA%BF%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="进程"><a href="#进程" class="headerlink" title="进程"></a>进程</h1><h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>进程是程序的一次执行过程，是系统进行资源分配和调度的一个独立单位</p>
+<h3 id="组成"><a href="#组成" class="headerlink" title="组成"></a>组成</h3><p>程序段</p>
+<p>数据段</p>
+<p>进程控制块（PCB）</p>
+<h3 id="PCB"><a href="#PCB" class="headerlink" title="PCB"></a>PCB</h3><p>他描述了进程的基本信息和运行状态</p>
+<p>是进程存在的唯一标识</p>
+<p>包含了进程ID，状态，优先级等信息</p>
+<h2 id="进程的状态和切换"><a href="#进程的状态和切换" class="headerlink" title="进程的状态和切换"></a>进程的状态和切换</h2><ul>
+<li>常见五状态模型<ol>
+<li>创建</li>
+<li>就绪</li>
+<li>运行</li>
+<li>阻塞</li>
+<li>结束</li>
+</ol>
+</li>
+<li>状态转换场景<ol>
+<li>2-&gt;3：被调度器选中</li>
+<li>3-&gt;2：时间片用完</li>
+<li>3-&gt;4：等待IO，信号量等资源</li>
+<li>4-&gt;2：资源就绪或者被唤醒</li>
+</ol>
+</li>
+</ul>
+<h2 id="进程的上下文切换"><a href="#进程的上下文切换" class="headerlink" title="进程的上下文切换"></a>进程的上下文切换</h2><h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><p>从一个进程切换到另一个进程执行的过程</p>
+<h3 id="切换内容"><a href="#切换内容" class="headerlink" title="切换内容"></a>切换内容</h3><ul>
+<li>用户资源：虚拟内存，栈，全局变量</li>
+<li>内核资源：内核栈，寄存器，PCB</li>
+</ul>
+<h3 id="触发场景"><a href="#触发场景" class="headerlink" title="触发场景"></a>触发场景</h3><ul>
+<li>时间片耗尽</li>
+<li>进程阻塞</li>
+<li>更高优先级的进程就绪</li>
+</ul>
+<h2 id="进程的控制操作"><a href="#进程的控制操作" class="headerlink" title="进程的控制操作"></a>进程的控制操作</h2><h3 id="进程创建"><a href="#进程创建" class="headerlink" title="进程创建"></a>进程创建</h3><ol>
+<li>分配唯一PCB</li>
+<li>分配资源（内存，文件）</li>
+<li>初始化PCB（状态，程序计数器等）</li>
+<li>将PCB插入就绪队列</li>
+</ol>
+<h3 id="进程终止"><a href="#进程终止" class="headerlink" title="进程终止"></a>进程终止</h3><ol>
+<li>根据ID找到PCB</li>
+<li>如果正在运行，立即终止（如果不在运行时，也是立即改为终止状态），释放CPU</li>
+<li>如果有子进程，交给init进程接管</li>
+<li>释放所有资源</li>
+<li>将PCB队列中删除</li>
+</ol>
+<h3 id="进程阻塞"><a href="#进程阻塞" class="headerlink" title="进程阻塞"></a>进程阻塞</h3><ol>
+<li>找到对应PCB</li>
+<li>保存现场，状态改为阻塞</li>
+<li>插入阻塞队列</li>
+<li>调度其他就绪进程</li>
+</ol>
+<h3 id="进程唤醒"><a href="#进程唤醒" class="headerlink" title="进程唤醒"></a>进程唤醒</h3><ol>
+<li>从阻塞队列找到PCB</li>
+<li>移除阻塞队列，状态改为就绪</li>
+<li>插入就绪队列等待调度</li>
+</ol>
+<h2 id="进程调度算法"><a href="#进程调度算法" class="headerlink" title="进程调度算法"></a>进程调度算法</h2><p>注意，线程调度也会用到这些类似算法</p>
+<h3 id="非抢占"><a href="#非抢占" class="headerlink" title="非抢占"></a>非抢占</h3><ol>
+<li>先来先服务</li>
+<li>短作业优先</li>
+<li>高响应比优先</li>
+</ol>
+<h3 id="抢占"><a href="#抢占" class="headerlink" title="抢占"></a>抢占</h3><ol>
+<li>时间片轮转</li>
+<li>最高优先级调度</li>
+<li>多级队列调度</li>
+</ol>
+<h2 id="死锁"><a href="#死锁" class="headerlink" title="死锁"></a>死锁</h2><h3 id="死锁产生的四个必要条件"><a href="#死锁产生的四个必要条件" class="headerlink" title="死锁产生的四个必要条件"></a>死锁产生的四个必要条件</h3><ul>
+<li><strong>互斥</strong>：资源只能被一个进程占用</li>
+<li><strong>占有并等待</strong>：进程已持有资源，同时等待其他资源</li>
+<li><strong>不可抢占</strong>：资源只能由持有者释放</li>
+<li><strong>循环等待</strong>：进程之间形成资源等待环</li>
+</ul>
+<h3 id="死锁处理方式"><a href="#死锁处理方式" class="headerlink" title="死锁处理方式"></a>死锁处理方式</h3><ul>
+<li><strong>预防</strong>：破坏四个必要条件之一</li>
+<li><strong>避免</strong>：银行家算法，动态检查资源分配状态</li>
+<li><strong>检测与恢复</strong>：检测是否存在环路，并强制释放资源</li>
+</ul>
+<h3 id="同步问题"><a href="#同步问题" class="headerlink" title="同步问题"></a>同步问题</h3><h4 id="哲学家就餐问题"><a href="#哲学家就餐问题" class="headerlink" title="哲学家就餐问题"></a>哲学家就餐问题</h4><ul>
+<li>多个哲学家竞争有限的叉子（资源）</li>
+<li>解决方案：限制同时就餐人数、资源分级分配、使用信号量</li>
+</ul>
+<h4 id="读者-写者问题"><a href="#读者-写者问题" class="headerlink" title="读者-写者问题"></a>读者-写者问题</h4><ul>
+<li>多个读者可同时读，写者必须独占</li>
+<li>解决方案：读者优先、写者优先、公平调度</li>
+</ul>
+<h1 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h1><h2 id="基本定义"><a href="#基本定义" class="headerlink" title="基本定义"></a>基本定义</h2><p>线程是操作系统能够进行运算调度的最小单位，他被包含在进程之中，是进程中实际运作单位。</p>
+<ul>
+<li>线程是CPU调度和分配的基本单位</li>
+<li>一个进程可以有一个或多个线程，他们共享进程的资源</li>
+<li>每个线程有自己独立的线程ID，程序计数器</li>
+</ul>
+<h1 id="进程-vs-线程"><a href="#进程-vs-线程" class="headerlink" title="进程 vs 线程"></a>进程 vs 线程</h1><table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">进程</th>
+<th align="left">线程</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>资源拥有</strong></td>
+<td align="left">资源分配的基本单位，拥有独立的地址空间、文件、信号等资源</td>
+<td align="left">不拥有系统资源，共享其所属进程的全部资源</td>
+</tr>
+<tr>
+<td align="left"><strong>调度单位</strong></td>
+<td align="left">独立调度单位，由操作系统内核进行进程调度</td>
+<td align="left">独立调度和分配的基本单位，由操作系统内核进行线程调度</td>
+</tr>
+<tr>
+<td align="left"><strong>系统开销</strong></td>
+<td align="left">上下文切换需要切换内存地址空间，开销大（Cache、TLB失效）</td>
+<td align="left">上下文切换仅需保存寄存器、栈等少量资源，开销小</td>
+</tr>
+<tr>
+<td align="left"><strong>通信方式</strong></td>
+<td align="left">管道、消息队列、共享内存、信号量、信号、Socket等</td>
+<td align="left">读写同一进程的全局数据、互斥锁、条件变量、信号量等</td>
+</tr>
+<tr>
+<td align="left"><strong>健壮性</strong></td>
+<td align="left">一个进程崩溃不会影响其他进程</td>
+<td align="left">一个线程崩溃会导致整个进程崩溃</td>
+</tr>
+<tr>
+<td align="left"><strong>C++实现</strong></td>
+<td align="left"><code>fork()</code>、<code>std::process</code> (C++20)</td>
+<td align="left"><code>std::thread</code>、<code>pthreads</code></td>
+</tr>
+</tbody></table>
+<h1 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h1><h2 id="进程-1"><a href="#进程-1" class="headerlink" title="进程"></a>进程</h2><h3 id="普通问题"><a href="#普通问题" class="headerlink" title="普通问题"></a>普通问题</h3><ol>
+<li><p>什么是进程？和程序的区别？</p>
+<p>进程是执行中的程序，是动态的，程序是静态的代码集合</p>
+</li>
+<li><p>进程拥有哪些状态，状态如何切换</p>
+</li>
+<li><p>什么是上下文切换，开销在哪？</p>
+<p>切换进程时保存和恢复现场的过程，开销主要在寄存器，内存映射</p>
+</li>
+</ol>
+<h3 id="项目问题"><a href="#项目问题" class="headerlink" title="项目问题"></a>项目问题</h3><p><strong>1. 在C++高性能服务器中，为什么我们通常选择使用多线程而不是多进程？在什么场景下你会反其道而行之，选择多进程？</strong></p>
+<ul>
+<li><strong>选多线程</strong>：因为线程间共享内存，<strong>数据共享极其高效</strong>（无需序列化、进程间通信），上下文切换开销小，非常适合用于处理同一任务的多个部分（如一个连接一个线程，共享监听socket和缓存）。</li>
+<li><strong>选多进程</strong>：<ul>
+<li><strong>需要更好的隔离性和健壮性</strong>。例如，一个处理用户请求的模块崩溃了，你不希望它把整个服务器拖垮。使用进程可以隔离这种故障。</li>
+<li><strong>利用多机扩展</strong>。进程模型更容易扩展到分布式系统。</li>
+<li><strong>利用第三方库</strong>。某些第三方库不是线程安全的，将其放在独立的进程中是最安全的用法。</li>
+</ul>
+</li>
+</ul>
+<p><strong>2. 在C++程序中，进程上下文切换具体会导致哪些我们需要注意的性能损耗？</strong></p>
+<p>这远不止是“保存&#x2F;恢复寄存器”那么简单。在工程上我们需要关注：</p>
+<ul>
+<li><strong>TLB（快表）失效</strong>：切换内存地址空间意味着TLB大部分或全部需要刷新，导致后续内存访问需要多次内存查找，这是<strong>最大的开销之一</strong>。</li>
+<li><strong>CPU Cache失效</strong>：新进程的数据和代码会“污染”当前CPU缓存，缓存命中率急剧下降。</li>
+<li><strong>调度器自身开销</strong>：如果进程数非常多，调度器选择下一个进程的算法本身也会消耗CPU时间。</li>
+</ul>
+<p><strong>3. 假设你写了一个C++程序，用 <code>fork()</code> 创建了子进程。在子进程中，如果一个文件描述符在父进程中被加锁（如 <code>flock</code>），子进程会继承这个锁吗？这可能导致什么工程问题？</strong></p>
+<ul>
+<li><strong>会继承</strong>。在Linux中，子进程会继承父进程的文件描述符表，包括其上的锁状态。</li>
+<li><strong>工程问题</strong>：这可能导致<strong>难以调试的死锁</strong>。例如，父进程锁了一个文件，子进程也试图去锁同一个文件（通过同一个文件描述符），在某些锁类型下，子进程可能会成功（递归锁）或阻塞，行为取决于具体实现和锁类型，容易造成逻辑混乱。<strong>最佳实践</strong>是 <code>fork()</code> 后，子进程应立即关闭不需要的文件描述符，或使用 <code>fcntl</code> 设置 <code>FD_CLOEXEC</code> 标志。</li>
+</ul>
+<p><strong>4. 在Linux C++编程中，<code>fork()</code> 和 <code>exec()</code> 系列函数通常一起使用。请问在 <code>fork()</code> 之后，<code>exec()</code> 之前，子进程应该特别注意处理哪些资源？为什么？</strong></p>
+<p>这是一个经典陷阱。在 <code>fork()</code> 后 <code>exec()</code> 前，子进程拥有父进程的完整副本。但 <code>exec()</code> 会用新程序替换当前进程的代码、数据、堆栈。因此必须注意：</p>
+<ul>
+<li><strong>关闭不需要的文件描述符</strong>：否则会被新程序继承，可能导致资源泄漏或意外的文件访问。</li>
+<li><strong>处理信号</strong>：继承的信号处理函数可能在新程序中不存在，导致未定义行为。通常需要在 <code>exec()</code> 前将信号重置为默认状态。</li>
+<li><strong>同步问题</strong>：确保子进程不会和父进程在共享资源（如临时文件）上产生竞争。</li>
+</ul>
+<h2 id="线程-1"><a href="#线程-1" class="headerlink" title="线程"></a>线程</h2><ol>
+<li><p>一个线程意外崩溃会导致什么</p>
+<p>整个进程崩溃</p>
+</li>
+<li><p>多线程编程中为什么要用到线程同步</p>
+<p>否则会导致数据竞争</p>
+</li>
+<li><p>多线程程序一定能提高性能吗？</p>
+<p>不一定，当</p>
+<ol>
+<li>线程数大于CPU核心数，频繁上下文切换</li>
+<li>大量线程竞争同一把锁</li>
+<li>缓存一致性协议</li>
+</ol>
+</li>
+<li><p>什么是虚假唤醒，如何处理</p>
+<p>虚假唤醒指等待条件变量的线程可能在没被通知的情况下被唤醒</p>
+<p>处理方法为使用while循环检查，而不是if语句</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mutex)</span></span>;</span><br><span class="line"><span class="keyword">while</span> (!condition) &#123;</span><br><span class="line">    cond_var.<span class="built_in">wait</span>(lock);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>os</category>
       </categories>
   </entry>
 </search>
