@@ -1685,4 +1685,176 @@
         <category>cpp</category>
       </categories>
   </entry>
+  <entry>
+    <title>gdb常用命令</title>
+    <url>/2025/10/13/gdb%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>顺口溜：冷若冰霜驱动盘</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">l list <span class="comment"># 查看源码</span></span><br><span class="line"></span><br><span class="line">r run <span class="comment"># 运行程序</span></span><br><span class="line"></span><br><span class="line">b <span class="built_in">break</span> <span class="comment"># 设置断点</span></span><br><span class="line"></span><br><span class="line">s step <span class="comment"># 单步执行（进入函数）</span></span><br><span class="line"></span><br><span class="line">q quit <span class="comment"># 退出gdb</span></span><br><span class="line"></span><br><span class="line">d delete <span class="comment"># 删除断点</span></span><br><span class="line"></span><br><span class="line">p <span class="built_in">print</span> <span class="comment"># 打印变量值</span></span><br></pre></td></tr></table></figure>
+
+<p>再加几个常用的：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bt backtrace <span class="comment"># 查看调用栈</span></span><br><span class="line"></span><br><span class="line">c <span class="built_in">continue</span> <span class="comment"># 继续执行</span></span><br><span class="line"></span><br><span class="line">n next <span class="comment"># 单步执行（不进入函数）</span></span><br><span class="line"></span><br><span class="line">f finish <span class="comment"># 执行完当前函数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">disable</span> 2 <span class="comment"># 禁用编号为2的断点</span></span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux常用命令</title>
+    <url>/2025/10/13/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="文件和目录操作"><a href="#文件和目录操作" class="headerlink" title="文件和目录操作"></a>文件和目录操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>       <span class="comment"># 显示当前目录</span></span><br><span class="line"><span class="built_in">cd</span>        <span class="comment"># 切换目录</span></span><br><span class="line"><span class="built_in">ls</span>        <span class="comment"># 列出目录内容</span></span><br><span class="line"><span class="built_in">cp</span>        <span class="comment"># 复制文件/目录</span></span><br><span class="line">    <span class="built_in">cp</span> file.txt backup/</span><br><span class="line">    <span class="built_in">cp</span> -r dir1/ dir2/</span><br><span class="line"><span class="built_in">mv</span>        <span class="comment"># 移动文件/目录，也用于重命名</span></span><br><span class="line">	<span class="built_in">mv</span> 源文件 目标文件</span><br><span class="line"><span class="built_in">touch</span>     <span class="comment"># 创建空文件或更新文件时间戳</span></span><br><span class="line"><span class="built_in">mkdir</span>     <span class="comment"># 创建目录</span></span><br><span class="line"><span class="built_in">rmdir</span>     <span class="comment"># 移除空目录</span></span><br><span class="line"><span class="built_in">rm</span>        <span class="comment"># 删除文件/目录</span></span><br><span class="line">find      <span class="comment"># 查找文件</span></span><br><span class="line">	find 路径 选项 表达式</span><br><span class="line">	find /home -name <span class="string">&quot;*.txt&quot;</span></span><br><span class="line"><span class="built_in">which</span>     <span class="comment"># 查找命令位置</span></span><br><span class="line">whereis   <span class="comment"># 查找程序相关文件</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="文件查看和处理"><a href="#文件查看和处理" class="headerlink" title="文件查看和处理"></a>文件查看和处理</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span>       <span class="comment"># 显示文件内容</span></span><br><span class="line">    <span class="built_in">cat</span> tmp.txt</span><br><span class="line">    <span class="built_in">cat</span> -n tmp.txt 显示行号</span><br><span class="line">less/more <span class="comment"># 分页查看文件</span></span><br><span class="line">    less large_file.log <span class="comment">#支持翻页。less比more好用，不介绍more了</span></span><br><span class="line"><span class="built_in">head</span>      <span class="comment"># 查看文件前几行</span></span><br><span class="line"><span class="built_in">tail</span>      <span class="comment"># 查看文件后几行</span></span><br><span class="line"><span class="built_in">wc</span>        <span class="comment"># 统计文件行数、字数、字节数</span></span><br><span class="line">diff      <span class="comment"># 比较文件差异</span></span><br><span class="line">grep      <span class="comment"># 搜索文本</span></span><br><span class="line">    grep <span class="string">&quot;error&quot;</span> server.log <span class="comment">#直接查</span></span><br><span class="line">    grep -r <span class="string">&quot;404&quot;</span> /var/log  <span class="comment">#递归查找目录</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="系统监控"><a href="#系统监控" class="headerlink" title="系统监控"></a>系统监控</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps        <span class="comment"># 查看进程</span></span><br><span class="line">    ps -ef | grep nginx</span><br><span class="line">top/htop  <span class="comment"># 系统进程监控</span></span><br><span class="line"><span class="built_in">kill</span>      <span class="comment"># 终止进程</span></span><br><span class="line">    <span class="built_in">kill</span> -9 5678</span><br><span class="line">free -h   <span class="comment"># 查看剩余内存</span></span><br><span class="line"><span class="built_in">df</span> -h     <span class="comment"># 查看磁盘使用情况</span></span><br><span class="line"><span class="built_in">du</span> -sh    <span class="comment"># 查看目录大小</span></span><br><span class="line">netstat   <span class="comment"># 网络连接状态</span></span><br><span class="line">ss        <span class="comment"># 更现代的网络状态查看</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping      <span class="comment"># 测试网络连通性</span></span><br><span class="line">telnet    <span class="comment"># 测试端口连通性</span></span><br><span class="line">curl      <span class="comment"># 发送HTTP请求</span></span><br><span class="line">wget      <span class="comment"># 下载文件</span></span><br><span class="line">nc/netcat <span class="comment"># 网络调试工具</span></span><br><span class="line">ifconfig/ip <span class="comment"># 网络接口配置</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="权限设置"><a href="#权限设置" class="headerlink" title="权限设置"></a>权限设置</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span>     <span class="comment"># 修改文件权限</span></span><br><span class="line">    <span class="built_in">chmod</span> 777 config.conf</span><br><span class="line">    <span class="built_in">chmod</span> (u/g/o/a)+(r/w/x) script.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar       <span class="comment"># 打包压缩</span></span><br><span class="line">    tar -zcvf log.tar.gz /var/log</span><br><span class="line">    tar -xvf archive.tar -C /var/log</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux性能调优经验</title>
+    <url>/2025/10/13/linux%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98%E7%BB%8F%E9%AA%8C/</url>
+    <content><![CDATA[<h1 id="多线程异步问题怎么解决"><a href="#多线程异步问题怎么解决" class="headerlink" title="多线程异步问题怎么解决?"></a>多线程异步问题怎么解决?</h1><p>锁、原子操作、条件变量、线程池。</p>
+<p>muduo里的方法是：</p>
+<ol>
+<li>one loop per thread 尽量减少跨线程通信</li>
+<li>线程安全的跨线程调用，用runInloop提交任务</li>
+</ol>
+<h1 id="发生内存泄漏时如何排查问题"><a href="#发生内存泄漏时如何排查问题" class="headerlink" title="发生内存泄漏时如何排查问题"></a>发生内存泄漏时如何排查问题</h1><ol>
+<li>gflags+umdh</li>
+<li>代码内循环</li>
+<li>共享内存泄露用查句柄泄露的方法排查</li>
+</ol>
+<h1 id="CPU占用超过70-，如何排查？"><a href="#CPU占用超过70-，如何排查？" class="headerlink" title="CPU占用超过70%，如何排查？"></a>CPU占用超过70%，如何排查？</h1><ol>
+<li>死循环或者低效算法<br> 比如增加休眠时间，优化算法<br> while(!ready)一直在占用CPU，要改成条件变量</li>
+<li>多线程在锁上等待<br> 减小锁的粒度</li>
+<li>IO太多<br> 比如日志等级太低，是否可以减少输出</li>
+</ol>
+<h1 id="性能调优经验案例"><a href="#性能调优经验案例" class="headerlink" title="性能调优经验案例"></a>性能调优经验案例</h1><ol>
+<li><p>CPU调优</p>
+<p> perf火焰图显示热点在map.find<br> 改用unordered_map</p>
+</li>
+<li><p>内存调优</p>
+<p> 无内存泄漏但是内存碎片化严重<br> 对象复用</p>
+</li>
+</ol>
+<p>经验：</p>
+<ol>
+<li>先测量，再优化</li>
+<li>优先优化热点函数</li>
+<li>不要猜，用火焰图证明</li>
+<li>多个小优化会带来大优化</li>
+<li>优化完成需要回归测试</li>
+</ol>
+<h1 id="观测性能瓶颈时是什么资源问题"><a href="#观测性能瓶颈时是什么资源问题" class="headerlink" title="观测性能瓶颈时是什么资源问题"></a>观测性能瓶颈时是什么资源问题</h1><h2 id="观测"><a href="#观测" class="headerlink" title="观测"></a>观测</h2><p>vmstat 1指令 或者top也行</p>
+<h3 id="CPU瓶颈判断："><a href="#CPU瓶颈判断：" class="headerlink" title="CPU瓶颈判断："></a>CPU瓶颈判断：</h3><table>
+<thead>
+<tr>
+<th>监控指标</th>
+<th>阈值条件</th>
+<th>问题描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>us + sy</code></td>
+<td>&gt; 0.8 (80%)</td>
+<td>CPU 资源紧张</td>
+</tr>
+<tr>
+<td><code>wa</code></td>
+<td>&gt; 5%</td>
+<td>存在 I&#x2F;O 瓶颈</td>
+</tr>
+<tr>
+<td><code>r</code> (运行队列长度)</td>
+<td>&gt; 2 * CPU 核数</td>
+<td>进程排队等待 CPU</td>
+</tr>
+</tbody></table>
+<p>us：用户态进程占用CPU百分比</p>
+<p>sy：内核态进程占用百分比</p>
+<p>id：空闲百分比</p>
+<p>wa：IO等待百分比</p>
+<p>r：running 正在运行的进程数</p>
+<h3 id="内存不足信号"><a href="#内存不足信号" class="headerlink" title="内存不足信号"></a>内存不足信号</h3><p>si&gt;0或so&gt;0  正在使用swap</p>
+<p>si swap in</p>
+<p>so swap out</p>
+<p>原因解析：物理内存不足时，系统会将部分内存数据暂时移动到swap分区，导致性能下降，si&gt;0或so&gt;0导致正在频繁使用swap，是内存不足的明显信号</p>
+<p>free持续下降 可能存在内存泄漏</p>
+<p>cache很高但是应用慢 手动释放echo</p>
+<h3 id="IO性能问题"><a href="#IO性能问题" class="headerlink" title="IO性能问题"></a>IO性能问题</h3><p>wa高+bi&#x2F;bo高</p>
+<p>wa CPU等待IO完成的时间百分比<br>bi&#x2F;bo每秒从块设备读取，写入的块数</p>
+<p>b&gt;0<br>不可中断睡眠状态的进程数（通常因为IO阻塞）</p>
+<h3 id="上下文切换过多"><a href="#上下文切换过多" class="headerlink" title="上下文切换过多"></a>上下文切换过多</h3><p>cs&gt;10000&#x2F;秒&#x2F;核</p>
+<p>上下文切换次数，即四核机器&gt;40000就要注意了</p>
+<h2 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h2><ul>
+<li><p>针对1：</p>
+<ol>
+<li><p>us高，通过top找到高CPU进程，优化算法、减少循环</p>
+</li>
+<li><p>sy高，减少系统调用（高频文件读写改成批量操作）</p>
+</li>
+<li><p>wa&gt;5%，结合后面的IO部分处理</p>
+</li>
+<li><p>r&gt;2*CPU核数，扩容CPU资源，降低进程并发度</p>
+</li>
+</ol>
+</li>
+<li><p>针对2：</p>
+<ol>
+<li><p>情况1：si&#x2F;so &gt; 0（频繁使用Swap）</p>
+<p> <strong>紧急处理：</strong></p>
+<p> 释放缓存：echo 3 &gt; &#x2F;proc&#x2F;sys&#x2F;vm&#x2F;drop_caches（临时方案）。</p>
+<p> 终止非关键进程：kill -9 或 oom-killer 自动处理。</p>
+<p> <strong>长期优化：</strong></p>
+<p> 扩容物理内存。</p>
+<p> 调整Swappiness：sysctl vm.swappiness&#x3D;10（降低Swap倾向）。</p>
+<p> 优化应用内存：检查内存泄漏（如 valgrind）、减少缓存大小。</p>
+</li>
+<li><p>情况2：free持续下降（内存泄漏）</p>
+<p> 使用 pmap 或 jmap（Java）分析进程内存分布。</p>
+<p> 监控工具：smem、valgrind 定位泄漏代码。</p>
+</li>
+<li><p>情况3：cache高但应用慢</p>
+<p> 手动释放缓存（同上），或优化应用IO模式（如改用直接IO）。</p>
+</li>
+</ol>
+</li>
+<li><p>针对3：</p>
+<ol>
+<li><p>wa高+bi&#x2F;bo高</p>
+<p> iotop 查看进程级IO</p>
+<p> 使用更快的存储（ssd）</p>
+<p> 调整文件系统(ext4换成xfs)</p>
+<p> 减少随机写</p>
+</li>
+<li><p>如果b&gt;0</p>
+<p> 检查磁盘健康，分散IO负载</p>
+</li>
+</ol>
+</li>
+<li><p>针对4：</p>
+<ol>
+<li>检查是否因为过多的线程或者频繁的锁竞争，优化代码，降低锁粒度。调整调度策略</li>
+</ol>
+</li>
+</ul>
+<h1 id="内存泄漏一般什么场景会出现？"><a href="#内存泄漏一般什么场景会出现？" class="headerlink" title="内存泄漏一般什么场景会出现？"></a>内存泄漏一般什么场景会出现？</h1><ol>
+<li>未调用free或者malloc回收</li>
+<li>异常抛出后跳过清理代码</li>
+<li>共享内存的释放与申请和堆内存不一样，也是要释放的</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
 </search>
