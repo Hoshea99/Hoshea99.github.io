@@ -1622,4 +1622,67 @@
         <category>os</category>
       </categories>
   </entry>
+  <entry>
+    <title>wireshark操作简述</title>
+    <url>/2025/10/13/wireshark%E6%93%8D%E4%BD%9C%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<p>Wireshark是一个网络协议分析工具，可以捕获并分析数据包</p>
+<h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><h2 id="基于协议的过滤"><a href="#基于协议的过滤" class="headerlink" title="基于协议的过滤"></a>基于协议的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有TCP数据包</span><br><span class="line">tcp</span><br><span class="line"></span><br><span class="line"># 显示所有UDP数据包</span><br><span class="line">udp</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP数据包</span><br><span class="line">http</span><br><span class="line"></span><br><span class="line"># 显示所有DNS数据包</span><br><span class="line">dns</span><br><span class="line"></span><br><span class="line"># 显示所有HTTPS数据包</span><br><span class="line">ssl or tls</span><br><span class="line"></span><br><span class="line"># 显示所有FTP数据包</span><br><span class="line">ftp</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于IP地址的过滤"><a href="#基于IP地址的过滤" class="headerlink" title="基于IP地址的过滤"></a>基于IP地址的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示来自或发送到特定IP的数据包</span><br><span class="line">ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示来自特定源IP的数据包</span><br><span class="line">ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示发送到特定目标IP的数据包</span><br><span class="line">ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示源IP和目标IP之间的通信</span><br><span class="line">ip.src == 192.168.1.100 and ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示与特定网络段相关的数据包</span><br><span class="line">ip.addr &gt;= 192.168.1.0 and ip.addr &lt;= 192.168.1.255</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于端口号的过滤"><a href="#基于端口号的过滤" class="headerlink" title="基于端口号的过滤"></a>基于端口号的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示特定端口的数据包</span><br><span class="line">tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 显示特定源端口的数据包</span><br><span class="line">tcp.srcport == 80</span><br><span class="line"></span><br><span class="line"># 显示特定目标端口的数据包</span><br><span class="line">tcp.dstport == 443</span><br><span class="line"></span><br><span class="line"># 显示多个端口的数据包</span><br><span class="line">tcp.port == 80 or tcp.port == 443 or tcp.port == 8080</span><br><span class="line"></span><br><span class="line"># 显示端口范围</span><br><span class="line">tcp.port &gt;= 80 and tcp.port &lt;= 100</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于HTTP的过滤"><a href="#基于HTTP的过滤" class="headerlink" title="基于HTTP的过滤"></a>基于HTTP的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有HTTP请求</span><br><span class="line">http.request</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP响应</span><br><span class="line">http.response</span><br><span class="line"></span><br><span class="line"># 显示特定HTTP方法的请求</span><br><span class="line">http.request.method == &quot;GET&quot;</span><br><span class="line">http.request.method == &quot;POST&quot;</span><br><span class="line">http.request.method == &quot;PUT&quot;</span><br><span class="line">http.request.method == &quot;DELETE&quot;</span><br><span class="line"></span><br><span class="line"># 显示包含特定字符串的HTTP数据包</span><br><span class="line">http contains &quot;login&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定User-Agent的请求</span><br><span class="line">http.user_agent contains &quot;Mozilla&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定主机的HTTP流量</span><br><span class="line">http.host == &quot;www.example.com&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定状态码的HTTP响应</span><br><span class="line">http.response.code == 200</span><br><span class="line">http.response.code == 404</span><br><span class="line">http.response.code == 500</span><br></pre></td></tr></table></figure>
+
+<h2 id="组合过滤"><a href="#组合过滤" class="headerlink" title="组合过滤"></a>组合过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># AND操作：同时满足两个条件</span><br><span class="line">tcp.port == 80 and ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># OR操作：满足其中一个条件</span><br><span class="line">tcp.port == 80 or tcp.port == 443</span><br><span class="line"></span><br><span class="line"># NOT操作：不满足条件</span><br><span class="line">not tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 复杂组合</span><br><span class="line">(tcp.port == 80 or tcp.port == 443) and ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 使用括号控制优先级</span><br><span class="line">(tcp.srcport == 80 and ip.dst == 192.168.1.1) or (tcp.dstport == 80 and ip.src == 192.168.1.1)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>cn</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>cmake</title>
+    <url>/2025/10/13/cmake/</url>
+    <content><![CDATA[<h1 id="生成静态-动态链接库"><a href="#生成静态-动态链接库" class="headerlink" title="生成静态&#x2F;动态链接库"></a>生成静态&#x2F;动态链接库</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">math_library/</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── include/</span><br><span class="line">│   └── math_utils.h</span><br><span class="line">└── src/</span><br><span class="line">    └── math_utils.cpp</span><br></pre></td></tr></table></figure>
+
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><p><strong>头文件：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span></span>;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">multiply</span><span class="params">(<span class="type">int</span> a,<span class="type">int</span> b)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>源文件：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;math_utiles.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">multiply</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a * b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Cmake:</strong></p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(MathLibrary VERSION <span class="number">1.0</span>.<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_library</span>(math_shared SHARED src/math_utils.cpp)</span><br><span class="line"><span class="keyword">add_library</span>(math_static STATIC src/math_utils.cpp)</span><br></pre></td></tr></table></figure>
+
+<h1 id="写一个程序用到上面的动态库"><a href="#写一个程序用到上面的动态库" class="headerlink" title="写一个程序用到上面的动态库"></a>写一个程序用到上面的动态库</h1><p><strong>目录：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">project_root/</span><br><span class="line">├── math_library/</span><br><span class="line">│   ├── include/</span><br><span class="line">│   │   └── math_utiles.h</span><br><span class="line">│   ├── src/</span><br><span class="line">│   │   ├── math_utiles.cpp</span><br><span class="line">│   │   └── CMakeLists.txt</span><br><span class="line">│   ├── lib/</span><br><span class="line">│   │   └── libmath_shared.so</span><br><span class="line">│   └── CMakeLists.txt</span><br><span class="line">├── math_test/</span><br><span class="line">│   ├── CMakeLists.txt</span><br><span class="line">│   └── test_math.cpp</span><br><span class="line">└── CMakeLists.txt (顶层)</span><br></pre></td></tr></table></figure>
+
+<p><strong>源文件：</strong></p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&quot;math_utiles.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;3+4=&quot;</span>&lt;&lt;<span class="built_in">add</span>(<span class="number">3</span>,<span class="number">4</span>)&lt;&lt;std::endl;</span><br><span class="line">    std::cout&lt;&lt;<span class="string">&quot;3*4=&quot;</span>&lt;&lt;<span class="built_in">multiply</span>(<span class="number">3</span>,<span class="number">4</span>)&lt;&lt;std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>Cmake:</strong></p>
+<figure class="highlight cmake"><table><tr><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(MathTest)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置库文件路径</span></span><br><span class="line"><span class="keyword">set</span>(MATH_UTILS_LIB <span class="string">&quot;$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;/libmath_shared.so&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建测试程序</span></span><br><span class="line"><span class="keyword">add_executable</span>(test_math test_math.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接库并包含头文件</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(test_math PRIVATE <span class="variable">$&#123;MATH_UTILS_LIB&#125;</span>)</span><br><span class="line"><span class="keyword">target_include_directories</span>(test_math PRIVATE </span><br><span class="line">    <span class="variable">$&#123;CMAKE_CURRENT_SOURCE_DIR&#125;</span>/../math_library/<span class="keyword">include</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果库不在当前目录，需要复制或创建符号链接</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="variable">$&#123;MATH_UTILS_LIB&#125;</span>)</span><br><span class="line">    <span class="keyword">message</span>(WARNING <span class="string">&quot;libmath_shared.so not found in current directory&quot;</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+
+<h1 id="Cmake问题"><a href="#Cmake问题" class="headerlink" title="Cmake问题"></a>Cmake问题</h1><h2 id="PRIVATE-PUBLIC-INTERFACE区别"><a href="#PRIVATE-PUBLIC-INTERFACE区别" class="headerlink" title="PRIVATE PUBLIC INTERFACE区别"></a>PRIVATE PUBLIC INTERFACE区别</h2><ul>
+<li><p>public</p>
+<p>A和依赖A的目标都能使用</p>
+</li>
+<li><p>private</p>
+<p>仅A使用</p>
+</li>
+<li><p>interface</p>
+<p>仅依赖A的目标能使用</p>
+</li>
+</ul>
+<h2 id="动态链接库对比静态链接库有哪些好处"><a href="#动态链接库对比静态链接库有哪些好处" class="headerlink" title="动态链接库对比静态链接库有哪些好处"></a>动态链接库对比静态链接库有哪些好处</h2><ol>
+<li>节省磁盘空间</li>
+<li>更新维护时不需要重新编译</li>
+<li>dlopen可以按需加载</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
 </search>
