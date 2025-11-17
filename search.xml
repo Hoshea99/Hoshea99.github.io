@@ -22,6 +22,28 @@
       </categories>
   </entry>
   <entry>
+    <title>RAII避免异常导致的资源泄露</title>
+    <url>/2025/10/29/RAII%E9%81%BF%E5%85%8D%E5%BC%82%E5%B8%B8%E5%AF%BC%E8%87%B4%E7%9A%84%E8%B5%84%E6%BA%90%E6%B3%84%E9%9C%B2/</url>
+    <content><![CDATA[<p>在C++中，使用RAII来管理动态内存，其本身就是为了从根本避免异常导致的资源泄露。关键在于：将资源的生命周期与对象的生命周期绑定，当对象离开其作用域时（无论是正常还是异常栈展开），他的析构函数都会被自动调用，从而确保资源被释放。</p>
+<span id="more"></span>
+
+<h1 id="文件句柄RAII"><a href="#文件句柄RAII" class="headerlink" title="文件句柄RAII"></a>文件句柄RAII</h1><p>使用智能指针的方法讲了数次了，这里不展开了。RAII的思想不限于内存，还包括文件句柄、套接字等。这里举例一个文件句柄：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileRAII</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    FILE* file_ptr;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数获取资源</span></span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">FileRAII</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">const</span> <span class="type">char</span>* mode)</span> </span></span><br><span class="line"><span class="function">        : file_ptr(std::fopen(filename, mode)) &#123;</span></span><br><span class="line">        <span class="keyword">if</span> (!file_ptr) &#123;</span><br><span class="line">            <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;Failed to open file&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 析构函数释放资源</span></span><br><span class="line">    ~<span class="built_in">FileRAII</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (file_ptr) &#123;</span><br><span class="line">            std::<span class="built_in">fclose</span>(file_ptr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 禁止拷贝（或实现深拷贝/移动语义）</span></span><br><span class="line">    <span class="built_in">FileRAII</span>(<span class="type">const</span> FileRAII&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">    FileRAII&amp; <span class="keyword">operator</span>=(<span class="type">const</span> FileRAII&amp;) = <span class="keyword">delete</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可选：提供访问原始资源的接口</span></span><br><span class="line">    <span class="function">FILE* <span class="title">get</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> file_ptr; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">useFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">FileRAII <span class="title">file</span><span class="params">(<span class="string">&quot;data.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span></span>; <span class="comment">// 文件被打开</span></span><br><span class="line">    <span class="built_in">someFunctionThatMightThrow</span>();   <span class="comment">// 可能抛出异常</span></span><br><span class="line">    <span class="comment">// 读取文件...</span></span><br><span class="line">&#125; <span class="comment">// 无论是否异常，file的析构函数都会关闭文件 -&gt; 无资源泄漏！</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="崩溃"><a href="#崩溃" class="headerlink" title="崩溃"></a>崩溃</h1><p>RAII处理内存释放问题是基于程序正常的控制流的，当系统出现段异常等非正常终止情况时，RAII也没有办法。现代操作系统（如Linux, Windows）在进程终止时，会回收该进程拥有的所有内存和大多数内核资源（如文件描述符、套接字）。所以，对于内存和这些内核资源，即使崩溃也不会造成“永久性泄漏”。</p>
+<p>但是，如果是数据库事务等资源，则需要人们从系统架构层面考虑。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
+<li>核心原则：将资源获取置于构造函数内，将资源释放置于析构函数内。</li>
+<li>依赖栈展开：信任C++的异常机制。当异常抛出时，系统会析构所有已成功构造的局部RAII对象，从而自动释放其管理的资源。</li>
+<li>优先使用标准库工具：对于动态内存，首选 std::unique_ptr 和 std::shared_ptr，并使用 make_unique&#x2F;make_shared 来构造它们。这是最简单、最安全的方式。</li>
+<li>为其他资源自定义RAII类：对于非内存资源，遵循同样的模式封装成类，从而将琐碎且易错的资源管理任务转化为可靠的、自动化的对象生命周期管理。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>cmake</title>
     <url>/2025/10/13/cmake/</url>
     <content><![CDATA[<h1 id="生成静态-动态链接库"><a href="#生成静态-动态链接库" class="headerlink" title="生成静态&#x2F;动态链接库"></a>生成静态&#x2F;动态链接库</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">math_library/</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── include/</span><br><span class="line">│   └── math_utils.h</span><br><span class="line">└── src/</span><br><span class="line">    └── math_utils.cpp</span><br></pre></td></tr></table></figure>
@@ -60,28 +82,6 @@
 <li>更新维护时不需要重新编译</li>
 <li>dlopen可以按需加载</li>
 </ol>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>RAII避免异常导致的资源泄露</title>
-    <url>/2025/10/29/RAII%E9%81%BF%E5%85%8D%E5%BC%82%E5%B8%B8%E5%AF%BC%E8%87%B4%E7%9A%84%E8%B5%84%E6%BA%90%E6%B3%84%E9%9C%B2/</url>
-    <content><![CDATA[<p>在C++中，使用RAII来管理动态内存，其本身就是为了从根本避免异常导致的资源泄露。关键在于：将资源的生命周期与对象的生命周期绑定，当对象离开其作用域时（无论是正常还是异常栈展开），他的析构函数都会被自动调用，从而确保资源被释放。</p>
-<span id="more"></span>
-
-<h1 id="文件句柄RAII"><a href="#文件句柄RAII" class="headerlink" title="文件句柄RAII"></a>文件句柄RAII</h1><p>使用智能指针的方法讲了数次了，这里不展开了。RAII的思想不限于内存，还包括文件句柄、套接字等。这里举例一个文件句柄：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileRAII</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    FILE* file_ptr;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数获取资源</span></span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">FileRAII</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* filename, <span class="type">const</span> <span class="type">char</span>* mode)</span> </span></span><br><span class="line"><span class="function">        : file_ptr(std::fopen(filename, mode)) &#123;</span></span><br><span class="line">        <span class="keyword">if</span> (!file_ptr) &#123;</span><br><span class="line">            <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;Failed to open file&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 析构函数释放资源</span></span><br><span class="line">    ~<span class="built_in">FileRAII</span>() &#123;</span><br><span class="line">        <span class="keyword">if</span> (file_ptr) &#123;</span><br><span class="line">            std::<span class="built_in">fclose</span>(file_ptr);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 禁止拷贝（或实现深拷贝/移动语义）</span></span><br><span class="line">    <span class="built_in">FileRAII</span>(<span class="type">const</span> FileRAII&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">    FileRAII&amp; <span class="keyword">operator</span>=(<span class="type">const</span> FileRAII&amp;) = <span class="keyword">delete</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可选：提供访问原始资源的接口</span></span><br><span class="line">    <span class="function">FILE* <span class="title">get</span><span class="params">()</span> <span class="type">const</span> </span>&#123; <span class="keyword">return</span> file_ptr; &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">useFile</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">FileRAII <span class="title">file</span><span class="params">(<span class="string">&quot;data.txt&quot;</span>, <span class="string">&quot;r&quot;</span>)</span></span>; <span class="comment">// 文件被打开</span></span><br><span class="line">    <span class="built_in">someFunctionThatMightThrow</span>();   <span class="comment">// 可能抛出异常</span></span><br><span class="line">    <span class="comment">// 读取文件...</span></span><br><span class="line">&#125; <span class="comment">// 无论是否异常，file的析构函数都会关闭文件 -&gt; 无资源泄漏！</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-<h1 id="崩溃"><a href="#崩溃" class="headerlink" title="崩溃"></a>崩溃</h1><p>RAII处理内存释放问题是基于程序正常的控制流的，当系统出现段异常等非正常终止情况时，RAII也没有办法。现代操作系统（如Linux, Windows）在进程终止时，会回收该进程拥有的所有内存和大多数内核资源（如文件描述符、套接字）。所以，对于内存和这些内核资源，即使崩溃也不会造成“永久性泄漏”。</p>
-<p>但是，如果是数据库事务等资源，则需要人们从系统架构层面考虑。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li>核心原则：将资源获取置于构造函数内，将资源释放置于析构函数内。</li>
-<li>依赖栈展开：信任C++的异常机制。当异常抛出时，系统会析构所有已成功构造的局部RAII对象，从而自动释放其管理的资源。</li>
-<li>优先使用标准库工具：对于动态内存，首选 std::unique_ptr 和 std::shared_ptr，并使用 make_unique&#x2F;make_shared 来构造它们。这是最简单、最安全的方式。</li>
-<li>为其他资源自定义RAII类：对于非内存资源，遵循同样的模式封装成类，从而将琐碎且易错的资源管理任务转化为可靠的、自动化的对象生命周期管理。</li>
-</ul>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -190,41 +190,6 @@
       </categories>
   </entry>
   <entry>
-    <title>dog3</title>
-    <url>/2025/10/30/dog3/</url>
-    <content><![CDATA[<p><img src="/2025/10/30/dog3/1.jpg" alt="1"></p>
-<span id="more"></span>
-
-<p><img src="/2025/10/30/dog3/2.jpg" alt="2"></p>
-<p><img src="/2025/10/30/dog3/3.jpg" alt="3"></p>
-]]></content>
-      <categories>
-        <category>pets</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>constexpr</title>
-    <url>/2025/10/10/constexpr/</url>
-    <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
-<blockquote>
-<p>作用：</p>
-<ol>
-<li>编译时计算</li>
-<li>性能优化</li>
-<li>类型安全</li>
-</ol>
-</blockquote>
-<p>和const的区别是其为编译时初始化，const为运行时初始化。</p>
-<h1 id="修饰变量"><a href="#修饰变量" class="headerlink" title="修饰变量"></a>修饰变量</h1><p>编译期常量</p>
-<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>函数在编译期即可调用：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">square</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x*x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="built_in">square</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
     <title>decltype</title>
     <url>/2025/10/10/decltype/</url>
     <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">decltype</span>(expression) varible;</span><br></pre></td></tr></table></figure>
@@ -263,13 +228,50 @@
       </categories>
   </entry>
   <entry>
-    <title>gdb常用命令</title>
-    <url>/2025/10/13/gdb%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>顺口溜：冷若冰霜驱动盘</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">l list <span class="comment"># 查看源码</span></span><br><span class="line"></span><br><span class="line">r run <span class="comment"># 运行程序</span></span><br><span class="line"></span><br><span class="line">b <span class="built_in">break</span> <span class="comment"># 设置断点</span></span><br><span class="line"></span><br><span class="line">s step <span class="comment"># 单步执行（进入函数）</span></span><br><span class="line"></span><br><span class="line">q quit <span class="comment"># 退出gdb</span></span><br><span class="line"></span><br><span class="line">d delete <span class="comment"># 删除断点</span></span><br><span class="line"></span><br><span class="line">p <span class="built_in">print</span> <span class="comment"># 打印变量值</span></span><br></pre></td></tr></table></figure>
+    <title>constexpr</title>
+    <url>/2025/10/10/constexpr/</url>
+    <content><![CDATA[<h1 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h1><p>常量表达式是C++11的关键字，在编译时就可以计算表达式的值</p>
+<blockquote>
+<p>作用：</p>
+<ol>
+<li>编译时计算</li>
+<li>性能优化</li>
+<li>类型安全</li>
+</ol>
+</blockquote>
+<p>和const的区别是其为编译时初始化，const为运行时初始化。</p>
+<h1 id="修饰变量"><a href="#修饰变量" class="headerlink" title="修饰变量"></a>修饰变量</h1><p>编译期常量</p>
+<h1 id="修饰函数"><a href="#修饰函数" class="headerlink" title="修饰函数"></a>修饰函数</h1><p>函数在编译期即可调用：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">constexpr</span> <span class="type">int</span> <span class="title">square</span><span class="params">(<span class="type">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> x*x;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">constexpr</span> <span class="type">int</span> val = <span class="built_in">square</span>(<span class="number">5</span>);</span><br></pre></td></tr></table></figure>
 
-<p>再加几个常用的：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bt backtrace <span class="comment"># 查看调用栈</span></span><br><span class="line"></span><br><span class="line">c <span class="built_in">continue</span> <span class="comment"># 继续执行</span></span><br><span class="line"></span><br><span class="line">n next <span class="comment"># 单步执行（不进入函数）</span></span><br><span class="line"></span><br><span class="line">f finish <span class="comment"># 执行完当前函数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">disable</span> 2 <span class="comment"># 禁用编号为2的断点</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>dog2</title>
+    <url>/2025/10/17/dog2/</url>
+    <content><![CDATA[<p><img src="/2025/10/17/dog2/mmexport1760672311013.jpg" alt="mmexport1760672311013"></p>
+]]></content>
+      <categories>
+        <category>pets</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux常用命令</title>
+    <url>/2025/10/13/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<h2 id="文件和目录操作"><a href="#文件和目录操作" class="headerlink" title="文件和目录操作"></a>文件和目录操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>       <span class="comment"># 显示当前目录</span></span><br><span class="line"><span class="built_in">cd</span>        <span class="comment"># 切换目录</span></span><br><span class="line"><span class="built_in">ls</span>        <span class="comment"># 列出目录内容</span></span><br><span class="line"><span class="built_in">cp</span>        <span class="comment"># 复制文件/目录</span></span><br><span class="line">    <span class="built_in">cp</span> file.txt backup/</span><br><span class="line">    <span class="built_in">cp</span> -r dir1/ dir2/</span><br><span class="line"><span class="built_in">mv</span>        <span class="comment"># 移动文件/目录，也用于重命名</span></span><br><span class="line">	<span class="built_in">mv</span> 源文件 目标文件</span><br><span class="line"><span class="built_in">touch</span>     <span class="comment"># 创建空文件或更新文件时间戳</span></span><br><span class="line"><span class="built_in">mkdir</span>     <span class="comment"># 创建目录</span></span><br><span class="line"><span class="built_in">rmdir</span>     <span class="comment"># 移除空目录</span></span><br><span class="line"><span class="built_in">rm</span>        <span class="comment"># 删除文件/目录</span></span><br><span class="line">find      <span class="comment"># 查找文件</span></span><br><span class="line">	find 路径 选项 表达式</span><br><span class="line">	find /home -name <span class="string">&quot;*.txt&quot;</span></span><br><span class="line"><span class="built_in">which</span>     <span class="comment"># 查找命令位置</span></span><br><span class="line">whereis   <span class="comment"># 查找程序相关文件</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="文件查看和处理"><a href="#文件查看和处理" class="headerlink" title="文件查看和处理"></a>文件查看和处理</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span>       <span class="comment"># 显示文件内容</span></span><br><span class="line">    <span class="built_in">cat</span> tmp.txt</span><br><span class="line">    <span class="built_in">cat</span> -n tmp.txt 显示行号</span><br><span class="line">less/more <span class="comment"># 分页查看文件</span></span><br><span class="line">    less large_file.log <span class="comment">#支持翻页。less比more好用，不介绍more了</span></span><br><span class="line"><span class="built_in">head</span>      <span class="comment"># 查看文件前几行</span></span><br><span class="line"><span class="built_in">tail</span>      <span class="comment"># 查看文件后几行</span></span><br><span class="line"><span class="built_in">wc</span>        <span class="comment"># 统计文件行数、字数、字节数</span></span><br><span class="line">diff      <span class="comment"># 比较文件差异</span></span><br><span class="line">grep      <span class="comment"># 搜索文本</span></span><br><span class="line">    grep <span class="string">&quot;error&quot;</span> server.log <span class="comment">#直接查</span></span><br><span class="line">    grep -r <span class="string">&quot;404&quot;</span> /var/log  <span class="comment">#递归查找目录</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="系统监控"><a href="#系统监控" class="headerlink" title="系统监控"></a>系统监控</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps        <span class="comment"># 查看进程</span></span><br><span class="line">    ps -ef | grep nginx</span><br><span class="line">top/htop  <span class="comment"># 系统进程监控</span></span><br><span class="line"><span class="built_in">kill</span>      <span class="comment"># 终止进程</span></span><br><span class="line">    <span class="built_in">kill</span> -9 5678</span><br><span class="line">free -h   <span class="comment"># 查看剩余内存</span></span><br><span class="line"><span class="built_in">df</span> -h     <span class="comment"># 查看磁盘使用情况</span></span><br><span class="line"><span class="built_in">du</span> -sh    <span class="comment"># 查看目录大小</span></span><br><span class="line">netstat   <span class="comment"># 网络连接状态</span></span><br><span class="line">ss        <span class="comment"># 更现代的网络状态查看</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping      <span class="comment"># 测试网络连通性</span></span><br><span class="line">telnet    <span class="comment"># 测试端口连通性</span></span><br><span class="line">curl      <span class="comment"># 发送HTTP请求</span></span><br><span class="line">wget      <span class="comment"># 下载文件</span></span><br><span class="line">nc/netcat <span class="comment"># 网络调试工具</span></span><br><span class="line">ifconfig/ip <span class="comment"># 网络接口配置</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="权限设置"><a href="#权限设置" class="headerlink" title="权限设置"></a>权限设置</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span>     <span class="comment"># 修改文件权限</span></span><br><span class="line">    <span class="built_in">chmod</span> 777 config.conf</span><br><span class="line">    <span class="built_in">chmod</span> (u/g/o/a)+(r/w/x) script.sh</span><br></pre></td></tr></table></figure>
+
+<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar       <span class="comment"># 打包压缩</span></span><br><span class="line">    tar -zcvf log.tar.gz /var/log</span><br><span class="line">    tar -xvf archive.tar -C /var/log</span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -277,23 +279,16 @@
       </categories>
   </entry>
   <entry>
-    <title>inline</title>
-    <url>/2025/10/11/inline/</url>
-    <content><![CDATA[<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明为inline的函数</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> result = <span class="built_in">add</span>(<span class="number">3</span>, <span class="number">4</span>);  <span class="comment">// 可能被内联</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>dog3</title>
+    <url>/2025/10/30/dog3/</url>
+    <content><![CDATA[<p><img src="/2025/10/30/dog3/1.jpg" alt="1"></p>
+<span id="more"></span>
 
-<p>内联后</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">3</span> + <span class="number">4</span>;  <span class="comment">// 直接替换函数调用</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="编译器不内联的情况"><a href="#编译器不内联的情况" class="headerlink" title="编译器不内联的情况"></a>编译器不内联的情况</h1><ol>
-<li>函数体过于复杂</li>
-<li>递归</li>
-<li>包含静态变量</li>
-<li>虚函数</li>
-<li>函数指针调用</li>
-</ol>
+<p><img src="/2025/10/30/dog3/2.jpg" alt="2"></p>
+<p><img src="/2025/10/30/dog3/3.jpg" alt="3"></p>
 ]]></content>
       <categories>
-        <category>cpp</category>
+        <category>pets</category>
       </categories>
   </entry>
   <entry>
@@ -435,6 +430,26 @@
       </categories>
   </entry>
   <entry>
+    <title>inline</title>
+    <url>/2025/10/11/inline/</url>
+    <content><![CDATA[<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 声明为inline的函数</span></span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> result = <span class="built_in">add</span>(<span class="number">3</span>, <span class="number">4</span>);  <span class="comment">// 可能被内联</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>内联后</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="type">int</span> result = <span class="number">3</span> + <span class="number">4</span>;  <span class="comment">// 直接替换函数调用</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="编译器不内联的情况"><a href="#编译器不内联的情况" class="headerlink" title="编译器不内联的情况"></a>编译器不内联的情况</h1><ol>
+<li>函数体过于复杂</li>
+<li>递归</li>
+<li>包含静态变量</li>
+<li>虚函数</li>
+<li>函数指针调用</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
     <title>lru</title>
     <url>/2025/10/13/lru/</url>
     <content><![CDATA[<p>lru使用了双向链表维护访问顺序，使用哈希表进行了O(1)复杂度的查找</p>
@@ -446,19 +461,13 @@
       </categories>
   </entry>
   <entry>
-    <title>linux常用命令</title>
-    <url>/2025/10/13/linux%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<h2 id="文件和目录操作"><a href="#文件和目录操作" class="headerlink" title="文件和目录操作"></a>文件和目录操作</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">pwd</span>       <span class="comment"># 显示当前目录</span></span><br><span class="line"><span class="built_in">cd</span>        <span class="comment"># 切换目录</span></span><br><span class="line"><span class="built_in">ls</span>        <span class="comment"># 列出目录内容</span></span><br><span class="line"><span class="built_in">cp</span>        <span class="comment"># 复制文件/目录</span></span><br><span class="line">    <span class="built_in">cp</span> file.txt backup/</span><br><span class="line">    <span class="built_in">cp</span> -r dir1/ dir2/</span><br><span class="line"><span class="built_in">mv</span>        <span class="comment"># 移动文件/目录，也用于重命名</span></span><br><span class="line">	<span class="built_in">mv</span> 源文件 目标文件</span><br><span class="line"><span class="built_in">touch</span>     <span class="comment"># 创建空文件或更新文件时间戳</span></span><br><span class="line"><span class="built_in">mkdir</span>     <span class="comment"># 创建目录</span></span><br><span class="line"><span class="built_in">rmdir</span>     <span class="comment"># 移除空目录</span></span><br><span class="line"><span class="built_in">rm</span>        <span class="comment"># 删除文件/目录</span></span><br><span class="line">find      <span class="comment"># 查找文件</span></span><br><span class="line">	find 路径 选项 表达式</span><br><span class="line">	find /home -name <span class="string">&quot;*.txt&quot;</span></span><br><span class="line"><span class="built_in">which</span>     <span class="comment"># 查找命令位置</span></span><br><span class="line">whereis   <span class="comment"># 查找程序相关文件</span></span><br></pre></td></tr></table></figure>
+    <title>gdb常用命令</title>
+    <url>/2025/10/13/gdb%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>顺口溜：冷若冰霜驱动盘</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">l list <span class="comment"># 查看源码</span></span><br><span class="line"></span><br><span class="line">r run <span class="comment"># 运行程序</span></span><br><span class="line"></span><br><span class="line">b <span class="built_in">break</span> <span class="comment"># 设置断点</span></span><br><span class="line"></span><br><span class="line">s step <span class="comment"># 单步执行（进入函数）</span></span><br><span class="line"></span><br><span class="line">q quit <span class="comment"># 退出gdb</span></span><br><span class="line"></span><br><span class="line">d delete <span class="comment"># 删除断点</span></span><br><span class="line"></span><br><span class="line">p <span class="built_in">print</span> <span class="comment"># 打印变量值</span></span><br></pre></td></tr></table></figure>
 
-<h1 id="文件查看和处理"><a href="#文件查看和处理" class="headerlink" title="文件查看和处理"></a>文件查看和处理</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span>       <span class="comment"># 显示文件内容</span></span><br><span class="line">    <span class="built_in">cat</span> tmp.txt</span><br><span class="line">    <span class="built_in">cat</span> -n tmp.txt 显示行号</span><br><span class="line">less/more <span class="comment"># 分页查看文件</span></span><br><span class="line">    less large_file.log <span class="comment">#支持翻页。less比more好用，不介绍more了</span></span><br><span class="line"><span class="built_in">head</span>      <span class="comment"># 查看文件前几行</span></span><br><span class="line"><span class="built_in">tail</span>      <span class="comment"># 查看文件后几行</span></span><br><span class="line"><span class="built_in">wc</span>        <span class="comment"># 统计文件行数、字数、字节数</span></span><br><span class="line">diff      <span class="comment"># 比较文件差异</span></span><br><span class="line">grep      <span class="comment"># 搜索文本</span></span><br><span class="line">    grep <span class="string">&quot;error&quot;</span> server.log <span class="comment">#直接查</span></span><br><span class="line">    grep -r <span class="string">&quot;404&quot;</span> /var/log  <span class="comment">#递归查找目录</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="系统监控"><a href="#系统监控" class="headerlink" title="系统监控"></a>系统监控</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ps        <span class="comment"># 查看进程</span></span><br><span class="line">    ps -ef | grep nginx</span><br><span class="line">top/htop  <span class="comment"># 系统进程监控</span></span><br><span class="line"><span class="built_in">kill</span>      <span class="comment"># 终止进程</span></span><br><span class="line">    <span class="built_in">kill</span> -9 5678</span><br><span class="line">free -h   <span class="comment"># 查看剩余内存</span></span><br><span class="line"><span class="built_in">df</span> -h     <span class="comment"># 查看磁盘使用情况</span></span><br><span class="line"><span class="built_in">du</span> -sh    <span class="comment"># 查看目录大小</span></span><br><span class="line">netstat   <span class="comment"># 网络连接状态</span></span><br><span class="line">ss        <span class="comment"># 更现代的网络状态查看</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="网络"><a href="#网络" class="headerlink" title="网络"></a>网络</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping      <span class="comment"># 测试网络连通性</span></span><br><span class="line">telnet    <span class="comment"># 测试端口连通性</span></span><br><span class="line">curl      <span class="comment"># 发送HTTP请求</span></span><br><span class="line">wget      <span class="comment"># 下载文件</span></span><br><span class="line">nc/netcat <span class="comment"># 网络调试工具</span></span><br><span class="line">ifconfig/ip <span class="comment"># 网络接口配置</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="权限设置"><a href="#权限设置" class="headerlink" title="权限设置"></a>权限设置</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">chmod</span>     <span class="comment"># 修改文件权限</span></span><br><span class="line">    <span class="built_in">chmod</span> 777 config.conf</span><br><span class="line">    <span class="built_in">chmod</span> (u/g/o/a)+(r/w/x) script.sh</span><br></pre></td></tr></table></figure>
-
-<h1 id="压缩"><a href="#压缩" class="headerlink" title="压缩"></a>压缩</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tar       <span class="comment"># 打包压缩</span></span><br><span class="line">    tar -zcvf log.tar.gz /var/log</span><br><span class="line">    tar -xvf archive.tar -C /var/log</span><br></pre></td></tr></table></figure>
+<p>再加几个常用的：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bt backtrace <span class="comment"># 查看调用栈</span></span><br><span class="line"></span><br><span class="line">c <span class="built_in">continue</span> <span class="comment"># 继续执行</span></span><br><span class="line"></span><br><span class="line">n next <span class="comment"># 单步执行（不进入函数）</span></span><br><span class="line"></span><br><span class="line">f finish <span class="comment"># 执行完当前函数</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">disable</span> 2 <span class="comment"># 禁用编号为2的断点</span></span><br></pre></td></tr></table></figure>
 
 ]]></content>
       <categories>
@@ -481,15 +490,6 @@
       </categories>
   </entry>
   <entry>
-    <title>dog2</title>
-    <url>/2025/10/17/dog2/</url>
-    <content><![CDATA[<p><img src="/2025/10/17/dog2/mmexport1760672311013.jpg" alt="mmexport1760672311013"></p>
-]]></content>
-      <categories>
-        <category>pets</category>
-      </categories>
-  </entry>
-  <entry>
     <title>noexcept</title>
     <url>/2025/10/24/noexcept/</url>
     <content><![CDATA[<p>noexcept是C++11引入的异常规范，用于声明一个函数不会抛出任何异常，是一个编译时提示和运行时保证。</p>
@@ -499,25 +499,6 @@
 
 <h1 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h1><h2 id="优化机会"><a href="#优化机会" class="headerlink" title="优化机会"></a>优化机会</h2><p>加了之后，编译期可以省略异常处理代码</p>
 <h2 id="容器行为控制"><a href="#容器行为控制" class="headerlink" title="容器行为控制"></a>容器行为控制</h2><p>最重要的应用场景，即如果移动构造函数中如果没有noexcept，编译器会自动退化为拷贝构造函数。因此，移动构造函数一般会标记为noexcept</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>packaged_task</title>
-    <url>/2025/10/13/packaged-task/</url>
-    <content><![CDATA[<p><code>packaged_task</code> 是 C++11 引入的一个重要组件，它可以将可调用对象（函数、lambda、函数对象等）包装起来，并将其返回值与一个 <code>future</code> 对象关联，从而方便地获取异步操作的结果。</p>
-<h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包装普通函数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">packaged_task&lt;<span class="title">int</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>&gt; <span class="title">task</span><span class="params">(add)</span></span>;</span><br></pre></td></tr></table></figure>
-
-<span id="more"></span>
-
-<h1 id="执行任务"><a href="#执行任务" class="headerlink" title="执行任务"></a>执行任务</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在另一个线程中执行</span></span><br><span class="line"><span class="function">thread <span class="title">t</span><span class="params">(move(task), <span class="number">10</span>, <span class="number">20</span>)</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取结果</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;Result: &quot;</span> &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; endl; <span class="comment">// 输出: Result: 30</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h2><p>智能移动不能复制</p>
-<h2 id="重置任务"><a href="#重置任务" class="headerlink" title="重置任务"></a>重置任务</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">packaged_task&lt;<span class="title">int</span><span class="params">()</span>&gt; <span class="title">task</span><span class="params">([]&#123; <span class="keyword">return</span> <span class="number">42</span>; &#125;)</span></span>;</span><br><span class="line"><span class="built_in">task</span>(); <span class="comment">// 第一次执行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 任务已执行，需要重置才能再次使用</span></span><br><span class="line">task.<span class="built_in">reset</span>(); <span class="comment">// 重置任务状态</span></span><br><span class="line">future&lt;<span class="type">int</span>&gt; fut2 = task.<span class="built_in">get_future</span>();</span><br><span class="line"><span class="built_in">task</span>(); <span class="comment">// 可以再次执行</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h1><p>可以看线程池一文的第二种实现方法</p>
 ]]></content>
       <categories>
         <category>cpp</category>
@@ -804,25 +785,6 @@
       </categories>
   </entry>
   <entry>
-    <title>wireshark操作简述</title>
-    <url>/2025/10/13/wireshark%E6%93%8D%E4%BD%9C%E7%AE%80%E8%BF%B0/</url>
-    <content><![CDATA[<p>Wireshark是一个网络协议分析工具，可以捕获并分析数据包</p>
-<h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><h2 id="基于协议的过滤"><a href="#基于协议的过滤" class="headerlink" title="基于协议的过滤"></a>基于协议的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有TCP数据包</span><br><span class="line">tcp</span><br><span class="line"></span><br><span class="line"># 显示所有UDP数据包</span><br><span class="line">udp</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP数据包</span><br><span class="line">http</span><br><span class="line"></span><br><span class="line"># 显示所有DNS数据包</span><br><span class="line">dns</span><br><span class="line"></span><br><span class="line"># 显示所有HTTPS数据包</span><br><span class="line">ssl or tls</span><br><span class="line"></span><br><span class="line"># 显示所有FTP数据包</span><br><span class="line">ftp</span><br></pre></td></tr></table></figure>
-
-<h2 id="基于IP地址的过滤"><a href="#基于IP地址的过滤" class="headerlink" title="基于IP地址的过滤"></a>基于IP地址的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示来自或发送到特定IP的数据包</span><br><span class="line">ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示来自特定源IP的数据包</span><br><span class="line">ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示发送到特定目标IP的数据包</span><br><span class="line">ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示源IP和目标IP之间的通信</span><br><span class="line">ip.src == 192.168.1.100 and ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示与特定网络段相关的数据包</span><br><span class="line">ip.addr &gt;= 192.168.1.0 and ip.addr &lt;= 192.168.1.255</span><br></pre></td></tr></table></figure>
-
-<h2 id="基于端口号的过滤"><a href="#基于端口号的过滤" class="headerlink" title="基于端口号的过滤"></a>基于端口号的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示特定端口的数据包</span><br><span class="line">tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 显示特定源端口的数据包</span><br><span class="line">tcp.srcport == 80</span><br><span class="line"></span><br><span class="line"># 显示特定目标端口的数据包</span><br><span class="line">tcp.dstport == 443</span><br><span class="line"></span><br><span class="line"># 显示多个端口的数据包</span><br><span class="line">tcp.port == 80 or tcp.port == 443 or tcp.port == 8080</span><br><span class="line"></span><br><span class="line"># 显示端口范围</span><br><span class="line">tcp.port &gt;= 80 and tcp.port &lt;= 100</span><br></pre></td></tr></table></figure>
-
-<h2 id="基于HTTP的过滤"><a href="#基于HTTP的过滤" class="headerlink" title="基于HTTP的过滤"></a>基于HTTP的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有HTTP请求</span><br><span class="line">http.request</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP响应</span><br><span class="line">http.response</span><br><span class="line"></span><br><span class="line"># 显示特定HTTP方法的请求</span><br><span class="line">http.request.method == &quot;GET&quot;</span><br><span class="line">http.request.method == &quot;POST&quot;</span><br><span class="line">http.request.method == &quot;PUT&quot;</span><br><span class="line">http.request.method == &quot;DELETE&quot;</span><br><span class="line"></span><br><span class="line"># 显示包含特定字符串的HTTP数据包</span><br><span class="line">http contains &quot;login&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定User-Agent的请求</span><br><span class="line">http.user_agent contains &quot;Mozilla&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定主机的HTTP流量</span><br><span class="line">http.host == &quot;www.example.com&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定状态码的HTTP响应</span><br><span class="line">http.response.code == 200</span><br><span class="line">http.response.code == 404</span><br><span class="line">http.response.code == 500</span><br></pre></td></tr></table></figure>
-
-<h2 id="组合过滤"><a href="#组合过滤" class="headerlink" title="组合过滤"></a>组合过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># AND操作：同时满足两个条件</span><br><span class="line">tcp.port == 80 and ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># OR操作：满足其中一个条件</span><br><span class="line">tcp.port == 80 or tcp.port == 443</span><br><span class="line"></span><br><span class="line"># NOT操作：不满足条件</span><br><span class="line">not tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 复杂组合</span><br><span class="line">(tcp.port == 80 or tcp.port == 443) and ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 使用括号控制优先级</span><br><span class="line">(tcp.srcport == 80 and ip.dst == 192.168.1.1) or (tcp.dstport == 80 and ip.src == 192.168.1.1)</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>cn</category>
-      </categories>
-  </entry>
-  <entry>
     <title>三/五/零法则</title>
     <url>/2025/10/30/%E4%B8%89-%E4%BA%94-%E9%9B%B6%E6%B3%95%E5%88%99/</url>
     <content><![CDATA[<p>这是一个 C++ 编程原则，用于正确管理资源（如动态内存、文件句柄等）。它规定了类在什么情况下需要定义哪些特殊的成员函数，以避免资源泄漏、重复释放等问题。</p>
@@ -848,6 +810,25 @@
 ]]></content>
       <categories>
         <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>wireshark操作简述</title>
+    <url>/2025/10/13/wireshark%E6%93%8D%E4%BD%9C%E7%AE%80%E8%BF%B0/</url>
+    <content><![CDATA[<p>Wireshark是一个网络协议分析工具，可以捕获并分析数据包</p>
+<h1 id="过滤器"><a href="#过滤器" class="headerlink" title="过滤器"></a>过滤器</h1><h2 id="基于协议的过滤"><a href="#基于协议的过滤" class="headerlink" title="基于协议的过滤"></a>基于协议的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有TCP数据包</span><br><span class="line">tcp</span><br><span class="line"></span><br><span class="line"># 显示所有UDP数据包</span><br><span class="line">udp</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP数据包</span><br><span class="line">http</span><br><span class="line"></span><br><span class="line"># 显示所有DNS数据包</span><br><span class="line">dns</span><br><span class="line"></span><br><span class="line"># 显示所有HTTPS数据包</span><br><span class="line">ssl or tls</span><br><span class="line"></span><br><span class="line"># 显示所有FTP数据包</span><br><span class="line">ftp</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于IP地址的过滤"><a href="#基于IP地址的过滤" class="headerlink" title="基于IP地址的过滤"></a>基于IP地址的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示来自或发送到特定IP的数据包</span><br><span class="line">ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示来自特定源IP的数据包</span><br><span class="line">ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 显示发送到特定目标IP的数据包</span><br><span class="line">ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示源IP和目标IP之间的通信</span><br><span class="line">ip.src == 192.168.1.100 and ip.dst == 8.8.8.8</span><br><span class="line"></span><br><span class="line"># 显示与特定网络段相关的数据包</span><br><span class="line">ip.addr &gt;= 192.168.1.0 and ip.addr &lt;= 192.168.1.255</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于端口号的过滤"><a href="#基于端口号的过滤" class="headerlink" title="基于端口号的过滤"></a>基于端口号的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示特定端口的数据包</span><br><span class="line">tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 显示特定源端口的数据包</span><br><span class="line">tcp.srcport == 80</span><br><span class="line"></span><br><span class="line"># 显示特定目标端口的数据包</span><br><span class="line">tcp.dstport == 443</span><br><span class="line"></span><br><span class="line"># 显示多个端口的数据包</span><br><span class="line">tcp.port == 80 or tcp.port == 443 or tcp.port == 8080</span><br><span class="line"></span><br><span class="line"># 显示端口范围</span><br><span class="line">tcp.port &gt;= 80 and tcp.port &lt;= 100</span><br></pre></td></tr></table></figure>
+
+<h2 id="基于HTTP的过滤"><a href="#基于HTTP的过滤" class="headerlink" title="基于HTTP的过滤"></a>基于HTTP的过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># 显示所有HTTP请求</span><br><span class="line">http.request</span><br><span class="line"></span><br><span class="line"># 显示所有HTTP响应</span><br><span class="line">http.response</span><br><span class="line"></span><br><span class="line"># 显示特定HTTP方法的请求</span><br><span class="line">http.request.method == &quot;GET&quot;</span><br><span class="line">http.request.method == &quot;POST&quot;</span><br><span class="line">http.request.method == &quot;PUT&quot;</span><br><span class="line">http.request.method == &quot;DELETE&quot;</span><br><span class="line"></span><br><span class="line"># 显示包含特定字符串的HTTP数据包</span><br><span class="line">http contains &quot;login&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定User-Agent的请求</span><br><span class="line">http.user_agent contains &quot;Mozilla&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定主机的HTTP流量</span><br><span class="line">http.host == &quot;www.example.com&quot;</span><br><span class="line"></span><br><span class="line"># 显示特定状态码的HTTP响应</span><br><span class="line">http.response.code == 200</span><br><span class="line">http.response.code == 404</span><br><span class="line">http.response.code == 500</span><br></pre></td></tr></table></figure>
+
+<h2 id="组合过滤"><a href="#组合过滤" class="headerlink" title="组合过滤"></a>组合过滤</h2><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># AND操作：同时满足两个条件</span><br><span class="line">tcp.port == 80 and ip.src == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># OR操作：满足其中一个条件</span><br><span class="line">tcp.port == 80 or tcp.port == 443</span><br><span class="line"></span><br><span class="line"># NOT操作：不满足条件</span><br><span class="line">not tcp.port == 80</span><br><span class="line"></span><br><span class="line"># 复杂组合</span><br><span class="line">(tcp.port == 80 or tcp.port == 443) and ip.addr == 192.168.1.100</span><br><span class="line"></span><br><span class="line"># 使用括号控制优先级</span><br><span class="line">(tcp.srcport == 80 and ip.dst == 192.168.1.1) or (tcp.dstport == 80 and ip.src == 192.168.1.1)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>cn</category>
       </categories>
   </entry>
   <entry>
@@ -880,26 +861,6 @@
 ]]></content>
       <categories>
         <category>os</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>双椒牛肉</title>
-    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
-    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肉</li>
-<li>彩椒</li>
-<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肉切丝</li>
-<li>拍蒜，切姜丝，切彩椒丝</li>
-<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
-<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
       </categories>
   </entry>
   <entry>
@@ -1094,6 +1055,45 @@
       </categories>
   </entry>
   <entry>
+    <title>packaged_task</title>
+    <url>/2025/10/13/packaged-task/</url>
+    <content><![CDATA[<p><code>packaged_task</code> 是 C++11 引入的一个重要组件，它可以将可调用对象（函数、lambda、函数对象等）包装起来，并将其返回值与一个 <code>future</code> 对象关联，从而方便地获取异步操作的结果。</p>
+<h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包装普通函数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">packaged_task&lt;<span class="title">int</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>&gt; <span class="title">task</span><span class="params">(add)</span></span>;</span><br></pre></td></tr></table></figure>
+
+<span id="more"></span>
+
+<h1 id="执行任务"><a href="#执行任务" class="headerlink" title="执行任务"></a>执行任务</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 在另一个线程中执行</span></span><br><span class="line"><span class="function">thread <span class="title">t</span><span class="params">(move(task), <span class="number">10</span>, <span class="number">20</span>)</span></span>;</span><br><span class="line">t.<span class="built_in">join</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 获取结果</span></span><br><span class="line">cout &lt;&lt; <span class="string">&quot;Result: &quot;</span> &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; endl; <span class="comment">// 输出: Result: 30</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="特性"><a href="#特性" class="headerlink" title="特性"></a>特性</h1><h2 id="移动语义"><a href="#移动语义" class="headerlink" title="移动语义"></a>移动语义</h2><p>智能移动不能复制</p>
+<h2 id="重置任务"><a href="#重置任务" class="headerlink" title="重置任务"></a>重置任务</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function">packaged_task&lt;<span class="title">int</span><span class="params">()</span>&gt; <span class="title">task</span><span class="params">([]&#123; <span class="keyword">return</span> <span class="number">42</span>; &#125;)</span></span>;</span><br><span class="line"><span class="built_in">task</span>(); <span class="comment">// 第一次执行</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 任务已执行，需要重置才能再次使用</span></span><br><span class="line">task.<span class="built_in">reset</span>(); <span class="comment">// 重置任务状态</span></span><br><span class="line">future&lt;<span class="type">int</span>&gt; fut2 = task.<span class="built_in">get_future</span>();</span><br><span class="line"><span class="built_in">task</span>(); <span class="comment">// 可以再次执行</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="类型擦除"><a href="#类型擦除" class="headerlink" title="类型擦除"></a>类型擦除</h1><p>可以看线程池一文的第二种实现方法</p>
+]]></content>
+      <categories>
+        <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>双椒牛肉</title>
+    <url>/2025/10/09/%E5%8F%8C%E6%A4%92%E7%89%9B%E8%82%89/</url>
+    <content><![CDATA[<h1 id="双椒牛肉"><a href="#双椒牛肉" class="headerlink" title="双椒牛肉"></a>双椒牛肉</h1><p>家里带来的牛排，总是煎着吃，其实也可以切了炒着吃</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>牛肉</li>
+<li>彩椒</li>
+<li>生姜 大蒜 蚝油 生抽 老抽 淀粉（实测不一定需要）</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>牛肉切丝</li>
+<li>拍蒜，切姜丝，切彩椒丝</li>
+<li>制作调味汁，小碗里放2勺生抽，1勺老抽，适量蚝油，少量盐，少量淀粉，加水搅匀（水不要太多）</li>
+<li>锅热倒油，炒香大蒜生姜，倒牛肉到断生，下青红椒丝。青红椒丝不生了就可以倒调料水了，锅里水炒的快没有了就可以出锅</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
     <title>可变参数模版</title>
     <url>/2025/10/10/%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E6%A8%A1%E7%89%88/</url>
     <content><![CDATA[<h1 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(Args... args)</span></span>&#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1157,26 +1157,6 @@
 ]]></content>
       <categories>
         <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>大蒜炒牛肚</title>
-    <url>/2025/11/08/%E5%A4%A7%E8%92%9C%E7%82%92%E7%89%9B%E8%82%9A/</url>
-    <content><![CDATA[<h1 id="大蒜炒牛肚"><a href="#大蒜炒牛肚" class="headerlink" title="大蒜炒牛肚"></a>大蒜炒牛肚</h1><p>买新鲜牛肚，不是卤过的</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>牛肚丝</li>
-<li>大蒜叶</li>
-<li>小葱 姜 蒜 豆瓣酱 小米辣 糖 盐 料酒</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>牛肚丝放碗里生抽+料酒腌制</li>
-<li>大蒜叶切段，蒜白切斜一点，不然太厚不容易熟</li>
-<li>油热下蒜瓣，生姜，加入牛肚丝翻炒，加入一勺豆瓣酱。</li>
-<li>再加入蒜叶继续炒，中间放少量糖，盐根据目前口味控制</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
       </categories>
   </entry>
   <entry>
@@ -1321,6 +1301,26 @@
       </categories>
   </entry>
   <entry>
+    <title>大蒜炒牛肚</title>
+    <url>/2025/11/08/%E5%A4%A7%E8%92%9C%E7%82%92%E7%89%9B%E8%82%9A/</url>
+    <content><![CDATA[<h1 id="大蒜炒牛肚"><a href="#大蒜炒牛肚" class="headerlink" title="大蒜炒牛肚"></a>大蒜炒牛肚</h1><p>买新鲜牛肚，不是卤过的</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>牛肚丝</li>
+<li>大蒜叶</li>
+<li>小葱 姜 蒜 豆瓣酱 小米辣 糖 盐 料酒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>牛肚丝放碗里生抽+料酒腌制</li>
+<li>大蒜叶切段，蒜白切斜一点，不然太厚不容易熟</li>
+<li>油热下蒜瓣，生姜，加入牛肚丝翻炒，加入一勺豆瓣酱。</li>
+<li>再加入蒜叶继续炒，中间放少量糖，盐根据目前口味控制</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
     <title>小问题集</title>
     <url>/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/</url>
     <content><![CDATA[<h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
@@ -1349,6 +1349,41 @@
 ]]></content>
       <categories>
         <category>cpp</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>山药排骨汤</title>
+    <url>/2025/11/17/%E5%B1%B1%E8%8D%AF%E6%8E%92%E9%AA%A8%E6%B1%A4/</url>
+    <content><![CDATA[<h1 id="山药排骨汤"><a href="#山药排骨汤" class="headerlink" title="山药排骨汤"></a>山药排骨汤</h1><p>经典的家常汤</p>
+<span id="more"></span>
+
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>两斤排骨 两到三根山药</li>
+<li>生姜 葱 料酒 盐 花椒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li><p>排骨剁成小块，冷水下锅，加葱姜料酒焯水</p>
+</li>
+<li><p>开水加姜加葱加花椒（10l粒左右）加排骨下锅烧开转小火40分钟</p>
+</li>
+<li><p>滚刀切山药，注意切完就放，不然会变黑</p>
+</li>
+<li><p>最后放盐调味出锅</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>归并排序</title>
+    <url>/2025/10/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e5</span> + <span class="number">10</span>; <span class="comment">// 假设数组最大长度为 1e5</span></span><br><span class="line"><span class="type">int</span> tmp[N];             <span class="comment">// 全局定义的临时数组</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge_sort</span><span class="params">(<span class="type">int</span> q[], <span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1.判边界</span></span><br><span class="line">    <span class="keyword">if</span> (l &gt;= r) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.定分界点</span></span><br><span class="line">    <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 递归排序子序列</span></span><br><span class="line">    <span class="built_in">merge_sort</span>(q, l, mid), <span class="built_in">merge_sort</span>(q, mid + <span class="number">1</span>, r);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 3.归并排序（双指针法）</span></span><br><span class="line">    <span class="type">int</span> k = <span class="number">0</span>, i = l, j = mid + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= r)</span><br><span class="line">        <span class="keyword">if</span> (q[i] &lt;= q[j]) tmp[k ++ ] = q[i ++ ];</span><br><span class="line">        <span class="keyword">else</span> tmp[k ++ ] = q[j ++ ];</span><br><span class="line">    <span class="comment">// 某个子序列走到最后了，将另一个序列剩余部分加入到 tmp 中</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt;= mid) tmp[k ++ ] = q[i ++ ];</span><br><span class="line">    <span class="keyword">while</span> (j &lt;= r) tmp[k ++ ] = q[j ++ ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将排序结果 tmp 重新覆盖掉 q</span></span><br><span class="line">    <span class="keyword">for</span> (i = l, j = <span class="number">0</span>; i &lt;= r; i ++, j ++ ) q[i] = tmp[j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>alg</category>
       </categories>
   </entry>
   <entry>
@@ -1512,9 +1547,11 @@
       </categories>
   </entry>
   <entry>
-    <title>归并排序</title>
-    <url>/2025/10/13/%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> N = <span class="number">1e5</span> + <span class="number">10</span>; <span class="comment">// 假设数组最大长度为 1e5</span></span><br><span class="line"><span class="type">int</span> tmp[N];             <span class="comment">// 全局定义的临时数组</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">merge_sort</span><span class="params">(<span class="type">int</span> q[], <span class="type">int</span> l, <span class="type">int</span> r)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// 1.判边界</span></span><br><span class="line">    <span class="keyword">if</span> (l &gt;= r) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.定分界点</span></span><br><span class="line">    <span class="type">int</span> mid = l + r &gt;&gt; <span class="number">1</span>;</span><br><span class="line">    <span class="comment">// 递归排序子序列</span></span><br><span class="line">    <span class="built_in">merge_sort</span>(q, l, mid), <span class="built_in">merge_sort</span>(q, mid + <span class="number">1</span>, r);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 3.归并排序（双指针法）</span></span><br><span class="line">    <span class="type">int</span> k = <span class="number">0</span>, i = l, j = mid + <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">while</span> (i &lt;= mid &amp;&amp; j &lt;= r)</span><br><span class="line">        <span class="keyword">if</span> (q[i] &lt;= q[j]) tmp[k ++ ] = q[i ++ ];</span><br><span class="line">        <span class="keyword">else</span> tmp[k ++ ] = q[j ++ ];</span><br><span class="line">    <span class="comment">// 某个子序列走到最后了，将另一个序列剩余部分加入到 tmp 中</span></span><br><span class="line">    <span class="keyword">while</span> (i &lt;= mid) tmp[k ++ ] = q[i ++ ];</span><br><span class="line">    <span class="keyword">while</span> (j &lt;= r) tmp[k ++ ] = q[j ++ ];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将排序结果 tmp 重新覆盖掉 q</span></span><br><span class="line">    <span class="keyword">for</span> (i = l, j = <span class="number">0</span>; i &lt;= r; i ++, j ++ ) q[i] = tmp[j];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+    <title>快速排序</title>
+    <url>/2025/10/13/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
+    <content><![CDATA[<h1 id="挖坑法"><a href="#挖坑法" class="headerlink" title="挖坑法"></a>挖坑法</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void quick_sort(int a[], int l, int r)</span><br><span class="line">&#123;</span><br><span class="line">    if (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        int i,j,x;</span><br><span class="line"> </span><br><span class="line">        i = l;</span><br><span class="line">        j = r;</span><br><span class="line">        x = a[i];</span><br><span class="line">        while (i &lt; j)</span><br><span class="line">        &#123;</span><br><span class="line">            while(i &lt; j &amp;&amp; a[j] &gt; x)</span><br><span class="line">                j--; // 从右向左找第一个小于x的数</span><br><span class="line">            if(i &lt; j)</span><br><span class="line">                a[i++] = a[j];</span><br><span class="line">            while(i &lt; j &amp;&amp; a[i] &lt; x)</span><br><span class="line">                i++; // 从左向右找第一个大于x的数</span><br><span class="line">            if(i &lt; j)</span><br><span class="line">                a[j--] = a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        a[i] = x;</span><br><span class="line">        quick_sort(a, l, i-1); /* 递归调用 */</span><br><span class="line">        quick_sort(a, i+1, r); /* 递归调用 */</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
 
 ]]></content>
       <categories>
@@ -1735,18 +1772,6 @@
       </categories>
   </entry>
   <entry>
-    <title>快速排序</title>
-    <url>/2025/10/13/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/</url>
-    <content><![CDATA[<h1 id="挖坑法"><a href="#挖坑法" class="headerlink" title="挖坑法"></a>挖坑法</h1><figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">void quick_sort(int a[], int l, int r)</span><br><span class="line">&#123;</span><br><span class="line">    if (l &lt; r)</span><br><span class="line">    &#123;</span><br><span class="line">        int i,j,x;</span><br><span class="line"> </span><br><span class="line">        i = l;</span><br><span class="line">        j = r;</span><br><span class="line">        x = a[i];</span><br><span class="line">        while (i &lt; j)</span><br><span class="line">        &#123;</span><br><span class="line">            while(i &lt; j &amp;&amp; a[j] &gt; x)</span><br><span class="line">                j--; // 从右向左找第一个小于x的数</span><br><span class="line">            if(i &lt; j)</span><br><span class="line">                a[i++] = a[j];</span><br><span class="line">            while(i &lt; j &amp;&amp; a[i] &lt; x)</span><br><span class="line">                i++; // 从左向右找第一个大于x的数</span><br><span class="line">            if(i &lt; j)</span><br><span class="line">                a[j--] = a[i];</span><br><span class="line">        &#125;</span><br><span class="line">        a[i] = x;</span><br><span class="line">        quick_sort(a, l, i-1); /* 递归调用 */</span><br><span class="line">        quick_sort(a, i+1, r); /* 递归调用 */</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-]]></content>
-      <categories>
-        <category>alg</category>
-      </categories>
-  </entry>
-  <entry>
     <title>榨菜肉丝汤</title>
     <url>/2025/11/08/%E6%A6%A8%E8%8F%9C%E8%82%89%E4%B8%9D%E6%B1%A4/</url>
     <content><![CDATA[<h1 id="榨菜肉丝汤"><a href="#榨菜肉丝汤" class="headerlink" title="榨菜肉丝汤"></a>榨菜肉丝汤</h1><p>很简单，也记录一下</p>
@@ -1762,6 +1787,21 @@
 ]]></content>
       <categories>
         <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>模版元编程</title>
+    <url>/2025/10/11/%E6%A8%A1%E7%89%88%E5%85%83%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p>模板元编程TMP是C++在编译期执行计算和类型操作的编程范式，本质是用代码生成代码，核心思想是将运行时计算转移到编译期，从而提升性能，增强类型安全并实现零开销抽象。</p>
+<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><p>元编程，编写操作程序本身的代码，而非直接解决问题。</p>
+<h1 id="编译器计算"><a href="#编译器计算" class="headerlink" title="编译器计算"></a>编译器计算</h1><p>所有计算在代码编译阶段完成，运行时无额外开销：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 传统运行时阶乘</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">factorial</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> (n &lt;= <span class="number">1</span>) ? <span class="number">1</span> : n * <span class="built_in">factorial</span>(n<span class="number">-1</span>);  <span class="comment">// 递归消耗栈空间</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模板元编程实现（编译期计算）</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="type">int</span> N&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Factorial</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">int</span> value = N * Factorial&lt;N<span class="number">-1</span>&gt;::value;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Factorial</span>&lt;<span class="number">0</span>&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">int</span> value = <span class="number">1</span>;  <span class="comment">// 递归终止</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译时即计算出 Factorial&lt;5&gt;::value = 120</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="模板特化"><a href="#模板特化" class="headerlink" title="模板特化"></a>模板特化</h1><p>为特定类型&#x2F;值提供定制实现，构成TMP的逻辑分支基础：</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 通用模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针类型的特化</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">true</span>;  <span class="comment">// 对指针返回true</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">static_assert</span>(IsPointer&lt;<span class="type">int</span>*&gt;::value, <span class="string">&quot;Must be pointer&quot;</span>);  <span class="comment">// 编译期验证</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>cpp</category>
       </categories>
   </entry>
   <entry>
@@ -1793,18 +1833,117 @@
       </categories>
   </entry>
   <entry>
-    <title>模版元编程</title>
-    <url>/2025/10/11/%E6%A8%A1%E7%89%88%E5%85%83%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p>模板元编程TMP是C++在编译期执行计算和类型操作的编程范式，本质是用代码生成代码，核心思想是将运行时计算转移到编译期，从而提升性能，增强类型安全并实现零开销抽象。</p>
-<h1 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h1><p>元编程，编写操作程序本身的代码，而非直接解决问题。</p>
-<h1 id="编译器计算"><a href="#编译器计算" class="headerlink" title="编译器计算"></a>编译器计算</h1><p>所有计算在代码编译阶段完成，运行时无额外开销：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 传统运行时阶乘</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">factorial</span><span class="params">(<span class="type">int</span> n)</span> </span>&#123; </span><br><span class="line">    <span class="keyword">return</span> (n &lt;= <span class="number">1</span>) ? <span class="number">1</span> : n * <span class="built_in">factorial</span>(n<span class="number">-1</span>);  <span class="comment">// 递归消耗栈空间</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 模板元编程实现（编译期计算）</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="type">int</span> N&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Factorial</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">int</span> value = N * Factorial&lt;N<span class="number">-1</span>&gt;::value;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Factorial</span>&lt;<span class="number">0</span>&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">int</span> value = <span class="number">1</span>;  <span class="comment">// 递归终止</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 编译时即计算出 Factorial&lt;5&gt;::value = 120</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="模板特化"><a href="#模板特化" class="headerlink" title="模板特化"></a>模板特化</h1><p>为特定类型&#x2F;值提供定制实现，构成TMP的逻辑分支基础：</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 通用模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针类型的特化</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">true</span>;  <span class="comment">// 对指针返回true</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">static_assert</span>(IsPointer&lt;<span class="type">int</span>*&gt;::value, <span class="string">&quot;Must be pointer&quot;</span>);  <span class="comment">// 编译期验证</span></span><br></pre></td></tr></table></figure>
+    <title>红烧猪肘</title>
+    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
+    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
+<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li><p>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</p>
+</li>
+<li><p>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</p>
+<p><em>个人感觉可以不用炒糖色，后续直接加老抽就行了，下回试试</em></p>
+</li>
+<li><p>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</p>
+</li>
+<li><p>倒开水没过猪蹄，小火炖一个小时，中间可加盐</p>
+</li>
+<li><p>把香料夹出来，大火收汁，不夹的话可能会发苦</p>
+</li>
+</ol>
 ]]></content>
       <categories>
-        <category>cpp</category>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>红烧带鱼</title>
+    <url>/2025/11/17/%E7%BA%A2%E7%83%A7%E5%B8%A6%E9%B1%BC/</url>
+    <content><![CDATA[<h1 id="红烧带鱼"><a href="#红烧带鱼" class="headerlink" title="红烧带鱼"></a>红烧带鱼</h1><p>咸鲜微甜，下饭好菜</p>
+<span id="more"></span>
+
+<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
+<li>带鱼若干</li>
+<li>生姜 葱 料酒 </li>
+<li>生抽 老抽 蚝油 香醋 白糖</li>
+<li>八角 干辣椒 蒜</li>
+</ol>
+<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
+<li>带鱼处理干净，用姜片，葱段，料酒腌制带鱼15分钟</li>
+<li>用厨房用纸擦干带鱼表面水渍，锅热烧油，筷子放进去有小气泡时放入姜片</li>
+<li>放入带鱼，铲刀微微动鱼，避免粘锅</li>
+<li>当移动锅鱼能轻松移动时说明可以翻面了</li>
+<li>比第一面时间短一点，放入八角干辣椒蒜，调味汁（料酒 生抽 老抽 蚝油 香醋 白糖 半碗清水）</li>
+<li>烧开后转为小火盖上锅盖焖煮，再大火收汁</li>
+</ol>
+]]></content>
+      <categories>
+        <category>cooking</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>线程池</title>
+    <url>/2025/10/13/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</url>
+    <content><![CDATA[<p>在操作系统那块也写了个线程池，实现方法略有不同，思路是一样的。这里都写一遍</p>
+<h1 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">ThreadPool</span><span class="params">(<span class="type">size_t</span> num_threads)</span>:stop_(false)&#123;</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>;i&lt;num_threads;++i)&#123;</span><br><span class="line">            workers_.<span class="built_in">emplace_back</span>(<span class="built_in">bind</span>(&amp;ThreadPool::worker_loop,<span class="keyword">this</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">ThreadPool</span>()&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">lock_guard&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">            stop_ = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cv_.<span class="built_in">notify_all</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; worker:workers_)&#123;</span><br><span class="line">            worker.<span class="built_in">join</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">enqueue</span><span class="params">(function&lt;<span class="type">void</span>()&gt; task)</span></span>&#123;</span><br><span class="line">        <span class="function">lock_guard&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">        tasks_.<span class="built_in">push</span>(task);</span><br><span class="line">        cv_.<span class="built_in">notify_one</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">bool</span> stop_;</span><br><span class="line">    vector&lt;thread&gt; workers_;</span><br><span class="line">    mutex mtx_;</span><br><span class="line">    condition_variable cv_;</span><br><span class="line">    queue&lt;function&lt;<span class="type">void</span>()&gt;&gt; tasks_;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">worker_loop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            function&lt;<span class="type">void</span>()&gt; task;</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">                cv_.<span class="built_in">wait</span>(lock,[<span class="keyword">this</span>]&#123;<span class="keyword">return</span> stop_||!tasks_.<span class="built_in">empty</span>();&#125;);</span><br><span class="line">                <span class="keyword">if</span>(stop_&amp;&amp;tasks.<span class="built_in">empty</span>()) <span class="keyword">return</span>;</span><br><span class="line">                task = tasks.<span class="built_in">front</span>();</span><br><span class="line">                tasks_.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">task</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这个线程池比较清晰，简单，enqueue只能传输返回类型为void的没有参数的函数。</p>
+<p>但是也有值得思考的东西：</p>
+<ol>
+<li><p>lock_guard和unique_lock有啥区别？</p>
+<p>lock_guard：功能简单，只能在构造时加锁，析构时解锁<br>unique_lock：功能丰富，支持延迟加锁、手动解锁、转移所有权等 </p>
+</li>
+<li><p>什么时候一定要用unique_lock？</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. condition_variable::wait()</span></span><br><span class="line">cv_.<span class="built_in">wait</span>(lock, [<span class="keyword">this</span>] &#123; <span class="keyword">return</span> condition; &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 需要手动控制锁的生命周期</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">    <span class="comment">// ... 做一些工作</span></span><br><span class="line">    lock.<span class="built_in">unlock</span>();  <span class="comment">// 手动解锁</span></span><br><span class="line">    <span class="comment">// ... 做一些不需要锁的工作</span></span><br><span class="line">&#125;  <span class="comment">// 自动解锁</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 延迟加锁</span></span><br><span class="line"><span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_, defer_lock)</span></span>;</span><br><span class="line"><span class="comment">// ... 其他代码</span></span><br><span class="line">lock.<span class="built_in">lock</span>();  <span class="comment">// 稍后加锁</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h1><p>该方法可以接收任意类型的函数。</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数，创建指定数量的工作线程</span></span><br><span class="line">    <span class="built_in">ThreadPool</span>(<span class="type">size_t</span> threads) : <span class="built_in">stop</span>(<span class="literal">false</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; threads; ++i) &#123;</span><br><span class="line">            workers.<span class="built_in">emplace_back</span>([<span class="keyword">this</span>] &#123;</span><br><span class="line">                <span class="keyword">for</span>(;;) &#123;</span><br><span class="line">                    std::function&lt;<span class="built_in">void</span>()&gt; task;</span><br><span class="line">                    &#123;</span><br><span class="line">                        std::unique_lock&lt;std::mutex&gt; <span class="built_in">lock</span>(<span class="keyword">this</span>-&gt;queue_mutex);</span><br><span class="line">                        <span class="keyword">this</span>-&gt;condition.<span class="built_in">wait</span>(lock, [<span class="keyword">this</span>] &#123;</span><br><span class="line">                            <span class="keyword">return</span> <span class="keyword">this</span>-&gt;stop || !<span class="keyword">this</span>-&gt;tasks.<span class="built_in">empty</span>();</span><br><span class="line">                        &#125;);</span><br><span class="line">                        <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;stop &amp;&amp; <span class="keyword">this</span>-&gt;tasks.<span class="built_in">empty</span>())</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        task = std::<span class="built_in">move</span>(<span class="keyword">this</span>-&gt;tasks.<span class="built_in">front</span>());</span><br><span class="line">                        <span class="keyword">this</span>-&gt;tasks.<span class="built_in">pop</span>();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="built_in">task</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加任务到线程池</span></span><br><span class="line">    <span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> F, <span class="keyword">class</span>... Args&gt;</span></span><br><span class="line"><span class="function">    <span class="keyword">auto</span> <span class="title">enqueue</span><span class="params">(F&amp;&amp; f, Args&amp;&amp;... args)</span> </span></span><br><span class="line"><span class="function">        -&gt; std::future&lt;<span class="keyword">typename</span> std::result_of&lt;<span class="title">F</span><span class="params">(Args...)</span>&gt;::type&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">using</span> return_type = <span class="keyword">typename</span> std::result_of&lt;<span class="built_in">F</span>(Args...)&gt;::type;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">return_type</span>()&gt;&gt;(</span><br><span class="line">            std::<span class="built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</span><br><span class="line">        );</span><br><span class="line">            </span><br><span class="line">        std::future&lt;return_type&gt; res = task-&gt;<span class="built_in">get_future</span>();</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">            <span class="keyword">if</span>(stop)</span><br><span class="line">                <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;enqueue on stopped ThreadPool&quot;</span>);</span><br><span class="line">            tasks.<span class="built_in">emplace</span>([task]()&#123; (*task)(); &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        condition.<span class="built_in">notify_one</span>();</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 析构函数，等待所有任务完成</span></span><br><span class="line">    ~<span class="built_in">ThreadPool</span>() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">            stop = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        condition.<span class="built_in">notify_all</span>();</span><br><span class="line">        <span class="keyword">for</span>(std::thread &amp;worker : workers)</span><br><span class="line">            worker.<span class="built_in">join</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;std::thread&gt; workers;      <span class="comment">// 工作线程</span></span><br><span class="line">    std::queue&lt;std::function&lt;<span class="type">void</span>()&gt;&gt; tasks; <span class="comment">// 任务队列</span></span><br><span class="line">    std::mutex queue_mutex;                <span class="comment">// 队列互斥锁</span></span><br><span class="line">    std::condition_variable condition;     <span class="comment">// 条件变量</span></span><br><span class="line">    <span class="type">bool</span> stop;                             <span class="comment">// 停止标志</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">ThreadPool <span class="title">pool</span><span class="params">(<span class="number">4</span>)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 提交任务到线程池</span></span><br><span class="line">    <span class="keyword">auto</span> result = pool.<span class="built_in">enqueue</span>([](<span class="type">int</span> answer) &#123; </span><br><span class="line">        <span class="keyword">return</span> answer; </span><br><span class="line">    &#125;, <span class="number">42</span>);</span><br><span class="line">    </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Result: &quot;</span> &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这个新线程池代码比较复杂，本文将逐段讲解：</p>
+<ul>
+<li><p>工作线程逻辑</p>
+<p>和老线程池一样</p>
+</li>
+<li><p>enqueue函数详解</p>
+<ul>
+<li><p>函数签名</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> F, <span class="keyword">class</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">enqueue</span><span class="params">(F&amp;&amp; f, Args&amp;&amp;... args)</span> </span></span><br><span class="line"><span class="function">    -&gt; std::future&lt;<span class="keyword">typename</span> std::result_of&lt;<span class="title">F</span><span class="params">(Args...)</span>&gt;::type&gt; </span>&#123;</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li><code>template&lt;class F, class... Args&gt;</code> - 模板函数，接受任意可调用对象和参数</li>
+<li><code>F&amp;&amp; f, Args&amp;&amp;... args</code> -完美转发参数</li>
+<li>返回类型是<code>std::future&lt;返回值类型&gt;</code>，用于获取异步结果</li>
+</ol>
+</li>
+<li><p>推导<code>f</code>函数的返回值</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> return_type = <span class="keyword">typename</span> std::result_of&lt;<span class="built_in">F</span>(Args...)&gt;::type;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>包装f函数</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">return_type</span>()&gt;&gt;(</span><br><span class="line">    std::<span class="built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<ol>
+<li>std::bind 将函数和参数绑定成无参函数</li>
+<li>std::packaged_task 包装任务，使其能与future关联 </li>
+<li>std::shared_ptr 确保任务对象生命周期安全</li>
+</ol>
+</li>
+<li><p>获取与任务关联的future，用于后续获取返回值</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::future&lt;return_type&gt; res = task-&gt;<span class="built_in">get_future</span>();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加入任务队列，并返回future</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(stop)</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;enqueue on stopped ThreadPool&quot;</span>);</span><br><span class="line">    tasks.<span class="built_in">emplace</span>([task]()&#123; (*task)(); &#125;);</span><br><span class="line">&#125;</span><br><span class="line">condition.<span class="built_in">notify_one</span>();</span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<p>packaged_task以及类型擦除在C++专栏中会讲到，这里不重点讲述</p>
+<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = pool.<span class="built_in">enqueue</span>([](<span class="type">int</span> answer) &#123; </span><br><span class="line">    <span class="keyword">return</span> answer; </span><br><span class="line">&#125;, <span class="number">42</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在这个工作例子中，auto推导出的类型其实是：<code>std::future&lt;int&gt;</code></p>
+]]></content>
+      <categories>
+        <category>alg</category>
       </categories>
   </entry>
   <entry>
@@ -1904,32 +2043,6 @@
 ]]></content>
       <categories>
         <category>cn</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>红烧猪肘</title>
-    <url>/2025/10/09/%E7%BA%A2%E7%83%A7%E7%8C%AA%E8%82%98/</url>
-    <content><![CDATA[<h1 id="红烧猪肘"><a href="#红烧猪肘" class="headerlink" title="红烧猪肘"></a>红烧猪肘</h1><p>比较简单好吃的菜，记录一下</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>猪肘2-4个，如果有其他菜，两个人吃买两个中等大小的即可。</li>
-<li>冰糖，香料（八角 桂皮 香叶 花椒 干辣椒），葱姜，料酒</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li><p>猪蹄剁成小块，冷水下锅，加葱姜料酒焯水</p>
-</li>
-<li><p>热锅凉油下冰糖，炒糖色，注意冰糖不要太多不然不好吃，六粒够了，油也不要太多，颜色不够多加老抽就行</p>
-<p><em>个人感觉可以不用炒糖色，后续直接加老抽就行了，下回试试</em></p>
-</li>
-<li><p>葱姜香料下进去，一勺料酒，一勺老抽，一勺生抽，适量蚝油，大火翻炒均匀</p>
-</li>
-<li><p>倒开水没过猪蹄，小火炖一个小时，中间可加盐</p>
-</li>
-<li><p>把香料夹出来，大火收汁，不夹的话可能会发苦</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>cooking</category>
       </categories>
   </entry>
   <entry>
@@ -2087,69 +2200,6 @@
 ]]></content>
       <categories>
         <category>cooking</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>线程池</title>
-    <url>/2025/10/13/%E7%BA%BF%E7%A8%8B%E6%B1%A0/</url>
-    <content><![CDATA[<p>在操作系统那块也写了个线程池，实现方法略有不同，思路是一样的。这里都写一遍</p>
-<h1 id="方法1"><a href="#方法1" class="headerlink" title="方法1"></a>方法1</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span><span class="string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span>&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">ThreadPool</span><span class="params">(<span class="type">size_t</span> num_threads)</span>:stop_(false)&#123;</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>;i&lt;num_threads;++i)&#123;</span><br><span class="line">            workers_.<span class="built_in">emplace_back</span>(<span class="built_in">bind</span>(&amp;ThreadPool::worker_loop,<span class="keyword">this</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">ThreadPool</span>()&#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">lock_guard&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">            stop_ = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        cv_.<span class="built_in">notify_all</span>();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">auto</span>&amp; worker:workers_)&#123;</span><br><span class="line">            worker.<span class="built_in">join</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">enqueue</span><span class="params">(function&lt;<span class="type">void</span>()&gt; task)</span></span>&#123;</span><br><span class="line">        <span class="function">lock_guard&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">        tasks_.<span class="built_in">push</span>(task);</span><br><span class="line">        cv_.<span class="built_in">notify_one</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">bool</span> stop_;</span><br><span class="line">    vector&lt;thread&gt; workers_;</span><br><span class="line">    mutex mtx_;</span><br><span class="line">    condition_variable cv_;</span><br><span class="line">    queue&lt;function&lt;<span class="type">void</span>()&gt;&gt; tasks_;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">worker_loop</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>)&#123;</span><br><span class="line">            function&lt;<span class="type">void</span>()&gt; task;</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">                cv_.<span class="built_in">wait</span>(lock,[<span class="keyword">this</span>]&#123;<span class="keyword">return</span> stop_||!tasks_.<span class="built_in">empty</span>();&#125;);</span><br><span class="line">                <span class="keyword">if</span>(stop_&amp;&amp;tasks.<span class="built_in">empty</span>()) <span class="keyword">return</span>;</span><br><span class="line">                task = tasks.<span class="built_in">front</span>();</span><br><span class="line">                tasks_.<span class="built_in">pop</span>();</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="built_in">task</span>();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<p>这个线程池比较清晰，简单，enqueue只能传输返回类型为void的没有参数的函数。</p>
-<p>但是也有值得思考的东西：</p>
-<ol>
-<li><p>lock_guard和unique_lock有啥区别？</p>
-<p>lock_guard：功能简单，只能在构造时加锁，析构时解锁<br>unique_lock：功能丰富，支持延迟加锁、手动解锁、转移所有权等 </p>
-</li>
-<li><p>什么时候一定要用unique_lock？</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 1. condition_variable::wait()</span></span><br><span class="line">cv_.<span class="built_in">wait</span>(lock, [<span class="keyword">this</span>] &#123; <span class="keyword">return</span> condition; &#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 需要手动控制锁的生命周期</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_)</span></span>;</span><br><span class="line">    <span class="comment">// ... 做一些工作</span></span><br><span class="line">    lock.<span class="built_in">unlock</span>();  <span class="comment">// 手动解锁</span></span><br><span class="line">    <span class="comment">// ... 做一些不需要锁的工作</span></span><br><span class="line">&#125;  <span class="comment">// 自动解锁</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 延迟加锁</span></span><br><span class="line"><span class="function">unique_lock&lt;mutex&gt; <span class="title">lock</span><span class="params">(mtx_, defer_lock)</span></span>;</span><br><span class="line"><span class="comment">// ... 其他代码</span></span><br><span class="line">lock.<span class="built_in">lock</span>();  <span class="comment">// 稍后加锁</span></span><br></pre></td></tr></table></figure></li>
-</ol>
-<h1 id="方法2"><a href="#方法2" class="headerlink" title="方法2"></a>方法2</h1><p>该方法可以接收任意类型的函数。</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;thread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mutex&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;condition_variable&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;future&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;functional&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;memory&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ThreadPool</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="comment">// 构造函数，创建指定数量的工作线程</span></span><br><span class="line">    <span class="built_in">ThreadPool</span>(<span class="type">size_t</span> threads) : <span class="built_in">stop</span>(<span class="literal">false</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>; i &lt; threads; ++i) &#123;</span><br><span class="line">            workers.<span class="built_in">emplace_back</span>([<span class="keyword">this</span>] &#123;</span><br><span class="line">                <span class="keyword">for</span>(;;) &#123;</span><br><span class="line">                    std::function&lt;<span class="built_in">void</span>()&gt; task;</span><br><span class="line">                    &#123;</span><br><span class="line">                        std::unique_lock&lt;std::mutex&gt; <span class="built_in">lock</span>(<span class="keyword">this</span>-&gt;queue_mutex);</span><br><span class="line">                        <span class="keyword">this</span>-&gt;condition.<span class="built_in">wait</span>(lock, [<span class="keyword">this</span>] &#123;</span><br><span class="line">                            <span class="keyword">return</span> <span class="keyword">this</span>-&gt;stop || !<span class="keyword">this</span>-&gt;tasks.<span class="built_in">empty</span>();</span><br><span class="line">                        &#125;);</span><br><span class="line">                        <span class="keyword">if</span>(<span class="keyword">this</span>-&gt;stop &amp;&amp; <span class="keyword">this</span>-&gt;tasks.<span class="built_in">empty</span>())</span><br><span class="line">                            <span class="keyword">return</span>;</span><br><span class="line">                        task = std::<span class="built_in">move</span>(<span class="keyword">this</span>-&gt;tasks.<span class="built_in">front</span>());</span><br><span class="line">                        <span class="keyword">this</span>-&gt;tasks.<span class="built_in">pop</span>();</span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="built_in">task</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 添加任务到线程池</span></span><br><span class="line">    <span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> F, <span class="keyword">class</span>... Args&gt;</span></span><br><span class="line"><span class="function">    <span class="keyword">auto</span> <span class="title">enqueue</span><span class="params">(F&amp;&amp; f, Args&amp;&amp;... args)</span> </span></span><br><span class="line"><span class="function">        -&gt; std::future&lt;<span class="keyword">typename</span> std::result_of&lt;<span class="title">F</span><span class="params">(Args...)</span>&gt;::type&gt; </span>&#123;</span><br><span class="line">        <span class="keyword">using</span> return_type = <span class="keyword">typename</span> std::result_of&lt;<span class="built_in">F</span>(Args...)&gt;::type;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">return_type</span>()&gt;&gt;(</span><br><span class="line">            std::<span class="built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</span><br><span class="line">        );</span><br><span class="line">            </span><br><span class="line">        std::future&lt;return_type&gt; res = task-&gt;<span class="built_in">get_future</span>();</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">            <span class="keyword">if</span>(stop)</span><br><span class="line">                <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;enqueue on stopped ThreadPool&quot;</span>);</span><br><span class="line">            tasks.<span class="built_in">emplace</span>([task]()&#123; (*task)(); &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        condition.<span class="built_in">notify_one</span>();</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 析构函数，等待所有任务完成</span></span><br><span class="line">    ~<span class="built_in">ThreadPool</span>() &#123;</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">            stop = <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        condition.<span class="built_in">notify_all</span>();</span><br><span class="line">        <span class="keyword">for</span>(std::thread &amp;worker : workers)</span><br><span class="line">            worker.<span class="built_in">join</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::vector&lt;std::thread&gt; workers;      <span class="comment">// 工作线程</span></span><br><span class="line">    std::queue&lt;std::function&lt;<span class="type">void</span>()&gt;&gt; tasks; <span class="comment">// 任务队列</span></span><br><span class="line">    std::mutex queue_mutex;                <span class="comment">// 队列互斥锁</span></span><br><span class="line">    std::condition_variable condition;     <span class="comment">// 条件变量</span></span><br><span class="line">    <span class="type">bool</span> stop;                             <span class="comment">// 停止标志</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">ThreadPool <span class="title">pool</span><span class="params">(<span class="number">4</span>)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 提交任务到线程池</span></span><br><span class="line">    <span class="keyword">auto</span> result = pool.<span class="built_in">enqueue</span>([](<span class="type">int</span> answer) &#123; </span><br><span class="line">        <span class="keyword">return</span> answer; </span><br><span class="line">    &#125;, <span class="number">42</span>);</span><br><span class="line">    </span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Result: &quot;</span> &lt;&lt; result.<span class="built_in">get</span>() &lt;&lt; std::endl;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这个新线程池代码比较复杂，本文将逐段讲解：</p>
-<ul>
-<li><p>工作线程逻辑</p>
-<p>和老线程池一样</p>
-</li>
-<li><p>enqueue函数详解</p>
-<ul>
-<li><p>函数签名</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">class</span> F, <span class="keyword">class</span>... Args&gt;</span></span><br><span class="line"><span class="function"><span class="keyword">auto</span> <span class="title">enqueue</span><span class="params">(F&amp;&amp; f, Args&amp;&amp;... args)</span> </span></span><br><span class="line"><span class="function">    -&gt; std::future&lt;<span class="keyword">typename</span> std::result_of&lt;<span class="title">F</span><span class="params">(Args...)</span>&gt;::type&gt; </span>&#123;</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li><code>template&lt;class F, class... Args&gt;</code> - 模板函数，接受任意可调用对象和参数</li>
-<li><code>F&amp;&amp; f, Args&amp;&amp;... args</code> -完美转发参数</li>
-<li>返回类型是<code>std::future&lt;返回值类型&gt;</code>，用于获取异步结果</li>
-</ol>
-</li>
-<li><p>推导<code>f</code>函数的返回值</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">using</span> return_type = <span class="keyword">typename</span> std::result_of&lt;<span class="built_in">F</span>(Args...)&gt;::type;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>包装f函数</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> task = std::make_shared&lt;std::packaged_task&lt;<span class="built_in">return_type</span>()&gt;&gt;(</span><br><span class="line">    std::<span class="built_in">bind</span>(std::forward&lt;F&gt;(f), std::forward&lt;Args&gt;(args)...)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<ol>
-<li>std::bind 将函数和参数绑定成无参函数</li>
-<li>std::packaged_task 包装任务，使其能与future关联 </li>
-<li>std::shared_ptr 确保任务对象生命周期安全</li>
-</ol>
-</li>
-<li><p>获取与任务关联的future，用于后续获取返回值</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">std::future&lt;return_type&gt; res = task-&gt;<span class="built_in">get_future</span>();</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>加入任务队列，并返回future</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(queue_mutex)</span></span>;</span><br><span class="line">    <span class="keyword">if</span>(stop)</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;enqueue on stopped ThreadPool&quot;</span>);</span><br><span class="line">    tasks.<span class="built_in">emplace</span>([task]()&#123; (*task)(); &#125;);</span><br><span class="line">&#125;</span><br><span class="line">condition.<span class="built_in">notify_one</span>();</span><br><span class="line"><span class="keyword">return</span> res;</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-</ul>
-<p>packaged_task以及类型擦除在C++专栏中会讲到，这里不重点讲述</p>
-<figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="keyword">auto</span> result = pool.<span class="built_in">enqueue</span>([](<span class="type">int</span> answer) &#123; </span><br><span class="line">    <span class="keyword">return</span> answer; </span><br><span class="line">&#125;, <span class="number">42</span>);</span><br></pre></td></tr></table></figure>
-
-<p>在这个工作例子中，auto推导出的类型其实是：<code>std::future&lt;int&gt;</code></p>
-]]></content>
-      <categories>
-        <category>alg</category>
       </categories>
   </entry>
   <entry>
