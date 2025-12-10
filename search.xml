@@ -267,6 +267,8 @@
     <content><![CDATA[<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Allocator是C++标准库中用于封装内存管理细节的类模板，他负责内存的分配、释放、对象的构造和析构。</p>
 <p><strong>核心思想：</strong></p>
 <p>将内存分配策略和数据结构分离开。</p>
+<span id="more"></span>
+
 <h1 id="作用与价值"><a href="#作用与价值" class="headerlink" title="作用与价值"></a>作用与价值</h1><ul>
 <li><p>灵活性： </p>
 <p>允许用户为STL容器自定义内存来源。例如：</p>
@@ -1541,6 +1543,8 @@
     <title>手写memcpy（逐步优化）</title>
     <url>/2025/10/30/%E6%89%8B%E5%86%99memcpy%EF%BC%88%E9%80%90%E6%AD%A5%E4%BC%98%E5%8C%96%EF%BC%89/</url>
     <content><![CDATA[<p>手写一个memcpy函数考察了对指针操作、内存对齐和性能优化的理解。</p>
+<span id="more"></span>
+
 <h1 id="基础版本（逐字节拷贝）"><a href="#基础版本（逐字节拷贝）" class="headerlink" title="基础版本（逐字节拷贝）"></a>基础版本（逐字节拷贝）</h1><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span>* <span class="title">my_memcpy_basic</span><span class="params">(<span class="type">void</span>* dest,<span class="type">const</span> <span class="type">void</span>* src,<span class="type">size_t</span> n)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(dest == <span class="literal">NULL</span> || src ==<span class="literal">NULL</span>)&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">char</span>* d = (<span class="type">char</span>*)dest;</span><br><span class="line">    <span class="type">const</span> <span class="type">char</span>* s = (<span class="type">const</span> <span class="type">char</span>*) src;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span>(<span class="type">size_t</span> i = <span class="number">0</span>;i&lt;n;i++)&#123;</span><br><span class="line">        d[i]=s[i];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> dest;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>这个版本只拷贝一个字节，循环次数多，效率比较低。而且没有考虑到内存重叠的问题。</p>
@@ -3007,6 +3011,86 @@
 ]]></content>
       <categories>
         <category>os</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>软件优化问题排查实战</title>
+    <url>/2025/12/10/%E8%BD%AF%E4%BB%B6%E4%BC%98%E5%8C%96%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E5%AE%9E%E6%88%98/</url>
+    <content><![CDATA[<p>针对C++的程序，在CPU、内存等性能优化方面实战如何操作（描述）？本文将进行逐步完善。</p>
+<span id="more"></span>
+
+<h1 id="内存问题"><a href="#内存问题" class="headerlink" title="内存问题"></a>内存问题</h1><blockquote>
+<p>C++程序遇到疑似内存问题应该如何排查？</p>
+</blockquote>
+<h2 id="完善前回答"><a href="#完善前回答" class="headerlink" title="完善前回答"></a>完善前回答</h2><p>在基础场景下，最多只能算合格。</p>
+<blockquote>
+<p>首先使用vmstat初测，看一下free内存是否在急速下降，si&#x2F;so是否大于0，如果是，则代表确实是可能存在内存问题。接着使用pmap指令，看一下内存申请记录，如果发现较多相同大小指令申请，则有可能是缓冲区申请过多，考虑使用内存池优化。如果正常，再去用valgrind进行进一步的内存泄漏分析，具体到申请行，泄露了多少字节。</p>
+</blockquote>
+<p>存在的问题点：</p>
+<ol>
+<li><p>vmstat只能证明你的系统内存紧张，只能证明系统内存不够用了，不能直接证明是我的C++程序泄露，也有可能是其他程序在抢内存</p>
+<p>修改：</p>
+<p>先用top指令锁定具体进程，确认是该进程的RES一直在涨</p>
+</li>
+<li><p>pmap不能看代码层面的申请记录，只能看到进程内存段的映射情况</p>
+<p>修改：</p>
+<p>pmap用来查看是否有大量的64MB匿名映射快，来判断是否是堆内存一直在增长</p>
+</li>
+<li><p>valgrind没有问题，但是他不适合在生产环节使用，因为会降低程序运行速度，在实际问题排查时，需要分线上和线下两种情况。</p>
+</li>
+</ol>
+<h2 id="完善后回答"><a href="#完善后回答" class="headerlink" title="完善后回答"></a>完善后回答</h2><ol>
+<li><p>线上初步观测定位</p>
+<p><strong>如果是线上环境，首先要确定是否真的存在泄露。</strong></p>
+<p>所以我先用top -p [PID]观察RES（物理内存）是否呈线性持续增长，疑似泄露。</p>
+<p>然后用pmap内存段分析，看看匿名内存段是否有很多64MB倍数的映射块（代表glibc的内存分配特征），如果有的话则代表申请了较多堆内存且没有释放。</p>
+<p>如果想要在线上看到泄露堆栈，可以考虑使用eBPF工具定位</p>
+</li>
+<li><p>线下复现</p>
+<p><strong>如果是线下环境可以复现，可以使用到更详细的工具</strong></p>
+<p>使用valgrind进行全面检查，分析到具体到代码行的问题，还可以查到崩溃问题（内存越界）</p>
+</li>
+</ol>
+<blockquote>
+<p>预防追问：测试环境复现不出来，线上环境比较老旧用不了eBPF，如何定位？</p>
+</blockquote>
+<blockquote>
+<p>极端情况下，使用gdb在现场对进程进行coredump，拉回本地使用gdb打开具体分析内存中残留对象的内容。</p>
+</blockquote>
+<h1 id="CPU问题"><a href="#CPU问题" class="headerlink" title="CPU问题"></a>CPU问题</h1><blockquote>
+<p>C++程序遇到疑似CPU问题应该如何排查？</p>
+</blockquote>
+<h2 id="完善前回答-1"><a href="#完善前回答-1" class="headerlink" title="完善前回答"></a>完善前回答</h2><blockquote>
+<p>首先，我使用top指令，观察是us、sy和wa，区分到底是用户态代码耗时过长，还是系统调用耗时过长，还是等待IO过久。<br>其次，我再使用mpstat指令，看是单核爆了，还是每个核心都满，如果是单核爆了，则考虑代码是否存在多线程分配只分配给一个线程的问题<br>然后，如果是每个核心都很久，首先看是否是us过高，us高则去使用pidstat，观察是主动放弃时间片多还是被动放弃时间片。主动多，则代表锁的粒度过高，或者IO过于频繁，被动多，则代表用户代码计算量过大，总是被抢走时间片。被动多的话，使用perf record结合火焰图看耗时最高的函数，进行定，也可以通过perf确认是缓存miss还是分支预测失败。 如果是sy过高，则代表系统调用过多，锁粒度或者IO读取频率过高<br>最后，如果火焰图查出来具体函数，如果是sy高，则返回去看vmstat，如果wa高则去看IO，如果不是，则去使用strace看调用次数，看是锁的接口调用得多还是IO函数调用得多</p>
+</blockquote>
+<p>存在的问题点：</p>
+<ol>
+<li>把核心工具都列出来了，但是很绕，尤其是最后pidstat，perf和strace</li>
+</ol>
+<h2 id="完善后回答-1"><a href="#完善后回答-1" class="headerlink" title="完善后回答"></a>完善后回答</h2><p>让逻辑不乱，也是以top的指标为核心，展开排查路径。</p>
+<ol>
+<li>先用top指令查看CPU整体负载，看us（用户态）、sy（内核态）三个指标去决定后面的排查方法。</li>
+<li>如果是us高<ol>
+<li>我则去使用mpstat看是否存在单核瓶颈。<strong>如果是单核瓶颈</strong>，则考虑要么是某个死循环卡死了单线程，或者是线程一直绑定在一个CPU上。如果是多核均匀高，则说明确实存在计算压力大的问题。</li>
+<li>无论是单核还是多核，我都会用perf+FrameGraph生成火焰图，去定位具体哪个函数平顶，CPU占用又高又久。</li>
+</ol>
+</li>
+<li>如果sy高，则代表和OS交互频繁。使用pidstat区分是什么种类的上下文切换<ol>
+<li>如果是非自愿切换高，则代表是线程太多了，CPU时间片不够分。需要检查线程池配置，减少线程。</li>
+<li>如果是自愿切换高，则代表主动让出CPU（锁竞争、IO等待较多），使用strace查看系统调用频次，看是futex多就需要查看锁粒度，如果是read、write、epoll高则代表io次数太多。</li>
+<li>如果切换不高，但是sy就是高，就说明淡出就是系统调用比较密集，比如疯狂调用read读取小字节，或者在循环里获取时间。这时候需要用strace查看系统调用的次数，哪个格外多就进行优化。</li>
+</ol>
+</li>
+<li>如果是wa高，说明是CPU在等IO完成，直接用iotop抓出读写磁盘最狠的线程即可。</li>
+<li>如果都没问题，但是IPC（每循环指令数）很低，可以使用perf stat进行查看什么原因<ol>
+<li>cache misses ：是不是比访问数据频繁使用链表而不是数组，或者是struct结构不行，因为要对齐</li>
+<li>branch missed：大量的分支预测失败，比如过多的if或switch</li>
+</ol>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
 </search>
