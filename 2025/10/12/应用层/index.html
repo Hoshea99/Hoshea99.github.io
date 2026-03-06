@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.0.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"hoshea99.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="DNSDNS是什么 将域名转换为IP地址的分布式系统  为什么使用分布式系统 单点故障 一台服务器宕机，全网瘫痪 性能瓶颈 单台服务器难以承受全球海量查询 远距离延迟 集中式服务器无法就近服务全球用户 维护困难 频繁更新 高成本维护  域名的层级结构从右到左层级递增，如www.server.com  根域名：. 顶级域名：.com 二级域名：server.com 三级域名：www.server.c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="应用层">
+<meta property="og:url" content="https://hoshea99.github.io/2025/10/12/%E5%BA%94%E7%94%A8%E5%B1%82/index.html">
+<meta property="og:site_name" content="Hoshea&#39;s Blog">
+<meta property="og:description" content="DNSDNS是什么 将域名转换为IP地址的分布式系统  为什么使用分布式系统 单点故障 一台服务器宕机，全网瘫痪 性能瓶颈 单台服务器难以承受全球海量查询 远距离延迟 集中式服务器无法就近服务全球用户 维护困难 频繁更新 高成本维护  域名的层级结构从右到左层级递增，如www.server.com  根域名：. 顶级域名：.com 二级域名：server.com 三级域名：www.server.c">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-10-12T10:47:42.000Z">
+<meta property="article:modified_time" content="2026-03-05T10:06:45.726Z">
+<meta property="article:author" content="Hoshea">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://hoshea99.github.io/2025/10/12/%E5%BA%94%E7%94%A8%E5%B1%82/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hoshea99.github.io/2025/10/12/%E5%BA%94%E7%94%A8%E5%B1%82/","path":"2025/10/12/应用层/","title":"应用层"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>应用层 | Hoshea's Blog</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Hoshea's Blog</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DNS"><span class="nav-number">1.</span> <span class="nav-text">DNS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.1.</span> <span class="nav-text">DNS是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F"><span class="nav-number">1.2.</span> <span class="nav-text">为什么使用分布式系统</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9F%9F%E5%90%8D%E7%9A%84%E5%B1%82%E7%BA%A7%E7%BB%93%E6%9E%84"><span class="nav-number">1.3.</span> <span class="nav-text">域名的层级结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DNS-%E8%A7%A3%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="nav-number">1.4.</span> <span class="nav-text">DNS 解析过程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2-vs-%E8%BF%AD%E4%BB%A3%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.5.</span> <span class="nav-text">递归查询 vs 迭代查询</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HTTP"><span class="nav-number">2.</span> <span class="nav-text">HTTP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8A%A5%E6%96%87%E7%BB%93%E6%9E%84"><span class="nav-number">2.1.</span> <span class="nav-text">报文结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AF%B7%E6%B1%82%E6%8A%A5%E6%96%87"><span class="nav-number">2.1.1.</span> <span class="nav-text">请求报文</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%93%8D%E5%BA%94%E6%8A%A5%E6%96%87"><span class="nav-number">2.1.2.</span> <span class="nav-text">响应报文</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP-%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">HTTP 请求方法</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">Hoshea</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/12/%E5%BA%94%E7%94%A8%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoshea">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="应用层 | Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          应用层
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-12 18:47:42" itemprop="dateCreated datePublished" datetime="2025-10-12T18:47:42+08:00">2025-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cn/" itemprop="url" rel="index"><span itemprop="name">cn</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="DNS"><a href="#DNS" class="headerlink" title="DNS"></a>DNS</h1><h2 id="DNS是什么"><a href="#DNS是什么" class="headerlink" title="DNS是什么"></a>DNS是什么</h2><ul>
+<li>将域名转换为IP地址的分布式系统</li>
+</ul>
+<h2 id="为什么使用分布式系统"><a href="#为什么使用分布式系统" class="headerlink" title="为什么使用分布式系统"></a>为什么使用分布式系统</h2><ul>
+<li>单点故障 一台服务器宕机，全网瘫痪</li>
+<li>性能瓶颈 单台服务器难以承受全球海量查询</li>
+<li>远距离延迟 集中式服务器无法就近服务全球用户</li>
+<li>维护困难 频繁更新 高成本维护</li>
+</ul>
+<h2 id="域名的层级结构"><a href="#域名的层级结构" class="headerlink" title="域名的层级结构"></a>域名的层级结构</h2><p>从右到左层级递增，如<code>www.server.com</code></p>
+<ul>
+<li>根域名：<code>.</code></li>
+<li>顶级域名：<code>.com</code></li>
+<li>二级域名：<code>server.com</code></li>
+<li>三级域名：<code>www.server.com</code></li>
+</ul>
+<h2 id="DNS-解析过程"><a href="#DNS-解析过程" class="headerlink" title="DNS 解析过程"></a>DNS 解析过程</h2><ol>
+<li>浏览器缓存 → 2. 本地 hosts 文件 → 3. 本地 DNS 服务器 → 4. 根 DNS 服务器 → 5. 顶级域名服务器 → 6. 权威 DNS 服务器 → 7. 返回 IP 并缓存 → 8. 浏览器发起连接</li>
+</ol>
+<h2 id="递归查询-vs-迭代查询"><a href="#递归查询-vs-迭代查询" class="headerlink" title="递归查询 vs 迭代查询"></a>递归查询 vs 迭代查询</h2><table>
+<thead>
+<tr>
+<th align="left">类型</th>
+<th align="left">发起者</th>
+<th align="left">特点</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">递归查询</td>
+<td align="left">客户端（如浏览器）</td>
+<td align="left">客户端只发一次请求，等待最终结果</td>
+<td align="left">用户端</td>
+</tr>
+<tr>
+<td align="left">迭代查询</td>
+<td align="left">本地 DNS 服务器</td>
+<td align="left">服务器返回下一级地址，客户端继续查询</td>
+<td align="left">DNS 服务器之</td>
+</tr>
+</tbody></table>
+<h1 id="HTTP"><a href="#HTTP" class="headerlink" title="HTTP"></a>HTTP</h1><h2 id="报文结构"><a href="#报文结构" class="headerlink" title="报文结构"></a>报文结构</h2><h3 id="请求报文"><a href="#请求报文" class="headerlink" title="请求报文"></a>请求报文</h3><table>
+<thead>
+<tr>
+<th align="left">部分</th>
+<th align="left">内容</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">请求行</td>
+<td align="left"><code>METHOD URL HTTP版本</code></td>
+<td align="left"><code>GET /index.html HTTP/1.1</code></td>
+</tr>
+<tr>
+<td align="left">请求头</td>
+<td align="left">客户端信息、缓存、身份等</td>
+<td align="left"><code>Host</code>, <code>User-Agent</code></td>
+</tr>
+<tr>
+<td align="left">请求体</td>
+<td align="left">提交的数据（POST&#x2F;PUT）</td>
+<td align="left"><code>username=admin</code></td>
+</tr>
+</tbody></table>
+<h3 id="响应报文"><a href="#响应报文" class="headerlink" title="响应报文"></a>响应报文</h3><table>
+<thead>
+<tr>
+<th align="left">部分</th>
+<th align="left">内容</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">状态行</td>
+<td align="left"><code>HTTP版本 状态码 状态信息</code></td>
+<td align="left"><code>HTTP/1.1 200 OK</code></td>
+</tr>
+<tr>
+<td align="left">响应头</td>
+<td align="left">服务器信息、缓存策略等</td>
+<td align="left"><code>Server</code>, <code>Set-Cookie</code></td>
+</tr>
+<tr>
+<td align="left">响应体</td>
+<td align="left">返回的资源（HTML&#x2F;JSON等）</td>
+<td align="left"><code>&lt;html&gt;...&lt;/html&gt;</code></td>
+</tr>
+</tbody></table>
+<h2 id="HTTP-请求方法"><a href="#HTTP-请求方法" class="headerlink" title="HTTP 请求方法"></a>HTTP 请求方法</h2><table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">作用</th>
+<th align="left">幂等性</th>
+<th align="left">安全性</th>
+<th align="left">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GET</td>
+<td align="left">获取资源</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">数据在 URL 中，有长度限制</td>
+</tr>
+<tr>
+<td align="left">POST</td>
+<td align="left">提交数据</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">数据在请求体中，适合敏感&#x2F;大量数据</td>
+</tr>
+<tr>
+<td align="left">PUT</td>
+<td align="left">更新整个资源</td>
+<td align="left">✅</td>
+<td align="left">❌</td>
+<td align="left">替换整个资源</td>
+</tr>
+<tr>
+<td align="left">DELETE</td>
+<td align="left">删除资源</td>
+<td align="left">✅</td>
+<td align="left">❌</td>
+<td align="left">删除指定资源</td>
+</tr>
+<tr>
+<td align="left">PATCH</td>
+<td align="left">部分更新资源</td>
+<td align="left">❌</td>
+<td align="left">❌</td>
+<td align="left">部分修改，幂等性取决于实现</td>
+</tr>
+<tr>
+<td align="left">HEAD</td>
+<td align="left">获取响应头</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">类似 GET，无响应体</td>
+</tr>
+<tr>
+<td align="left">OPTIONS</td>
+<td align="left">查询支持的方法</td>
+<td align="left">✅</td>
+<td align="left">✅</td>
+<td align="left">用于 CORS 预检请求</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📌 <strong>幂等</strong>：多次执行效果相同（如 GET、PUT、DELETE）<br>📌 <strong>安全</strong>：不修改服务器资源（如 GET、HEAD）</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/10/12/%E4%BC%A0%E8%BE%93%E5%B1%82/" rel="prev" title="传输层">
+                  <i class="fa fa-angle-left"></i> 传输层
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2025/10/12/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E9%9D%A2%E8%AF%95%E9%A2%98%E6%95%B4%E7%90%86/" rel="next" title="操作系统面试题整理">
+                  操作系统面试题整理 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Hoshea</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body>
+</html>
