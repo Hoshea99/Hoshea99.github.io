@@ -164,12 +164,12 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">67</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">分类</span>
       </div>
   </nav>
@@ -186,6 +186,99 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/13/packaged-task/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoshea">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/13/packaged-task/" class="post-title-link" itemprop="url">packaged_task</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-13 22:43:08" itemprop="dateCreated datePublished" datetime="2025-10-13T22:43:08+08:00">2025-10-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><code>packaged_task</code> 是 C++11 引入的一个重要组件，它可以将可调用对象（函数、lambda、函数对象等）包装起来，并将其返回值与一个 <code>future</code> 对象关联，从而方便地获取异步操作的结果。</p>
+<h1 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 包装普通函数</span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">add</span><span class="params">(<span class="type">int</span> a, <span class="type">int</span> b)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> a + b;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">packaged_task&lt;<span class="title">int</span><span class="params">(<span class="type">int</span>, <span class="type">int</span>)</span>&gt; <span class="title">task</span><span class="params">(add)</span></span>;</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2025/10/13/packaged-task/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1759,117 +1852,6 @@
 <li><strong>增加了延迟和复杂性</strong>：每个数据包都需要经过修改和查表操作，增加了处理开销和延迟。</li>
 <li><strong>导致某些应用兼容性问题</strong>：对于一些复杂的网络协议（如IPsec、FTP的主动模式），它们会在应用层数据中携带IP地址信息，NAT设备无法识别和修改这些内容，导致连接失败。虽然可以通过ALG等技术解决，但增加了复杂性。</li>
 <li><strong>对P2P应用不友好</strong>：由于内网主机无法被外网直接访问，建立P2P连接（如视频通话、BT下载）需要借助STUN、TURN等中继服务器，过程复杂。</li>
-</ol>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/12/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoshea">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/12/%E6%95%B0%E6%8D%AE%E9%93%BE%E8%B7%AF%E5%B1%82/" class="post-title-link" itemprop="url">数据链路层</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-10-12 10:25:19" itemprop="dateCreated datePublished" datetime="2025-10-12T10:25:19+08:00">2025-10-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cn/" itemprop="url" rel="index"><span itemprop="name">cn</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="MAC地址"><a href="#MAC地址" class="headerlink" title="MAC地址"></a>MAC地址</h1><h2 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h2><ol>
-<li>唯一标识：全球唯一的硬件地址，在局域网内标识网络设备</li>
-<li>帧寻址：在数据链路层，通过源MAC和目标MAC地址，实现了同一网段内设备直接通信</li>
-<li>帧过滤：网卡根据收到的帧的目标MAC地址，决定是否接收并上传给上层处理</li>
-</ol>
-<h2 id="格式"><a href="#格式" class="headerlink" title="格式"></a>格式</h2><p>48位，前24为由IEEE分配给厂商，后24位厂商自行分配</p>
-<h1 id="ARP协议"><a href="#ARP协议" class="headerlink" title="ARP协议"></a>ARP协议</h1><ul>
-<li>全称：地址解析协议</li>
-<li>作用：根据IP地址查询对应的MAC地址</li>
-<li>工作原理：<ol>
-<li>当主机A需要与同一局域网内主机B通信，A会查询本地ARP缓存表</li>
-<li>如果没找到B的MAC地址，A会向局域网广播一个ARP请求包，内容为询问IP地址为x.x.x.x的MAC地址</li>
-<li>局域网内所有主机都会收到这个请求，但是IP地址对应的主机会给主机A单播一个ARP回复包，包含自己的MAC地址</li>
-<li>主机A收到回复后，将IP-MAC的映射关系存入ARP缓存</li>
-</ol>
-</li>
-</ul>
-<h1 id="交换机"><a href="#交换机" class="headerlink" title="交换机"></a>交换机</h1><p>交换机是数据链路层设备，核心工作是基于MAC地址转发数据帧。</p>
-<ol>
-<li>学习：交换机有一个MAC地址表，记录端口与连接在该端口上设备的MAC地址映射关系</li>
-<li>转发，过滤：当交换机收到一个数据帧，则查看其目标MAC地址，在MAC地址表中查找对应的端口<ul>
-<li>如果找到了，单播将帧从那个端口转发</li>
-<li>如果未找到，则广播所有其他窗口</li>
-</ul>
-</li>
-<li>环路避免：在复杂网络中，使用STP协议来防止广播风暴</li>
 </ol>
 
       
