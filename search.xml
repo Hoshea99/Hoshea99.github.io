@@ -3725,6 +3725,13 @@
 <li><p>关闭对话</p>
 <p><code>tmux</code>里输入exit</p>
 </li>
+<li><p>分屏</p>
+<p><strong>水平分屏</strong>（左右）：<code>Ctrl + b</code> 然后按 <code>%</code></p>
+<p><strong>切换到左侧窗格</strong>（如果没在左边）：<code>Ctrl + b</code> 然后按 <code>左方向键</code></p>
+<p><strong>垂直分屏</strong>（上下）：<code>Ctrl + b</code> 然后按 <code>&quot;</code></p>
+<p><strong>切换到右侧窗格</strong>：<code>Ctrl + b</code> 然后按 <code>右方向键</code></p>
+<p><strong>垂直分屏</strong>（上下）：<code>Ctrl + b</code> 然后按 <code>&quot;</code></p>
+</li>
 </ul>
 ]]></content>
       <categories>
