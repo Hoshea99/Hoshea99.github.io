@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">69</span>
+          <span class="site-state-item-count">68</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -186,113 +186,6 @@
     </div>
 
     <div class="main-inner index posts-expand">
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoshea">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/" class="post-title-link" itemprop="url">小问题集</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-10-11 11:29:57" itemprop="dateCreated datePublished" datetime="2025-10-11T11:29:57+08:00">2025-10-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
-<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
-<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
-<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
-<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
-<li>map底层用到红黑树，unordered_map用到哈希表</li>
-<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
-<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
-</ul>
-<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
-<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
-<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
-</ul>
-<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如上，抛出异常是不会进入catch的。</p>
-<h1 id="程序的内存分区"><a href="#程序的内存分区" class="headerlink" title="程序的内存分区"></a>程序的内存分区</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">高地址</span><br><span class="line">+----------------------+</span><br><span class="line">|      ...             |</span><br><span class="line">|   命令行参数和环境变量 |</span><br><span class="line">+----------------------+ &lt;-- 栈顶 (esp寄存器指向这里)</span><br><span class="line">|        栈            |  | (向下增长)</span><br><span class="line">|                      |  |</span><br><span class="line">|         ...          |  |</span><br><span class="line">|                      |  |</span><br><span class="line">+----------------------+ &lt;-- 堆顶 (brk指针指向这里)</span><br><span class="line">|                      |  |</span><br><span class="line">|        堆            |  | (向上增长)</span><br><span class="line">|                      |  |</span><br><span class="line">+----------------------+</span><br><span class="line">|         BSS          | (未初始化数据)</span><br><span class="line">+----------------------+</span><br><span class="line">|         Data         | (已初始化数据)</span><br><span class="line">+----------------------+</span><br><span class="line">|         Text         | (代码)</span><br><span class="line">低地址</span><br></pre></td></tr></table></figure>
-
-<h1 id="free只传了个指针，如何知道传多大的空间"><a href="#free只传了个指针，如何知道传多大的空间" class="headerlink" title="free只传了个指针，如何知道传多大的空间"></a>free只传了个指针，如何知道传多大的空间</h1><p>内存管理器在分配内存时，会额外分配一小块“簿记”区域来记录这块内存的信息（包括大小），而返回给你的指针，指向的是“簿记”区域之后的可使用空间。</p>
-<p>这个区域的具体大小由C运行时库控制。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
 
     
 

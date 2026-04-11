@@ -1130,28 +1130,6 @@
       </categories>
   </entry>
   <entry>
-    <title>linux新版常用指令</title>
-    <url>/2026/02/28/linux%E6%96%B0%E7%89%88%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>工作环境中常用的指令再复习一下</p>
-<span id="more"></span>
-
-<h1 id="文件和进程管理"><a href="#文件和进程管理" class="headerlink" title="文件和进程管理"></a>文件和进程管理</h1><h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p><code>ls -al</code> :看权限</p>
-<p><code>cp -r</code>: 递归复制</p>
-<p> <code>mkdir -p</code>：递归创建目录</p>
-<h2 id="文件处理"><a href="#文件处理" class="headerlink" title="文件处理"></a>文件处理</h2><p><code>grep &quot;ERROR&quot; app.log</code> :过滤出带ERROR的行</p>
-<p><code>awk &#39;{print $2, $4}&#39; app.log</code>: 打印第二列和第四列</p>
-<p><code>sed -i &#39;s/debug=True/debug=False/g&#39; config.py</code> : 修改配置文件中的设置</p>
-<h2 id="权限管理"><a href="#权限管理" class="headerlink" title="权限管理"></a>权限管理</h2><p><code>chown -R pi:pi /home/pi/my_project</code>:递归改变路径下的所有者</p>
-<p><code>chmod 755 script.py</code>: 修改读写执行权限</p>
-<h2 id="进程监控"><a href="#进程监控" class="headerlink" title="进程监控"></a>进程监控</h2><p>top</p>
-<p>ps -ef |grep python</p>
-<p>kill -9</p>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
     <title>Name Mangling</title>
     <url>/2025/10/11/name-mangling/</url>
     <content><![CDATA[<h1 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h1><p>解决函数重载的符号冲突，保持类型安全，区分作用域，模板实例化的区分</p>
@@ -3618,47 +3596,47 @@
       </categories>
   </entry>
   <entry>
-    <title>工作中整理的经验1</title>
-    <url>/2026/03/07/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E6%95%B4%E7%90%86%E7%9A%84%E7%BB%8F%E9%AA%8C1/</url>
-    <content><![CDATA[<p>最近在工作中使用到了gdb调试以及对分析出来的数据进行分析，之前的工作是在windows端进行开发，习惯了图形化的调试和数据分析，这里记录一下在linux端的工作经验。</p>
+    <title>linux指令总结</title>
+    <url>/2026/04/11/linux%E6%8C%87%E4%BB%A4%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<p>将日常工作用到的经验记录下来，可以经常看看有没有什么遗忘的。</p>
 <span id="more"></span>
 
-<h1 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h1><p>首先是python环境，公司里的python开发环境一般都是统一的，举个例子公司里的环境是dev11，我们不能也没有权限去改变这个环境。</p>
-<p>但是我们自己开发时，可能会用到其他的库，这时候我们怎么处理呢？</p>
-<p>这个时候我们安装新库，会用到<code>--user</code>。</p>
+<h1 id="python相关"><a href="#python相关" class="headerlink" title="python相关"></a>python相关</h1><ol>
+<li><p>个人库的安装</p>
+<p>避免污染公司统一的开发环境，我们在pip install后加上–user，我们就可以安装到个人目录<code>/home/haotian/.local/lib/python3.11/site-packages</code>下了：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install --user xxx</span><br></pre></td></tr></table></figure>
-
-<p>python在启动时会遵循一套标准的路径搜索优先级，如果site路径下的库和环境的库冲突了，会用先使用site的路径。</p>
-<p><strong>优先级顺序</strong>：</p>
-<ul>
-<li>首先是当前执行脚本的目录。</li>
-<li><strong>接着就是 <code>PYTHONPATH</code> 环境变量和用户路径。</strong></li>
-<li>最后才是系统全局路径（如 <code>dev11</code> 所在的目录）。</li>
-</ul>
-<blockquote>
-<p>如果两个环境下（python大版本不同，比如3.10 和3.11），在3.10里-user装了一个库，切到3.11里后，就找不到这个库了。</p>
-</blockquote>
-<h1 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h1><p>这里讲的比较简单，只是记录一下工作上的经验，毕竟之前只在windows端分析过~</p>
-<ul>
-<li><p>简单看下文本文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cat</span> ./output</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>用grep去找关键词</p>
-<ul>
-<li><p>查文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep <span class="string">&quot;keyword&quot;</span> ./output</span><br></pre></td></tr></table></figure>
-
-<p>-i 忽略大小写</p>
-<p>-n 显示行号</p>
-<p>-C 查询上下几行</p>
+<li><p>使用一些脚本函数</p>
+<p>我之前使用脚本函数，会在脚本下面加上函数的调用，其实不太方便。我们其实可以直接在bash端上调用脚本的函数，例子如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">haotian@po2:~$ python3</span><br><span class="line"><span class="comment"># 1. 直接从脚本中导入具体的函数</span></span><br><span class="line">&gt;&gt;&gt; from daily_conv import get_cmd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 现在不需要加前缀了，直接调用</span></span><br><span class="line">&gt;&gt;&gt; get_cmd()</span><br><span class="line"><span class="string">&#x27;md_conv.ubuntu&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 如果你想一次性导入所有东西（不推荐在大型项目用，但测试很爽）</span></span><br><span class="line">&gt;&gt;&gt; from daily_conv import *</span><br><span class="line">&gt;&gt;&gt; <span class="comment"># 现在 daily_conv 里的所有函数都可以直接用了</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="文本文件处理"><a href="#文本文件处理" class="headerlink" title="文本文件处理"></a>文本文件处理</h1><ol>
+<li><p>找数据</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep -r <span class="string">&quot;xxx&quot;</span> ./</span><br><span class="line">grep <span class="string">&quot;xxx&quot;</span> ./xxx.cpp</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>查文件夹</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">grep -r <span class="string">&quot;keyword&quot;</span> ./</span><br></pre></td></tr></table></figure></li>
-</ul>
+<li><p>看看一个大型数据文件的几行数据:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">tail -f xxx.csv</span><br><span class="line">head -n <span class="number">10</span> xxx.csv</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>简单看看前几行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">head</span> -n 10 <span class="string">&quot;output&quot;</span></span><br></pre></td></tr></table></figure></li>
-</ul>
+<li><p><strong>vim常用操作</strong></p>
+<ol>
+<li>G 翻到最下面</li>
+<li>gg翻到最上面</li>
+<li>dd删除该行</li>
+<li>:10 跳到第十行</li>
+<li>&#x2F;error 向下查找”error“ </li>
+<li>?error 向上查找“error”</li>
+<li>ctrl b 往回翻页 ctrl f 往后翻页</li>
+<li>u 撤销一次最近改动</li>
+<li>o在当前行下方新开一行，并进入插入模式</li>
+<li>x 删除当前光标字符</li>
+<li>yy 复制当前行（等效于y1y   y3y就是复制本行到下面共三行，配合p使用复制）</li>
+<li>p粘贴到下一行</li>
+<li>dG从当前行删除到文件末尾</li>
+<li>0 移动到当前行首 ^移动到当前行有数据的那个字符</li>
+<li>$移动到当前行尾</li>
+</ol>
+</li>
+</ol>
 <h1 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h1><p>这里讲讲用到的地方</p>
 <ul>
 <li><p>设置代码路径</p>
@@ -3676,14 +3654,14 @@
 <li><p>设置条件断点</p>
 <ul>
 <li><p>断点还没打上</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">b 10 <span class="keyword">if</span> temp == 10 || temp ==11</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">b 10 <span class="keyword">if</span> temp == 10 || temp == 11</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>断点已经打上了</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">condition 3 temp == 10 || temp ==11</span><br></pre></td></tr></table></figure></li>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">condition 3 temp == 10 || temp == 11</span><br></pre></td></tr></table></figure></li>
 </ul>
 </li>
-<li><p>删除断点</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">d 3</span><br></pre></td></tr></table></figure>
+<li><p>看看当前断点信息&#x2F;删除断点</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">i b</span><br><span class="line">d 3</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>看字节数据</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">x /32xb addr</span><br></pre></td></tr></table></figure>
@@ -3691,24 +3669,7 @@
 <p><code>/32xb</code>的意思是，32是看32位，x看十六进制，b是以字节为单位</p>
 </li>
 </ul>
-]]></content>
-      <categories>
-        <category>linux</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>工作中整理的经验2</title>
-    <url>/2026/03/13/%E5%B7%A5%E4%BD%9C%E4%B8%AD%E6%95%B4%E7%90%86%E7%9A%84%E7%BB%8F%E9%AA%8C2/</url>
-    <content><![CDATA[<p>继续记录一下常用指令</p>
-<span id="more"></span>
-
-<h1 id="bash"><a href="#bash" class="headerlink" title="bash"></a>bash</h1><h2 id="看硬盘空间"><a href="#看硬盘空间" class="headerlink" title="看硬盘空间"></a>看硬盘空间</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">df</span> -h .</span><br></pre></td></tr></table></figure>
-
-<p>看看硬盘还有多少空间</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">du</span> -sh * | <span class="built_in">sort</span> -h</span><br></pre></td></tr></table></figure>
-
-<p>找一下数据文件是不是放到ssd里了，如果是的话得去移动到硬盘上</p>
-<h2 id="保存当前bash环境"><a href="#保存当前bash环境" class="headerlink" title="保存当前bash环境"></a>保存当前bash环境</h2><p>使用mutex</p>
+<h1 id="tmux"><a href="#tmux" class="headerlink" title="tmux"></a>tmux</h1><p>使用mutex</p>
 <ul>
 <li><p>新建</p>
 <p><code>tmux new -s work</code></p>
@@ -3731,6 +3692,75 @@
 <p><strong>垂直分屏</strong>（上下）：<code>Ctrl + b</code> 然后按 <code>&quot;</code></p>
 <p><strong>切换到右侧窗格</strong>：<code>Ctrl + b</code> 然后按 <code>右方向键</code></p>
 <p><strong>垂直分屏</strong>（上下）：<code>Ctrl + b</code> 然后按 <code>&quot;</code></p>
+</li>
+</ul>
+<h1 id="同步数据"><a href="#同步数据" class="headerlink" title="同步数据"></a>同步数据</h1><ul>
+<li><p>colo传psdc</p>
+<p>rsync -avzP .&#x2F;* zx_dce3:&#x2F;home&#x2F;fts&#x2F;tools</p>
+</li>
+<li><p>colo传colo</p>
+<p>scp -3 userA@RemoteA:&#x2F;path&#x2F;to&#x2F;file userB@RemoteB:&#x2F;path&#x2F;to&#x2F;destination</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>linux网卡网口相关</title>
+    <url>/2026/04/11/linux%E7%BD%91%E5%8D%A1%E7%BD%91%E5%8F%A3%E7%9B%B8%E5%85%B3/</url>
+    <content><![CDATA[<p>量化工作中需要通过网口接收行情，所以我们对网口&#x2F;网卡等知识要有一个基础的了解。</p>
+<span id="more"></span>
+
+<h1 id="测试接收数据"><a href="#测试接收数据" class="headerlink" title="测试接收数据"></a>测试接收数据</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"> <span class="built_in">sudo</span> tcpdump -i any port 5555 -X -nn</span><br></pre></td></tr></table></figure>
+
+<p>即监听所有网卡的5555端口数据。-X显示十六进制或者ASCII两种格式的包体内容，-nn指的是不进行域名和端口名称的解析。</p>
+<p><strong>但是不能开启混杂模式</strong>，如果要开启混杂模式，不能监听any，只能监听特定网卡。</p>
+<p>当你使用 <code>any</code> 时，由于架构限制，内核<strong>不允许</strong>通过这个虚拟入口开启底层硬件的混杂模式。这会导致以下差异：</p>
+<table>
+<thead>
+<tr>
+<th><strong>场景</strong></th>
+<th><strong>-i eth0 (混杂模式)</strong></th>
+<th><strong>-i any</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>发给本机的包</strong></td>
+<td>✅ 能抓到</td>
+<td>✅ 能抓到</td>
+</tr>
+<tr>
+<td><strong>本机发出的包</strong></td>
+<td>✅ 能抓到</td>
+<td>✅ 能抓到</td>
+</tr>
+<tr>
+<td><strong>广播&#x2F;组播包</strong></td>
+<td>✅ 能抓到</td>
+<td>✅ 能抓到</td>
+</tr>
+<tr>
+<td><strong>发给同交换机下别人的包</strong></td>
+<td>✅ <strong>能抓到</strong> (只要电信号路过这根线)</td>
+<td>❌ <strong>抓不到</strong></td>
+</tr>
+</tbody></table>
+<h1 id="查看本机网卡信息"><a href="#查看本机网卡信息" class="headerlink" title="查看本机网卡信息"></a>查看本机网卡信息</h1><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ip a</span><br></pre></td></tr></table></figure>
+
+<p>可以看本机网卡信息。</p>
+<ul>
+<li><p>lo是本地回环</p>
+</li>
+<li><p>NO-CARRIER指的是没接线也不用管</p>
+</li>
+<li><p>PROMISC混杂模式，一般用来接收行情</p>
+</li>
+<li><p>DOWN目前是关掉的</p>
+<ul>
+<li>为什么有时候网卡没有分配ipv4的地址呢，他其实是只听不讲的，只需要对组播MAC地址过滤并接收数据就好，不配置IPV4地址可以避免网卡被外部扫描或者攻击。</li>
+</ul>
 </li>
 </ul>
 ]]></content>
