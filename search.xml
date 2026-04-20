@@ -867,31 +867,6 @@
       </categories>
   </entry>
   <entry>
-    <title>git常用命令</title>
-    <url>/2025/12/25/git%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>公司用到的主要是svn图形化界面，这里学习一下git常用指令</p>
-<span id="more"></span>
-
-<h1 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h1><p>我们只讲场景，不空搬代码。</p>
-<p>场景：先要把公司代码远程拉下来，然后开发</p>
-<h2 id="克隆"><a href="#克隆" class="headerlink" title="克隆"></a>克隆</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 这会将远程仓库完整下载到本地，并自动创建一个同名文件夹</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/Company/ProjectName.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入项目文件夹</span></span><br><span class="line"><span class="built_in">cd</span> ProjectName</span><br></pre></td></tr></table></figure>
-
-<p>克隆后，记得checkout到main分支并pull</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 切换到主分支 (通常是 main 或 master)</span></span><br><span class="line">git checkout main</span><br><span class="line"></span><br><span class="line"><span class="comment"># 拉取最新改动（防止克隆期间有人推了新代码）</span></span><br><span class="line">git pull origin main</span><br></pre></td></tr></table></figure>
-
-<h2 id="开启新分支"><a href="#开启新分支" class="headerlink" title="开启新分支"></a>开启新分支</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 创建并切换到一个描述性强的分支名</span></span><br><span class="line"><span class="comment"># 格式通常为：功能/姓名-日期 或 任务号</span></span><br><span class="line">git checkout -b feature/math-module-yourname</span><br></pre></td></tr></table></figure>
-
-<h2 id="提交本地仓库"><a href="#提交本地仓库" class="headerlink" title="提交本地仓库"></a>提交本地仓库</h2><figure class="highlight cpp"><table><tr><td class="code"><pre><span class="line"># <span class="number">1.</span> 查看改动了哪些文件</span><br><span class="line">git status</span><br><span class="line"></span><br><span class="line"># <span class="number">2.</span> 暂存改动</span><br><span class="line">git add .</span><br><span class="line"></span><br><span class="line"># <span class="number">3.</span> 提交到本地仓库（写清楚你做了什么）</span><br><span class="line">git commit -m <span class="string">&quot;feat: add square root function to math library&quot;</span></span><br></pre></td></tr></table></figure>
-
-<h2 id="提交到远程仓库"><a href="#提交到远程仓库" class="headerlink" title="提交到远程仓库"></a>提交到远程仓库</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将你的分支推送到远程仓库</span></span><br><span class="line">git push origin feature/math-module-yourname</span><br></pre></td></tr></table></figure>
-
-<h2 id="发起PR-MR"><a href="#发起PR-MR" class="headerlink" title="发起PR MR"></a>发起PR MR</h2><p>在网页操作</p>
-]]></content>
-      <categories>
-        <category>cpp</category>
-      </categories>
-  </entry>
-  <entry>
     <title>enable_if和void_t</title>
     <url>/2025/12/20/enable-if%E5%92%8Cvoid-t/</url>
     <content><![CDATA[<p>C++模版中有一个很重要的特性：SFINAE，即替换失败并非错误。在函数头或者模版参数列表（并非函数体中）发生了语法无效的问题，编译期不会停止，而是会将这个模版从候选中移除。</p>
@@ -3766,6 +3741,147 @@
 ]]></content>
       <categories>
         <category>量化</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>clangd配置</title>
+    <url>/2026/04/12/clangd%E9%85%8D%E7%BD%AE/</url>
+    <content><![CDATA[<p>在使用cursor时，遇到了clangd无法生效的原因，不能快捷跳转代码。在写代码，看代码时造成了很大的困扰，如何解决这个问题呢？</p>
+<span id="more"></span>
+
+<p>共有两种解决方法，一种是在cmake时，加上<code>-DCMAKE_EXPORT_COMPILE_COMMANDS=ON</code>选项，会自动生成<code>compile_commands.json</code>。文件夹。这种方法我还没验证过，可以后续找项目尝试。</p>
+<p>还有一种方法，就是利用agent，在根目录生成.clangd文件和compile_flags.txt。这个实测有效。</p>
+<blockquote>
+<p>为什么我没有用第一种方法呢？因为我的目录不是一个cmake管理整个项目的结构，是多个项目各有各的cmake，他们都会用到下面的代码文件。这样的话，就都不能在根目录生成了。这样还需要手动去合并。</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>git指令</title>
+    <url>/2026/04/12/git%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<p>在真实工作环境中，有时候对git操作还是不太熟悉，只会push pull等基础操作。需要进一步学习一些指令。我将通过一个实际例子进行学习。</p>
+<span id="more"></span>
+
+<p>当前项目基准分支为main，需求分支为mkt，我基于需求分支拉了个新分支：my_dev。</p>
+<h1 id="每天的开发流程"><a href="#每天的开发流程" class="headerlink" title="每天的开发流程"></a>每天的开发流程</h1><ul>
+<li><p>新建分支并切换分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout mkt</span><br><span class="line">git checkout -b my_dev</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>同步需求分支</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout mkt</span><br><span class="line">git pull origin mkt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>变基（可选）</p>
+<p>如果mkt有变动，可以把最新改动后的版本作为my_dev的新起点，避免最后合并的时候冲突太多。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout my_dev</span><br><span class="line">git rebase mkt_sgx</span><br></pre></td></tr></table></figure>
+
+<p>如果遇到冲突，先把冲突解决，再git add . 然后git rebase –continue</p>
+</li>
+<li><p>合并</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git checkout mkt_sgx</span><br><span class="line">git merge my_dev</span><br><span class="line">git push origin mkt_sgx</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h1 id="开发中途切换分支"><a href="#开发中途切换分支" class="headerlink" title="开发中途切换分支"></a>开发中途切换分支</h1><p>如果开发到一半，我要去main分支处理问题，工作流程如下所示：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git stash -u  <span class="comment"># 此时在my_dev分支，暂存代码，不加-u会不给你存没有版本控制的文件</span></span><br><span class="line">git checkout main <span class="comment">#切换到main分支，此时ide也会自动刷新文件内容</span></span><br><span class="line">...... <span class="comment"># 处理main分支的问题</span></span><br><span class="line">git checkout my_dev</span><br><span class="line">git stash pop <span class="comment"># 把暂存的代码取回来</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="需要注意的点"><a href="#需要注意的点" class="headerlink" title="需要注意的点"></a>需要注意的点</h1><ol>
+<li><p><strong>每次切换分支时，都务必记得需要先</strong><code>git status</code></p>
+<p>原因：如果有未commit的文件，当你<code>git checkout</code>到其他分支时，会导致把这个文件也带上。 </p>
+<p>所以遇到这种情况，首先git stash或者git commit</p>
+</li>
+<li><p>可以在个人开发分支中的.gitignore文件中，把一些二进制文件或者数据文件给屏蔽掉：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line"># .gitignore 示例</span><br><span class="line">*.o</span><br><span class="line">*.so</span><br><span class="line">/data/      # 存放行情数据的文件夹</span><br><span class="line">/logs/      # 运行日志</span><br><span class="line">build/      # 编译目录</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>git status看下有哪些改了，如果想看看改了什么，用如下指令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git diff apps/common.cmake</span><br></pre></td></tr></table></figure></li>
+</ol>
+]]></content>
+      <categories>
+        <category>linux</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>docker使用</title>
+    <url>/2026/04/20/docker%E4%BD%BF%E7%94%A8/</url>
+    <content><![CDATA[<p>docker能够让我们在开发机器上跨系统编译，有效地提高了工作效率。这篇文章将重点分析docker的核心逻辑和基本操作。</p>
+<span id="more"></span>
+
+<h1 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h1><p>Docker不像虚拟机一样，模拟整个硬件和内核。他共享了宿主机的Linux内核，在用户态构建了一套独立的文件系统。</p>
+<p>所以只要内核是兼容的，就能在Ubuntu22.04的机器上 运行一个Ubuntu20.04甚至是centos的环境，而不污染宿主机（windows不行，因为内核不一样）</p>
+<ul>
+<li>docker三要素<ul>
+<li><strong>Image（镜像）</strong>：静态的“只读图纸”，包含了系统底座、依赖库和编译工具。它是分层存储的，可以被多次复用。</li>
+<li><strong>Container (容器)：</strong> 镜像运行后的“动态实例”。每次 <code>docker run</code> 都是基于镜像盖的一间新房子。</li>
+<li><strong>Mount (挂载)：</strong> 连接宿主机与容器的“传送门”。通过 <code>-v</code> 参数，将宿主机的代码目录映射到容器内部，实现“代码在宿主机，环境在容器，产物在宿主机”的高效流程。</li>
+</ul>
+</li>
+</ul>
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="管理镜像"><a href="#管理镜像" class="headerlink" title="管理镜像"></a>管理镜像</h2><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker images</code></td>
+<td>查看本地已下载的所有镜像</td>
+</tr>
+<tr>
+<td><code>docker pull &lt;image_name&gt;</code></td>
+<td>从远程仓库（Docker Hub）拉取镜像</td>
+</tr>
+<tr>
+<td><code>docker rmi &lt;image_id&gt;</code></td>
+<td>删除不再需要的镜像</td>
+</tr>
+</tbody></table>
+<h2 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h2><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker run -it -v &lt;宿主机路径&gt;:&lt;容器路径&gt; &lt;镜像名&gt; /bin/bash</code></td>
+<td><strong>最常用：</strong> 创建并进入一个挂载了本地代码的新环境</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>查看当前正在运行的容器</td>
+</tr>
+<tr>
+<td><code>docker ps -a</code></td>
+<td>查看所有容器（包括已停止的）</td>
+</tr>
+<tr>
+<td><code>docker stop &lt;ID&gt;</code></td>
+<td>停止一个正在运行的容器</td>
+</tr>
+<tr>
+<td><code>docker start -i &lt;ID&gt;</code></td>
+<td>重启并进入一个之前停止的旧容器</td>
+</tr>
+<tr>
+<td><code>docker rm &lt;ID&gt;</code></td>
+<td>删除已经不用的容器实例</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>第一次使用docker run，后面如果要先退出来就用docker stop，然后docker start可以继续在原环境中进行工作。在docke中想出来可以通过ctrl + D出去。</p>
+</li>
+<li><p><code>docker run -it -v &lt;宿主机路径&gt;:&lt;容器路径&gt; &lt;镜像名&gt; /bin/bash</code> </p>
+<ul>
+<li><strong><code>-v</code></strong>: 这是最关键的 <strong>Volume（卷）挂载</strong>。它在宿主机和容器之间修了一条“隧道”。你在宿主机的这个目录下改代码，容器里立刻同步，反之亦然</li>
+<li>可以再加一个参数：<code>--user $(id -u):$(id -g)</code> 这条命令把宿主机的用户 ID（UID）和组 ID（GID）传给容器。这样容器里的操作就像是你本人在操作，生成的代码和编译产物权限完全正常。否则，在docker生成的成果物是root的</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>linux</category>
       </categories>
   </entry>
 </search>

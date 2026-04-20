@@ -164,7 +164,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">68</span>
+          <span class="site-state-item-count">70</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -186,6 +186,489 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/12/%E4%BC%A0%E8%BE%93%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoshea">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/12/%E4%BC%A0%E8%BE%93%E5%B1%82/" class="post-title-link" itemprop="url">传输层</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-12 10:57:32" itemprop="dateCreated datePublished" datetime="2025-10-12T10:57:32+08:00">2025-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cn/" itemprop="url" rel="index"><span itemprop="name">cn</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>传输层位于网络层和应用层之间，为不同主机上的应用进程提供了逻辑通信功能</p>
+<ul>
+<li><p>端口号</p>
+<p>唯一标识一台主机上的特定应用进程，16位整数</p>
+</li>
+</ul>
+<h1 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h1><h2 id="特点"><a href="#特点" class="headerlink" title="特点"></a><strong>特点</strong></h2><ul>
+<li><strong>无连接</strong>：无需建立连接即可发送数据。</li>
+<li><strong>不可靠</strong>：不保证数据交付、不保证顺序、不具备拥塞控制。</li>
+<li><strong>高效</strong>：头部开销小，延迟低。</li>
+</ul>
+<h2 id="报文格式"><a href="#报文格式" class="headerlink" title="报文格式"></a>报文格式</h2><p>UDP头部固定为<strong>8字节</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">长度</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源端口号</td>
+<td align="left">16位</td>
+<td align="left">发送方端口号（可省略为0）</td>
+</tr>
+<tr>
+<td align="left">目的端口号</td>
+<td align="left">16位</td>
+<td align="left">接收方端口号</td>
+</tr>
+<tr>
+<td align="left">长度</td>
+<td align="left">16位</td>
+<td align="left">UDP整个数据报（头部+数据）的长度</td>
+</tr>
+<tr>
+<td align="left">校验和</td>
+<td align="left">16位</td>
+<td align="left">用于差错检测（可选）</td>
+</tr>
+</tbody></table>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><p>TCP是面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<h2 id="TCP报文格式"><a href="#TCP报文格式" class="headerlink" title="TCP报文格式"></a>TCP报文格式</h2><p>TCP头部<strong>最小20字节</strong>，最大60字节（因选项字段长度可变）。</p>
+<p><strong>固定头部（20字节）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th align="left">字段</th>
+<th align="left">长度</th>
+<th align="left">说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">源端口号</td>
+<td align="left">16位</td>
+<td align="left">发送方端口号</td>
+</tr>
+<tr>
+<td align="left">目的端口号</td>
+<td align="left">16位</td>
+<td align="left">接收方端口号</td>
+</tr>
+<tr>
+<td align="left"><strong>序列号</strong></td>
+<td align="left">32位</td>
+<td align="left">本报文段所发送数据的第一个字节的序号</td>
+</tr>
+<tr>
+<td align="left"><strong>确认应答号</strong></td>
+<td align="left">32位</td>
+<td align="left">期望收到的下一个报文段的第一个数据字节的序号</td>
+</tr>
+<tr>
+<td align="left"><strong>首部长度</strong></td>
+<td align="left">4位</td>
+<td align="left">以4字节为单位，指示TCP头部长度</td>
+</tr>
+<tr>
+<td align="left"><strong>保留位</strong></td>
+<td align="left">6位</td>
+<td align="left">保留为未来使用</td>
+</tr>
+<tr>
+<td align="left"><strong>控制标志</strong></td>
+<td align="left">6位</td>
+<td align="left">见下表详解</td>
+</tr>
+<tr>
+<td align="left"><strong>窗口大小</strong></td>
+<td align="left">16位</td>
+<td align="left">用于流量控制，指示接收方还能接收的字节数</td>
+</tr>
+<tr>
+<td align="left"><strong>校验和</strong></td>
+<td align="left">16位</td>
+<td align="left">用于差错检测</td>
+</tr>
+<tr>
+<td align="left"><strong>紧急指针</strong></td>
+<td align="left">16位</td>
+<td align="left">当URG&#x3D;1时有效，指示紧急数据的末尾</td>
+</tr>
+</tbody></table>
+<p><strong>控制标志（各占1位）</strong>：</p>
+<ul>
+<li><strong>URG</strong>：紧急指针有效。</li>
+<li><strong>ACK</strong>：确认号有效。<strong>一旦连接建立，该位通常始终为1</strong>。</li>
+<li><strong>PSH</strong>：接收方应尽快将数据交付应用层。</li>
+<li><strong>RST</strong>：重置连接。</li>
+<li><strong>SYN</strong>：同步序列号，用于<strong>建立连接</strong>。</li>
+<li><strong>FIN</strong>：结束连接，用于<strong>释放连接</strong>。</li>
+</ul>
+<p><strong>可选字段</strong>：常见选项包括MSS（最大报文段长度）、窗口缩放因子、时间戳等。</p>
+<h2 id="序列号与确认应答机制"><a href="#序列号与确认应答机制" class="headerlink" title="序列号与确认应答机制"></a>序列号与确认应答机制</h2><ul>
+<li><strong>序列号</strong>：标识发送数据流中每一个字节的编号。初始序列号随机生成，后续序列号按已发送的字节数递增。例如，发送seq&#x3D;1000，数据长度为200，则下一个报文seq&#x3D;1200。</li>
+<li><strong>确认应答号</strong>：当ACK标志位为1时有效。它向发送方声明期望收到的下一个字节的序列号。例如，收到seq&#x3D;1000，数据长度为150字节，则回复ack&#x3D;1150。<strong>确认应答号代表此序号之前的所有数据都已成功接收</strong>。</li>
+</ul>
+<h1 id="TCP连接管理"><a href="#TCP连接管理" class="headerlink" title="TCP连接管理"></a>TCP连接管理</h1><h2 id="三次握手"><a href="#三次握手" class="headerlink" title="三次握手"></a>三次握手</h2><p>用于建立TCP连接。</p>
+<ol>
+<li><strong>第一次握手</strong>：客户端发送SYN报文。随机生成初始序列号<code>client_isn</code>，并将SYN标志位置1。客户端进入<code>SYN-SENT</code>状态。</li>
+<li><strong>第二次握手</strong>：服务器收到SYN报文后，回复SYN-ACK报文。随机生成自己的初始序列号<code>server_isn</code>，将确认应答号设置为<code>client_isn + 1</code>，并将SYN和ACK标志位置1。服务器进入<code>SYN-RCVD</code>状态。</li>
+<li><strong>第三次握手</strong>：客户端收到SYN-ACK报文后，回复ACK报文。将确认应答号设置为<code>server_isn + 1</code>，ACK标志位置1。<strong>此报文可以携带数据</strong>。客户端进入<code>ESTABLISHED</code>状态，服务器收到后也进入<code>ESTABLISHED</code>状态。</li>
+</ol>
+<p><strong>为什么需要三次握手？</strong></p>
+<ol>
+<li><strong>阻止重复历史连接初始化（主因）</strong>：防止旧的、延迟的SYN报文到达服务器，导致服务器错误地打开一个连接。客户端可以通过第三次握手来判断这是否是一个历史连接，并决定是否重置它。</li>
+<li><strong>同步双方初始序列号</strong>：确保双方都知晓并确认了对方的初始序列号，这是可靠传输的基础。</li>
+<li><strong>避免资源浪费</strong>：如果是两次握手，服务器收到SYN后就建立连接。若客户端的SYN报文丢失，服务器会一直维持一个无效的连接，造成资源浪费。</li>
+</ol>
+<p><strong>相关概念</strong>：</p>
+<ul>
+<li><strong>半连接队列</strong>：服务器在收到第一次握手（SYN）后，但未完成三次握手时，会将连接请求放入此队列。</li>
+<li><strong>全连接队列</strong>：已完成三次握手、建立成功的连接会被放入此队列，等待应用进程调用<code>accept()</code>取走。</li>
+<li><strong>SYN Flood攻击</strong>：攻击者伪造大量IP发送SYN报文，但不完成第三次握手，占满服务器的半连接队列，导致正常用户无法连接。</li>
+</ul>
+<h2 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h2><p>用于释放TCP连接。TCP连接是全双工的，因此每个方向必须单独关闭。</p>
+<ol>
+<li><strong>第一次挥手</strong>：客户端打算关闭连接，发送一个FIN报文（FIN标志位置1）。客户端进入<code>FIN-WAIT-1</code>状态。</li>
+<li><strong>第二次挥手</strong>：服务器收到FIN报文后，回复一个ACK报文（确认应答号为客户端序列号+1）。服务器进入<code>CLOSE-WAIT</code>状态。此时，<strong>从客户端到服务器的连接关闭，但服务器到客户端的连接仍然存在</strong>（即半关闭状态）。</li>
+<li><strong>第三次挥手</strong>：当服务器处理完所有数据后，也发送一个FIN报文。服务器进入<code>LAST-ACK</code>状态。</li>
+<li><strong>第四次挥手</strong>：客户端收到服务器的FIN报文后，回复一个ACK报文。客户端进入<code>TIME-WAIT</code>状态。服务器收到ACK后，立即进入<code>CLOSED</code>状态。客户端经过<strong>2MSL</strong>（最长报文段寿命的两倍）时间后，也进入<code>CLOSED</code>状态。</li>
+</ol>
+<p><strong>为什么需要四次挥手？</strong><br>因为TCP连接是全双工的，一方发送FIN只表示它不再发送数据，但还可以接收数据。服务器在收到客户端的FIN后，可能还有数据需要发送和处理，因此ACK和FIN报文需要分开发送，这就比三次握手多了一次。</p>
+<p><strong>为什么需要TIME-WAIT状态？</strong></p>
+<ol>
+<li><strong>可靠地终止连接</strong>：确保最后一个ACK报文能够到达服务器。如果这个ACK丢失，服务器会超时重传FIN报文，处于<code>TIME-WAIT</code>状态的客户端可以重发ACK。</li>
+<li><strong>让旧连接的所有报文在网络中消逝</strong>：防止之前连接的延迟报文段被新的、具有相同四元组（源IP、源端口、目的IP、目的端口）的连接错误地接收。</li>
+</ol>
+<h1 id="TCP可靠传输机制"><a href="#TCP可靠传输机制" class="headerlink" title="TCP可靠传输机制"></a>TCP可靠传输机制</h1><h2 id="重传机制"><a href="#重传机制" class="headerlink" title="重传机制"></a>重传机制</h2><ul>
+<li><strong>超时重传</strong>：发送方为每个发送的数据包设置一个计时器。如果在<strong>RTO</strong>（超时重传时间）内未收到确认应答，就重传该数据包。RTO应略大于<strong>RTT</strong>（数据包的往返时间）。</li>
+<li><strong>快速重传</strong>：当接收方收到一个失序的报文段时，它会立即重复发送最后一个按序接收的ACK。当发送方<strong>连续收到3个重复的ACK</strong>时，就认为该ACK之后的数据包已经丢失，会在超时之前立即重传，而不必等待超时。</li>
+</ul>
+<h2 id="滑动窗口与流量控制"><a href="#滑动窗口与流量控制" class="headerlink" title="滑动窗口与流量控制"></a>滑动窗口与流量控制</h2><ul>
+<li><strong>目的</strong>：解决发送方发送速率过快，导致接收方缓冲区溢出的问题。</li>
+<li><strong>机制</strong>：<ul>
+<li>接收方通过TCP头部的<strong>窗口大小</strong>字段，告知发送方自己接收缓冲区的剩余空间（接收窗口，<code>rwnd</code>）。</li>
+<li>发送方根据<code>rwnd</code>的大小，调整自己可以发送的数据量。</li>
+<li>当<code>rwnd = 0</code>时，发送方停止发送数据，并启动一个持久计时器，定期探测接收方窗口是否已恢复。</li>
+</ul>
+</li>
+</ul>
+<h2 id="拥塞控制"><a href="#拥塞控制" class="headerlink" title="拥塞控制"></a>拥塞控制</h2><ul>
+<li><strong>目的</strong>：防止过多的数据注入网络，避免网络中间设备（如路由器）负载过大。</li>
+<li><strong>核心</strong>：发送方维护一个<strong>拥塞窗口</strong>，其大小取决于网络的拥塞程度。发送方的<strong>实际发送窗口</strong> &#x3D; <code>min(拥塞窗口, 接收窗口)</code>。</li>
+<li><strong>四大算法</strong>：<ol>
+<li><strong>慢启动</strong>：连接开始时，拥塞窗口从1开始，每收到一个ACK，窗口就加倍（指数增长）。直到窗口达到<strong>慢启动阈值</strong>。</li>
+<li><strong>拥塞避免</strong>：当窗口达到慢启动阈值后，进入拥塞避免阶段，每收到一个ACK，窗口只增加1（线性增长）。</li>
+<li><strong>拥塞发生</strong>：<ul>
+<li><strong>超时重传</strong>：认为网络拥塞严重。慢启动阈值降为当前窗口的一半，拥塞窗口重置为1，重新开始慢启动。</li>
+<li><strong>快速重传</strong>（收到3个重复ACK）：认为网络拥塞较轻。执行<strong>快速恢复</strong>。</li>
+</ul>
+</li>
+<li><strong>快速恢复</strong>：<ul>
+<li>慢启动阈值降为当前窗口的一半。</li>
+<li>拥塞窗口设置为新的慢启动阈值 + 3。</li>
+<li>重传丢失的数据包。</li>
+<li>每收到一个重复的ACK，拥塞窗口增加1。</li>
+<li>当收到一个新的数据的ACK时，退出快速恢复状态，进入拥塞避免阶段。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/12/%E7%BD%91%E7%BB%9C%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="Hoshea">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content=" | Hoshea's Blog">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2025/10/12/%E7%BD%91%E7%BB%9C%E5%B1%82/" class="post-title-link" itemprop="url">网络层</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-10-12 10:40:01" itemprop="dateCreated datePublished" datetime="2025-10-12T10:40:01+08:00">2025-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cn/" itemprop="url" rel="index"><span itemprop="name">cn</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="IPv4与IPv6"><a href="#IPv4与IPv6" class="headerlink" title="IPv4与IPv6"></a>IPv4与IPv6</h1><ul>
+<li>IPv4：<ul>
+<li>地址长度：32位（4字节）</li>
+<li>表示方法：点分十进制</li>
+<li>地址空间：43亿个</li>
+</ul>
+</li>
+<li>IPv6：<ul>
+<li>地址长度：128位</li>
+<li>表示方法：冒分十六进制</li>
+<li>地址空间：非常大</li>
+</ul>
+</li>
+</ul>
+<h1 id="TTL机制"><a href="#TTL机制" class="headerlink" title="TTL机制"></a>TTL机制</h1><h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><ul>
+<li>全称：生存时间</li>
+<li>作用：防止IP数据包在网络中无限循环地传输</li>
+</ul>
+<h2 id="工作机制"><a href="#工作机制" class="headerlink" title="工作机制"></a>工作机制</h2><ol>
+<li>TTL是IP头中的一个字段，初始值通常为64,128或者255</li>
+<li>数据包每经过一个路由器，TTL减1</li>
+<li>当路由器将TTL减至0，会丢弃该数据包，并向IP地址发送一个ICMP超时消息</li>
+</ol>
+<h1 id="子网划分与CIDR"><a href="#子网划分与CIDR" class="headerlink" title="子网划分与CIDR"></a>子网划分与CIDR</h1><ul>
+<li><strong>CIDR表示法</strong>：无类别域间路由，用于更灵活地分配IP地址。格式为 <code>IP地址/前缀长度</code>，例如 <code>192.168.1.0/24</code>。<ul>
+<li><code>/24</code> 表示网络部分占前24位，主机部分占后8位。</li>
+<li>可用IP地址数量为 2^8 - 2 &#x3D; 254个（减去网络地址和广播地址）。</li>
+</ul>
+</li>
+<li><strong>划分子网的目的</strong>：<ol>
+<li><strong>控制广播域</strong>：缩小广播范围，减少网络中的广播流量（如ARP、DHCP广播），提高网络性能。</li>
+<li><strong>提高安全性</strong>：便于在网络边界实施访问控制策略，例如限制不同子网间的访问。</li>
+<li><strong>IP地址高效利用</strong>：根据实际需要分配地址空间，避免浪费。</li>
+</ol>
+</li>
+</ul>
+<h1 id="路由机制"><a href="#路由机制" class="headerlink" title="路由机制"></a>路由机制</h1><p>路由是网络层的核心功能，指路由器为数据包选择路径的过程。</p>
+<ul>
+<li><strong>静态路由</strong>：由管理员手动配置路由表。适用于小型、结构稳定的网络。</li>
+<li><strong>动态路由协议</strong>：路由器之间自动交换路由信息，动态更新路由表。<ul>
+<li><strong>RIP</strong>：基于跳数的距离矢量协议，简单，适用于小型网络。</li>
+<li><strong>OSPF</strong>：基于链路状态的协议，收敛快，适用于大型企业网络。</li>
+<li><strong>BGP</strong>：路径矢量协议，用于在不同自治系统之间交换路由信息，是互联网的“骨架”协议。</li>
+</ul>
+</li>
+</ul>
+<h1 id="ICMP协议"><a href="#ICMP协议" class="headerlink" title="ICMP协议"></a>ICMP协议</h1><ul>
+<li><strong>全称</strong>：互联网控制消息协议。</li>
+<li><strong>作用</strong>：用于在IP主机、路由器之间传递<strong>控制消息</strong>，如网络通不通、主机是否可达、路由是否可用等。</li>
+<li><strong>常见应用</strong>：<ul>
+<li><strong>Ping</strong>：利用ICMP回送请求和回送应答消息，测试网络连通性。</li>
+<li><strong>Traceroute</strong>：利用ICMP超时消息和目的不可达消息，跟踪数据包路径。</li>
+</ul>
+</li>
+</ul>
+<h1 id="NAT"><a href="#NAT" class="headerlink" title="NAT"></a>NAT</h1><ul>
+<li><strong>全称</strong>：网络地址转换。</li>
+<li><strong>作用</strong>：将私有IP地址转换为公有IP地址，使内网设备可以访问互联网。它有效缓解了IPv4地址短缺问题，并提供了一定的安全隐藏性。</li>
+<li><strong>基本过程</strong>：NAT设备（通常是路由器）维护一个转换表。当内网主机发送数据包到外网时，NAT会将数据包的源IP和端口号替换为路由器的公网IP和一个新端口，并将映射关系记录在表中。当收到外网回复时，再根据转换表将目标IP和端口转换回内网主机的地址。</li>
+</ul>
+<h1 id="IP分片"><a href="#IP分片" class="headerlink" title="IP分片"></a>IP分片</h1><ul>
+<li><strong>原因</strong>：当IP数据包的大小超过数据链路层的<strong>最大传输单元（MTU）</strong> 时，就需要进行分片。</li>
+<li><strong>过程</strong>：路由器将原始数据包分割成多个较小的<strong>分片</strong>，每个分片都拥有自己的IP头（包含分片相关信息）。这些分片独立传输到目的地后，由目的主机的IP层进行重组。</li>
+<li><strong>缺点</strong>：<ul>
+<li><strong>性能开销</strong>：每个分片都需要IP头，增加额外负担。</li>
+<li><strong>可靠性差</strong>：任何一个分片丢失，都会导致整个原始数据包重传。</li>
+</ul>
+</li>
+<li><strong>优化</strong>：因此，在传输层，TCP协议会通过<strong>MSS（最大报文段长度）</strong> 来主动限制 segment 的大小，从而<strong>避免在IP层发生分片</strong>。</li>
+</ul>
+<h1 id="面试经典题型"><a href="#面试经典题型" class="headerlink" title="面试经典题型"></a>面试经典题型</h1><h3 id="NAT的工作原理及其优缺点"><a href="#NAT的工作原理及其优缺点" class="headerlink" title="NAT的工作原理及其优缺点"></a><strong>NAT的工作原理及其优缺点</strong></h3><h4 id="参考回答"><a href="#参考回答" class="headerlink" title="参考回答"></a><strong>参考回答</strong></h4><p><strong>NAT</strong>，即网络地址转换，是一种在当今互联网中至关重要的技术。它的核心功能是<strong>将私有IP地址转换为公有IP地址</strong>，使得使用私有地址的内网设备能够访问公共互联网。</p>
+<p><strong>一、工作原理</strong></p>
+<p>NAT通常运行在连接内网和外网的路由器（即NAT网关）上。其核心是一个<strong>NAT转换表</strong>，记录了内网IP和端口与外网IP和端口的映射关系。最常见的工作模式是<strong>NAPT</strong>，即同时转换IP地址和端口号。</p>
+<p>其工作过程可以分为以下几步：</p>
+<ol>
+<li><p><strong>出站请求（内网 -&gt; 外网）</strong>：</p>
+<ul>
+<li>当内网主机（例如 <code>192.168.1.100:5000</code>）想要访问外网服务器（例如 <code>203.0.113.1:80</code>）时，它会发送一个IP数据包。</li>
+<li>源IP：<code>192.168.1.100</code>，源端口：<code>5000</code></li>
+<li>目标IP：<code>203.0.113.1</code>，目标端口：<code>80</code></li>
+<li>这个数据包到达NAT路由器。</li>
+<li><strong>NAT操作</strong>：路由器会为该连接创建一个NAT表项。它将数据包的<strong>源IP</strong>替换为路由器自己的<strong>公网IP</strong>（例如 <code>198.51.100.1</code>），并分配一个新的<strong>源端口</strong>（例如 <code>10000</code>），然后将这个 <code>(公网IP:新端口, 目标IP:目标端口)</code> 的映射记录在NAT表中。</li>
+<li>修改后的数据包发出：源地址变为 <code>198.51.100.1:10000</code>，目标地址不变。</li>
+</ul>
+</li>
+<li><p><strong>NAT转换表记录</strong>：</p>
+<ul>
+<li><p>路由器内部会生成一条类似这样的映射记录：</p>
+<table>
+<thead>
+<tr>
+<th align="left">内网本地地址 (Local)</th>
+<th align="left">外网全局地址 (Global)</th>
+<th align="left">外部服务器地址 (Remote)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>192.168.1.100:5000</code></td>
+<td align="left"><code>198.51.100.1:10000</code></td>
+<td align="left"><code>203.0.113.1:80</code></td>
+</tr>
+</tbody></table>
+</li>
+</ul>
+</li>
+<li><p><strong>入站响应（外网 -&gt; 内网）</strong>：</p>
+<ul>
+<li>外网服务器 <code>203.0.113.1:80</code> 收到请求后，会回复一个数据包。</li>
+<li>源IP：<code>203.0.113.1</code>，源端口：<code>80</code></li>
+<li>目标IP：<code>198.51.100.1</code>，目标端口：<code>10000</code>（即N路由器转换后的地址）</li>
+<li>这个数据包到达NAT路由器。</li>
+<li><strong>NAT操作</strong>：路由器查看目标IP和端口 <code>198.51.100.1:10000</code>，并在NAT表中查找匹配的映射记录。</li>
+<li>找到记录后，路由器将数据包的<strong>目标IP</strong>还原为内网主机的 <code>192.168.1.100</code>，<strong>目标端口</strong>还原为 <code>5000</code>。</li>
+<li>然后将数据包转发给内网中的原始主机。</li>
+</ul>
+</li>
+</ol>
+<p><strong>简单比喻</strong>：NAT就像一个公司的前台总机。公司内部有很多分机（私有IP），但对外只有一个总机号（公有IP）。外部电话打进来要找“小王”，前台需要查表知道“小王”对应的是“分机123”，然后把电话转接进去。</p>
+<p><strong>二、优缺点</strong></p>
+<p><strong>优点</strong>：</p>
+<ol>
+<li><strong>缓解IPv4地址枯竭</strong>：这是NAT最重要的作用。一个家庭或企业只需要一个或少数几个公网IP，就可以让成百上千台设备同时上网。</li>
+<li><strong>提供基础安全防护</strong>：外部网络无法主动发起对NAT内部特定设备的连接，因为NAT表中没有对应的映射记录。这在一定程度上隐藏了内网拓扑，起到了类似防火墙的作用。</li>
+<li><strong>网络部署灵活</strong>：内网可以使用任意的私有地址空间，无需申请公网IP，便于网络规划和变更。</li>
+</ol>
+<p><strong>缺点</strong>：</p>
+<ol>
+<li><strong>破坏了端到端通信原则</strong>：这是NAT最大的理论缺陷。互联网设计初衷是任意两台主机都能直接通信，而NAT的介入使得通信必须经过地址转换，变得复杂。</li>
+<li><strong>增加了延迟和复杂性</strong>：每个数据包都需要经过修改和查表操作，增加了处理开销和延迟。</li>
+<li><strong>导致某些应用兼容性问题</strong>：对于一些复杂的网络协议（如IPsec、FTP的主动模式），它们会在应用层数据中携带IP地址信息，NAT设备无法识别和修改这些内容，导致连接失败。虽然可以通过ALG等技术解决，但增加了复杂性。</li>
+<li><strong>对P2P应用不友好</strong>：由于内网主机无法被外网直接访问，建立P2P连接（如视频通话、BT下载）需要借助STUN、TURN等中继服务器，过程复杂。</li>
+</ol>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -1315,217 +1798,6 @@
 
 <h1 id="模板特化"><a href="#模板特化" class="headerlink" title="模板特化"></a>模板特化</h1><p>为特定类型&#x2F;值提供定制实现，构成TMP的逻辑分支基础：</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 通用模板</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span> &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">false</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 指针类型的特化</span></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">IsPointer</span>&lt;T*&gt; &#123;</span><br><span class="line">    <span class="type">static</span> <span class="keyword">constexpr</span> <span class="type">bool</span> value = <span class="literal">true</span>;  <span class="comment">// 对指针返回true</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">static_assert</span>(IsPointer&lt;<span class="type">int</span>*&gt;::value, <span class="string">&quot;Must be pointer&quot;</span>);  <span class="comment">// 编译期验证</span></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoshea">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/11/%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/" class="post-title-link" itemprop="url">类型转换</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-10-11 11:39:01" itemprop="dateCreated datePublished" datetime="2025-10-11T11:39:01+08:00">2025-10-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><h2 id="适用范围"><a href="#适用范围" class="headerlink" title="适用范围"></a>适用范围</h2><ol>
-<li>基本类型转换</li>
-<li>继承关系转换</li>
-<li>void*和其他类型指针转换</li>
-<li>明确的隐式转换</li>
-</ol>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本类型转换</span></span><br><span class="line"><span class="type">double</span> d = <span class="number">3.14</span>;</span><br><span class="line"><span class="type">int</span> i = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(d);  <span class="comment">// 3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 上行转换（安全）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;&#125;;</span><br><span class="line">Derived* d = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Base* b = <span class="built_in">static_cast</span>&lt;Base*&gt;(d);  <span class="comment">// 安全的向上转换</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 下行转换（不安全，需谨慎）</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived = <span class="built_in">static_cast</span>&lt;Derived*&gt;(base);  <span class="comment">// 危险！未检查</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// void* 转换</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">malloc</span>(<span class="built_in">sizeof</span>(<span class="type">int</span>));</span><br><span class="line"><span class="type">int</span>* int_ptr = <span class="built_in">static_cast</span>&lt;<span class="type">int</span>*&gt;(ptr);</span><br></pre></td></tr></table></figure>
-
-<h1 id="dynamic-cast"><a href="#dynamic-cast" class="headerlink" title="dynamic_cast"></a>dynamic_cast</h1><h2 id="适用范围-1"><a href="#适用范围-1" class="headerlink" title="适用范围"></a>适用范围</h2><p>安全的下行转换，只能用于具有虚函数的类。</p>
-<p>失败时会抛异常，或者返回空指针</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">func</span><span class="params">()</span> </span>&#123;&#125;  <span class="comment">// 必须有虚函数</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">derivedFunc</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 安全的下行转换</span></span><br><span class="line">Base* base = <span class="keyword">new</span> <span class="built_in">Derived</span>();</span><br><span class="line">Derived* derived = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base);</span><br><span class="line"><span class="keyword">if</span>(derived) &#123;</span><br><span class="line">    derived-&gt;<span class="built_in">derivedFunc</span>();  <span class="comment">// 安全调用</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转换失败的情况</span></span><br><span class="line">Base* base2 = <span class="keyword">new</span> <span class="built_in">Base</span>();</span><br><span class="line">Derived* derived2 = <span class="built_in">dynamic_cast</span>&lt;Derived*&gt;(base2);</span><br><span class="line"><span class="comment">// derived2 == nullptr</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 引用转换（失败时抛异常）</span></span><br><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    Base&amp; base_ref = *base;</span><br><span class="line">    Derived&amp; derived_ref = <span class="built_in">dynamic_cast</span>&lt;Derived&amp;&gt;(base_ref);</span><br><span class="line">&#125; <span class="built_in">catch</span>(<span class="type">const</span> std::bad_cast&amp; e) &#123;</span><br><span class="line">    <span class="comment">// 转换失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><h2 id="适用范围-2"><a href="#适用范围-2" class="headerlink" title="适用范围"></a>适用范围</h2><p>添加或移除const</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 移除const</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">int</span>* modifiable = <span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(&amp;value);</span><br><span class="line">*modifiable = <span class="number">100</span>;  <span class="comment">// 未定义行为！原对象是const</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 正确使用场景</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">legacyFunction</span><span class="params">(<span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 旧C函数，不接受const参数</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">modernFunction</span><span class="params">(<span class="type">const</span> <span class="type">int</span>* param)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">legacyFunction</span>(<span class="built_in">const_cast</span>&lt;<span class="type">int</span>*&gt;(param));  <span class="comment">// 临时移除const</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加const</span></span><br><span class="line"><span class="type">int</span> mutable_value = <span class="number">42</span>;</span><br><span class="line"><span class="type">const</span> <span class="type">int</span>* const_ptr = <span class="built_in">const_cast</span>&lt;<span class="type">const</span> <span class="type">int</span>*&gt;(&amp;mutable_value);</span><br></pre></td></tr></table></figure>
-
-<h1 id="reinterpret-cast"><a href="#reinterpret-cast" class="headerlink" title="reinterpret_cast"></a>reinterpret_cast</h1><h2 id="适用范围-3"><a href="#适用范围-3" class="headerlink" title="适用范围"></a>适用范围</h2><p>低级位模式转换，不进行安全检查</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指针到整数</span></span><br><span class="line"><span class="type">int</span> value = <span class="number">42</span>;</span><br><span class="line"><span class="type">uintptr_t</span> addr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uintptr_t</span>&gt;(&amp;value);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 整数到指针</span></span><br><span class="line"><span class="type">void</span>* ptr = <span class="built_in">reinterpret_cast</span>&lt;<span class="type">void</span>*&gt;(addr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 不相关类型指针转换</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">A</span> &#123; <span class="type">int</span> x; &#125;;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">B</span> &#123; <span class="type">double</span> y; &#125;;</span><br><span class="line">A a&#123;<span class="number">42</span>&#125;;</span><br><span class="line">B* b = <span class="built_in">reinterpret_cast</span>&lt;B*&gt;(&amp;a);  <span class="comment">// 危险！位模式重新解释</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 函数指针转换</span></span><br><span class="line"><span class="built_in">void</span> (*func_ptr)() = <span class="built_in">reinterpret_cast</span>&lt;<span class="built_in">void</span>(*)()&gt;(some_address);</span><br></pre></td></tr></table></figure>
-
-
-
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="Hoshea">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content=" | Hoshea's Blog">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2025/10/11/%E5%B0%8F%E9%97%AE%E9%A2%98%E9%9B%86/" class="post-title-link" itemprop="url">小问题集</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2025-10-11 11:29:57" itemprop="dateCreated datePublished" datetime="2025-10-11T11:29:57+08:00">2025-10-11</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cpp/" itemprop="url" rel="index"><span itemprop="name">cpp</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="拷贝构造函数的参数使用非引用，会造成什么后果？"><a href="#拷贝构造函数的参数使用非引用，会造成什么后果？" class="headerlink" title="拷贝构造函数的参数使用非引用，会造成什么后果？"></a>拷贝构造函数的参数使用非引用，会造成什么后果？</h1><p>会造成循环拷贝，因为为了调用拷贝构造函数，需要先创建参数other，创建other时又需要调用拷贝构造函数。</p>
-<h1 id="重载函数的返回类型可以不同吗？"><a href="#重载函数的返回类型可以不同吗？" class="headerlink" title="重载函数的返回类型可以不同吗？"></a>重载函数的返回类型可以不同吗？</h1><p>可以，但是前提是参数列表必须不同。</p>
-<h1 id="如何解决引用头文件重复问题？"><a href="#如何解决引用头文件重复问题？" class="headerlink" title="如何解决引用头文件重复问题？"></a>如何解决引用头文件重复问题？</h1><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">pragma</span> once</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//或者</span></span><br><span class="line"><span class="meta">#<span class="keyword">ifndef</span> UTILS_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> UTILS_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br></pre></td></tr></table></figure>
-
-<h1 id="1G的内存排序1T的文件，文件内全是一行一个int"><a href="#1G的内存排序1T的文件，文件内全是一行一个int" class="headerlink" title="1G的内存排序1T的文件，文件内全是一行一个int"></a>1G的内存排序1T的文件，文件内全是一行一个int</h1><p>K路归并排序，先分成多个文件，每个文件里面1个g去排序。<br>然后合并，每次每个文件出一个值排序。</p>
-<h1 id="在析构函数中调用虚函数有什么问题"><a href="#在析构函数中调用虚函数有什么问题" class="headerlink" title="在析构函数中调用虚函数有什么问题"></a>在析构函数中调用虚函数有什么问题</h1><p>派生类可能已经析构，基类在析构函数里调用的虚函数可能是基类版本的，而不是派生类版本的。</p>
-<h1 id="map和unordered-map两者区别"><a href="#map和unordered-map两者区别" class="headerlink" title="map和unordered_map两者区别"></a>map和unordered_map两者区别</h1><ul>
-<li>map底层用到红黑树，unordered_map用到哈希表</li>
-<li>map有排序默认<code>&lt;</code>，umap没有排序</li>
-<li>时间复杂度 map是O(logn),umap是O(1),最坏O(N)哈希冲突时</li>
-</ul>
-<h2 id="umap底层如何实现？"><a href="#umap底层如何实现？" class="headerlink" title="umap底层如何实现？"></a>umap底层如何实现？</h2><p>桶+哈希。桶即动态分配的数组，而每个桶内部存一个链表，用于处理哈希冲突。</p>
-<h2 id="除了链表，还有什么方法吗？"><a href="#除了链表，还有什么方法吗？" class="headerlink" title="除了链表，还有什么方法吗？"></a>除了链表，还有什么方法吗？</h2><ul>
-<li>开放寻址法<br>  【线性探测】如果被占用，就依次检查i+1&#x2F;i+2…<br>  【二次探测】若i被占用，则找【i+1^2】&#x2F;【i+2^2】…</li>
-</ul>
-<h1 id="构造和析构函数可以抛出异常吗？"><a href="#构造和析构函数可以抛出异常吗？" class="headerlink" title="构造和析构函数可以抛出异常吗？"></a>构造和析构函数可以抛出异常吗？</h1><p>构造函数可以，然后会逆序析构已经new出来的资源。<br>析构函数不推荐，因为C++11之后默认为noexcept，如果抛出异常会直接崩溃。</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Resource</span> &#123;</span><br><span class="line">    ~<span class="built_in">Resource</span>() &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;析构中...\n&quot;</span>;</span><br><span class="line">        <span class="keyword">throw</span> std::<span class="built_in">runtime_error</span>(<span class="string">&quot;析构时出错！&quot;</span>); <span class="comment">// ⚠️ 禁止这样做！</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        Resource res;</span><br><span class="line">    &#125; <span class="built_in">catch</span> (...) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;捕获异常\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>如上，抛出异常是不会进入catch的。</p>
-<h1 id="程序的内存分区"><a href="#程序的内存分区" class="headerlink" title="程序的内存分区"></a>程序的内存分区</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">高地址</span><br><span class="line">+----------------------+</span><br><span class="line">|      ...             |</span><br><span class="line">|   命令行参数和环境变量 |</span><br><span class="line">+----------------------+ &lt;-- 栈顶 (esp寄存器指向这里)</span><br><span class="line">|        栈            |  | (向下增长)</span><br><span class="line">|                      |  |</span><br><span class="line">|         ...          |  |</span><br><span class="line">|                      |  |</span><br><span class="line">+----------------------+ &lt;-- 堆顶 (brk指针指向这里)</span><br><span class="line">|                      |  |</span><br><span class="line">|        堆            |  | (向上增长)</span><br><span class="line">|                      |  |</span><br><span class="line">+----------------------+</span><br><span class="line">|         BSS          | (未初始化数据)</span><br><span class="line">+----------------------+</span><br><span class="line">|         Data         | (已初始化数据)</span><br><span class="line">+----------------------+</span><br><span class="line">|         Text         | (代码)</span><br><span class="line">低地址</span><br></pre></td></tr></table></figure>
-
-<h1 id="free只传了个指针，如何知道传多大的空间"><a href="#free只传了个指针，如何知道传多大的空间" class="headerlink" title="free只传了个指针，如何知道传多大的空间"></a>free只传了个指针，如何知道传多大的空间</h1><p>内存管理器在分配内存时，会额外分配一小块“簿记”区域来记录这块内存的信息（包括大小），而返回给你的指针，指向的是“簿记”区域之后的可使用空间。</p>
-<p>这个区域的具体大小由C运行时库控制。</p>
 
       
     </div>

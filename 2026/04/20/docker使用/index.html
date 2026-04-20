@@ -19,26 +19,26 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"hoshea99.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.25.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="蒸河蟹大闸蟹如何蒸 食材准备 螃蟹若干只 料酒（多一点最好一斤以上），盐，花椒，葱，姜  步骤 螃蟹扔锅里，倒入一斤酒和少许水，酒可以少一点但是味道可能没那么好，多放盐，放适量花椒 大火蒸13分钟左右，这个根据火力判断，建议十分钟左右，掰一条腿试一下">
+    <meta name="description" content="docker能够让我们在开发机器上跨系统编译，有效地提高了工作效率。这篇文章将重点分析docker的核心逻辑和基本操作。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="蒸河蟹">
-<meta property="og:url" content="https://hoshea99.github.io/2025/11/08/%E8%92%B8%E6%B2%B3%E8%9F%B9/index.html">
+<meta property="og:title" content="docker使用">
+<meta property="og:url" content="https://hoshea99.github.io/2026/04/20/docker%E4%BD%BF%E7%94%A8/index.html">
 <meta property="og:site_name" content="Hoshea&#39;s Blog">
-<meta property="og:description" content="蒸河蟹大闸蟹如何蒸 食材准备 螃蟹若干只 料酒（多一点最好一斤以上），盐，花椒，葱，姜  步骤 螃蟹扔锅里，倒入一斤酒和少许水，酒可以少一点但是味道可能没那么好，多放盐，放适量花椒 大火蒸13分钟左右，这个根据火力判断，建议十分钟左右，掰一条腿试一下">
+<meta property="og:description" content="docker能够让我们在开发机器上跨系统编译，有效地提高了工作效率。这篇文章将重点分析docker的核心逻辑和基本操作。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2025-11-08T02:40:29.000Z">
-<meta property="article:modified_time" content="2026-03-05T10:06:45.726Z">
+<meta property="article:published_time" content="2026-04-20T02:55:14.000Z">
+<meta property="article:modified_time" content="2026-04-20T03:20:46.541Z">
 <meta property="article:author" content="Hoshea">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://hoshea99.github.io/2025/11/08/%E8%92%B8%E6%B2%B3%E8%9F%B9/">
+<link rel="canonical" href="https://hoshea99.github.io/2026/04/20/docker%E4%BD%BF%E7%94%A8/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hoshea99.github.io/2025/11/08/%E8%92%B8%E6%B2%B3%E8%9F%B9/","path":"2025/11/08/蒸河蟹/","title":"蒸河蟹"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://hoshea99.github.io/2026/04/20/docker%E4%BD%BF%E7%94%A8/","path":"2026/04/20/docker使用/","title":"docker使用"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>蒸河蟹 | Hoshea's Blog</title>
+<title>docker使用 | Hoshea's Blog</title>
   
 
 
@@ -156,7 +156,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%92%B8%E6%B2%B3%E8%9F%B9"><span class="nav-number">1.</span> <span class="nav-text">蒸河蟹</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A3%9F%E6%9D%90%E5%87%86%E5%A4%87"><span class="nav-number">1.1.</span> <span class="nav-text">食材准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4"><span class="nav-number">1.2.</span> <span class="nav-text">步骤</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">核心原理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">2.</span> <span class="nav-text">常用操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AE%A1%E7%90%86%E9%95%9C%E5%83%8F"><span class="nav-number">2.1.</span> <span class="nav-text">管理镜像</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%B9%E5%99%A8%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">容器操作</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -201,7 +201,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2025/11/08/%E8%92%B8%E6%B2%B3%E8%9F%B9/">
+    <link itemprop="mainEntityOfPage" href="https://hoshea99.github.io/2026/04/20/docker%E4%BD%BF%E7%94%A8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -214,12 +214,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="蒸河蟹 | Hoshea's Blog">
+      <meta itemprop="name" content="docker使用 | Hoshea's Blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          蒸河蟹
+          docker使用
         </h1>
 
         <div class="post-meta-container">
@@ -229,15 +229,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2025-11-08 10:40:29" itemprop="dateCreated datePublished" datetime="2025-11-08T10:40:29+08:00">2025-11-08</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-03-05 18:06:45" itemprop="dateModified" datetime="2026-03-05T18:06:45+08:00">2026-03-05</time>
+      <time title="创建时间：2026-04-20 10:55:14 / 修改时间：11:20:46" itemprop="dateCreated datePublished" datetime="2026-04-20T10:55:14+08:00">2026-04-20</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -245,7 +239,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/cooking/" itemprop="url" rel="index"><span itemprop="name">cooking</span></a>
+          <a href="/categories/linux/" itemprop="url" rel="index"><span itemprop="name">linux</span></a>
         </span>
     </span>
 
@@ -258,15 +252,81 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="蒸河蟹"><a href="#蒸河蟹" class="headerlink" title="蒸河蟹"></a>蒸河蟹</h1><p>大闸蟹如何蒸</p>
-<h2 id="食材准备"><a href="#食材准备" class="headerlink" title="食材准备"></a>食材准备</h2><ol>
-<li>螃蟹若干只</li>
-<li>料酒（多一点最好一斤以上），盐，花椒，葱，姜</li>
-</ol>
-<h2 id="步骤"><a href="#步骤" class="headerlink" title="步骤"></a>步骤</h2><ol>
-<li>螃蟹扔锅里，倒入一斤酒和少许水，酒可以少一点但是味道可能没那么好，多放盐，放适量花椒</li>
-<li>大火蒸13分钟左右，这个根据火力判断，建议十分钟左右，掰一条腿试一下</li>
-</ol>
+    <div class="post-body" itemprop="articleBody"><p>docker能够让我们在开发机器上跨系统编译，有效地提高了工作效率。这篇文章将重点分析docker的核心逻辑和基本操作。</p>
+<span id="more"></span>
+
+<h1 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h1><p>Docker不像虚拟机一样，模拟整个硬件和内核。他共享了宿主机的Linux内核，在用户态构建了一套独立的文件系统。</p>
+<p>所以只要内核是兼容的，就能在Ubuntu22.04的机器上 运行一个Ubuntu20.04甚至是centos的环境，而不污染宿主机（windows不行，因为内核不一样）</p>
+<ul>
+<li>docker三要素<ul>
+<li><strong>Image（镜像）</strong>：静态的“只读图纸”，包含了系统底座、依赖库和编译工具。它是分层存储的，可以被多次复用。</li>
+<li><strong>Container (容器)：</strong> 镜像运行后的“动态实例”。每次 <code>docker run</code> 都是基于镜像盖的一间新房子。</li>
+<li><strong>Mount (挂载)：</strong> 连接宿主机与容器的“传送门”。通过 <code>-v</code> 参数，将宿主机的代码目录映射到容器内部，实现“代码在宿主机，环境在容器，产物在宿主机”的高效流程。</li>
+</ul>
+</li>
+</ul>
+<h1 id="常用操作"><a href="#常用操作" class="headerlink" title="常用操作"></a>常用操作</h1><h2 id="管理镜像"><a href="#管理镜像" class="headerlink" title="管理镜像"></a>管理镜像</h2><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker images</code></td>
+<td>查看本地已下载的所有镜像</td>
+</tr>
+<tr>
+<td><code>docker pull &lt;image_name&gt;</code></td>
+<td>从远程仓库（Docker Hub）拉取镜像</td>
+</tr>
+<tr>
+<td><code>docker rmi &lt;image_id&gt;</code></td>
+<td>删除不再需要的镜像</td>
+</tr>
+</tbody></table>
+<h2 id="容器操作"><a href="#容器操作" class="headerlink" title="容器操作"></a>容器操作</h2><table>
+<thead>
+<tr>
+<th><strong>命令</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>docker run -it -v &lt;宿主机路径&gt;:&lt;容器路径&gt; &lt;镜像名&gt; /bin/bash</code></td>
+<td><strong>最常用：</strong> 创建并进入一个挂载了本地代码的新环境</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>查看当前正在运行的容器</td>
+</tr>
+<tr>
+<td><code>docker ps -a</code></td>
+<td>查看所有容器（包括已停止的）</td>
+</tr>
+<tr>
+<td><code>docker stop &lt;ID&gt;</code></td>
+<td>停止一个正在运行的容器</td>
+</tr>
+<tr>
+<td><code>docker start -i &lt;ID&gt;</code></td>
+<td>重启并进入一个之前停止的旧容器</td>
+</tr>
+<tr>
+<td><code>docker rm &lt;ID&gt;</code></td>
+<td>删除已经不用的容器实例</td>
+</tr>
+</tbody></table>
+<ul>
+<li><p>第一次使用docker run，后面如果要先退出来就用docker stop，然后docker start可以继续在原环境中进行工作。在docke中想出来可以通过ctrl + D出去。</p>
+</li>
+<li><p><code>docker run -it -v &lt;宿主机路径&gt;:&lt;容器路径&gt; &lt;镜像名&gt; /bin/bash</code> </p>
+<ul>
+<li><strong><code>-v</code></strong>: 这是最关键的 <strong>Volume（卷）挂载</strong>。它在宿主机和容器之间修了一条“隧道”。你在宿主机的这个目录下改代码，容器里立刻同步，反之亦然</li>
+<li>可以再加一个参数：<code>--user $(id -u):$(id -g)</code> 这条命令把宿主机的用户 ID（UID）和组 ID（GID）传给容器。这样容器里的操作就像是你本人在操作，生成的代码和编译产物权限完全正常。否则，在docker生成的成果物是root的</li>
+</ul>
+</li>
+</ul>
 
     </div>
 
@@ -280,14 +340,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2025/11/08/%E5%A4%A7%E8%92%9C%E7%82%92%E7%89%9B%E8%82%9A/" rel="prev" title="大蒜炒牛肚">
-                  <i class="fa fa-angle-left"></i> 大蒜炒牛肚
+                <a href="/2026/04/12/git%E6%8C%87%E4%BB%A4/" rel="prev" title="git指令">
+                  <i class="fa fa-angle-left"></i> git指令
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2025/11/08/%E6%A6%A8%E8%8F%9C%E8%82%89%E4%B8%9D%E6%B1%A4/" rel="next" title="榨菜肉丝汤">
-                  榨菜肉丝汤 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
